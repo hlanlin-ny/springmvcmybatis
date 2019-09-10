@@ -1,0 +1,45 @@
+Ehcache可以对页面、对象、数据进行缓存，同时支持集群/分布式缓存。如整合Spring、Hibernate也非常的简单，Spring对Ehcache的支持也非常好。EHCache支持内存和磁盘的缓存，支持LRU、LFU和FIFO多种淘汰算法，支持分布式的Cache，可以作为Hibernate的缓存插件。同时它也能提供基于Filter的Cache，该Filter可以缓存响应的内容并采用Gzip压缩提高响应速度。
+
+
+Ehcache基本用法
+
+CacheManager cacheManager = CacheManager.create();
+// 或者
+cacheManager = CacheManager.getInstance();
+// 或者
+cacheManager = CacheManager.create("/config/ehcache.xml");
+// 或者
+cacheManager = CacheManager.create("http://localhost:8080/test/ehcache.xml");
+cacheManager = CacheManager.newInstance("/config/ehcache.xml");
+// .......
+
+// 获取ehcache配置文件中的一个cache
+Cache sample = cacheManager.getCache("sample");
+// 获取页面缓存
+BlockingCache cache = new BlockingCache(cacheManager.getEhcache("SimplePageCachingFilter"));
+// 添加数据到缓存中
+Element element = new Element("key", "val");
+sample.put(element);
+// 获取缓存中的对象，注意添加到cache中对象要序列化 实现Serializable接口
+Element result = sample.get("key");
+// 删除缓存
+sample.remove("key");
+sample.removeAll();
+
+// 获取缓存管理器中的缓存配置名称
+for (String cacheName : cacheManager.getCacheNames()) {
+    System.out.println(cacheName);
+}
+// 获取所有的缓存对象
+for (Object key : cache.getKeys()) {
+    System.out.println(key);
+}
+
+// 得到缓存中的对象数
+cache.getSize();
+// 得到缓存对象占用内存的大小
+cache.getMemoryStoreSize();
+// 得到缓存读取的命中次数
+cache.getStatistics().getCacheHits();
+// 得到缓存读取的错失次数
+cache.getStatistics().getCacheMisses();

@@ -1,0 +1,16 @@
+package ${package}.service.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.Map;
+import ${package}.repository.${className}Repository;
+import ${package}.entity.${className};
+import ${package}.service.${className}Service;
+
+@Service("${classname}Service")
+public class ${className}ServiceImpl extends AbstractBaseService<${className}> implements ${className}Service {
+	@Autowired
+	private ${className}Repository ${classname}Repository;
+
+}

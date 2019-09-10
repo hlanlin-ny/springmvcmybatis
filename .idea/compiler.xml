@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="springmvcmybatis-core" />
+        <module name="springmvcmybatis-filewebapp" />
+        <module name="springmvcmybatis-frontwebapp" />
+        <module name="springmvcmybatis-webapp" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="springmvcmybatis" target="1.8" />
+      <module name="springmvcmybatis-core" target="1.7" />
+      <module name="springmvcmybatis-filewebapp" target="1.7" />
+      <module name="springmvcmybatis-frontwebapp" target="1.7" />
+      <module name="springmvcmybatis-webapp" target="1.7" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="springmvcmybatis-core" options="-verbose -bootclasspath &quot;C:/Program Files/Java/jdk1.8.0_191/jre/lib/rt.jar;C:/Program Files/Java/jdk1.8.0_191/jre/lib/jce.jar&quot; -extdirs F:\TongBaiPolice\intelligence-management\springmvcmybatis\springmvcmybatis-core/src/main/webapp/WEB-INF/lib" />
+      <module name="springmvcmybatis-filewebapp" options="-verbose -bootclasspath &quot;C:/Program Files/Java/jdk1.8.0_191/jre/lib/rt.jar;C:/Program Files/Java/jdk1.8.0_191/jre/lib/jce.jar&quot; -extdirs F:\TongBaiPolice\intelligence-management\springmvcmybatis\springmvcmybatis-filewebapp/src/main/webapp/WEB-INF/lib" />
+      <module name="springmvcmybatis-frontwebapp" options="-verbose -bootclasspath &quot;C:/Program Files/Java/jdk1.8.0_191/jre/lib/rt.jar;C:/Program Files/Java/jdk1.8.0_191/jre/lib/jce.jar&quot; -extdirs F:\TongBaiPolice\intelligence-management\springmvcmybatis\springmvcmybatis-frontwebapp/src/main/webapp/WEB-INF/lib" />
+      <module name="springmvcmybatis-webapp" options="-verbose -bootclasspath &quot;C:/Program Files/Java/jdk1.8.0_191/jre/lib/rt.jar;C:/Program Files/Java/jdk1.8.0_191/jre/lib/jce.jar&quot; -extdirs F:\TongBaiPolice\intelligence-management\springmvcmybatis\springmvcmybatis-webapp/src/main/webapp/WEB-INF/lib" />
+    </option>
+  </component>
+</project>

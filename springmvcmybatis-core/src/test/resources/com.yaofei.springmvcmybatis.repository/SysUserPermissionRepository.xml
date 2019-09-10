@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yaofei.springmvcmybatis.repository.SysUserPermissionRepository">
+
+	<!-- sql片段 -->
+	<sql id="query_list_where">
+		<if test="extraSearch !=null">
+			<!-- where可以自动去除第一个and -->
+			<where>
+				and is_deleted = 0
+				<if test="extraSearch.name !=null and extraSearch.name !=''">
+					and name like CONCAT('%',#{extraSearch.name},'%')
+				</if>
+				<if test="extraSearch.type !=null and extraSearch.type !=''">
+					and type = #{extraSearch.type}
+				</if>
+				<if test="extraSearch.parentName !=null and extraSearch.parentName !=''">
+					and parent_name like CONCAT('%',#{extraSearch.parentName},'%')
+				</if>
+			</where>
+		</if>
+	</sql>
+
+
+	<select id="queryTotal" resultType="long">
+		select count(*) from sys_user_permission where is_deleted = 0
+	</select>
+
+	<select id="queryListTotal" parameterType="com.yaofei.springmvcmybatis.plugins.datatables.domain.DataTablesRequest"
+			resultType="long">
+		select count(*) from sys_user_permission
+		<!-- 引用sql片段 -->
+		<include refid="query_list_where"/>
+	</select>
+
+	<select id="queryList" resultType="com.yaofei.springmvcmybatis.entity.SysUserPermission">
+		select * from sys_user_permission
+		<!-- 引用sql片段 -->
+		<include refid="query_list_where"/>
+
+		<choose>
+			<when test="orderString != null and orderString != ''">
+				order by ${orderString}
+			</when>
+			<otherwise>
+				order by id DESC
+			</otherwise>
+		</choose>
+		<if test="start != null and length != null">
+			limit #{start}, #{length}
+		</if>
+	</select>
+
+	<insert id="save" parameterType="com.yaofei.springmvcmybatis.entity.SysUserPermission" useGeneratedKeys="true" keyProperty="id">
+		insert into sys_user_permission
+		(
+		`parent_id`,
+		`parent_name`,
+		`name`,
+		`type`,
+		`url`,
+		`permission_code`,
+		`icon`,
+		`order_num`,
+		`created_by`,
+		`created_ip`,
+		`modification_by`,
+		`modification_ip`,
+		`remark`
+		)
+		values
+		(
+		#{parentId},
+		#{parentName},
+		#{name},
+		#{type},
+		#{url},
+		#{permissionCode},
+		#{icon},
+		#{orderNum},
+		#{createdBy},
+		#{createdIp},
+		#{modificationBy},
+		#{modificationIp},
+		#{remark}
+		)
+	</insert>
+
+	<update id="update" parameterType="com.yaofei.springmvcmybatis.entity.SysUserPermission">
+		update sys_user_permission
+		<set>
+			<if test="parentId != null">`parent_id` = #{parentId}, </if>
+			<if test="parentName != null">`parent_name` = #{parentName}, </if>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="type != null">`type` = #{type}, </if>
+			<if test="url != null">`url` = #{url}, </if>
+			<if test="permissionCode != null">`permission_code` = #{permissionCode}, </if>
+			<if test="icon != null">`icon` = #{icon}, </if>
+			<if test="orderNum != null">`order_num` = #{orderNum}, </if>
+			<if test="isDeleted != null">`is_deleted` = #{isDeleted}, </if>
+			<if test="modificationBy != null">`modification_by` = #{modificationBy}, </if>
+			<if test="modificationIp != null">`modification_ip` = #{modificationIp}, </if>
+			<if test="remark != null">`remark` = #{remark}</if>
+		</set>
+		where id = #{id} and is_deleted = 0
+	</update>
+
+	<delete id="delete">
+		delete from sys_user_permission where id = #{value} and is_deleted = 0
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sys_user_permission where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+		and is_deleted = 0
+	</delete>
+
+	<select id="queryObject" resultType="com.yaofei.springmvcmybatis.entity.SysUserPermission">
+		select * from sys_user_permission where id = #{value} and is_deleted = 0
+	</select>
+
+	<select id="queryNotButtonList" resultType="com.yaofei.springmvcmybatis.entity.SysUserPermission">
+		select * from sys_user_permission where type != 4 AND type != 5 and is_deleted = 0 order by order_num asc
+	</select>
+
+	<select id="queryListParentId" resultType="com.yaofei.springmvcmybatis.entity.SysUserPermission">
+		select * from sys_user_permission where parent_id = #{parentId} and is_deleted = 0 order by order_num asc
+	</select>
+
+	<select id="queryAllPermissionCodes" resultType="String">
+		select permission_code from sys_user_permission where is_deleted = 0
+	</select>
+
+	<select id="queryPermissionCodesByUserId" resultType="String">
+		select up.permission_code from sys_user u
+		LEFT JOIN sys_user_user_role uur on u.id = uur.user_id
+		LEFT JOIN sys_user_role_permission urp on uur.user_role_id = urp.user_role_id
+		LEFT JOIN sys_user_permission up on urp.user_permission_id = up.id
+		where u.id = #{id} and u.is_deleted = 0
+	</select>
+
+	<select id="queryTotalByPermissionAndId" resultType="long">
+		select count(*) from sys_user_permission where is_deleted = 0
+		<if test="permissionCode !=null and permissionCode !=''">
+			and permission_code = #{permissionCode}
+		</if>
+		<if test="id !=null and id !=''">
+			and id != #{id}
+		</if>
+	</select>
+
+</mapper>

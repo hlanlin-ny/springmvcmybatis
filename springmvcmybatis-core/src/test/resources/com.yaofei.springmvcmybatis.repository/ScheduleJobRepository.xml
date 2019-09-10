@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yaofei.springmvcmybatis.repository.ScheduleJobRepository">
+
+	<!-- sql片段 -->
+	<sql id="query_list_where">
+		<if test="extraSearch !=null">
+			<!-- where可以自动去除第一个and -->
+			<where>
+				and is_deleted = 0
+				<if test="extraSearch.beanName !=null and extraSearch.beanName !=''">
+					and bean_name like CONCAT('%',#{extraSearch.beanName},'%')
+				</if>
+				<if test="extraSearch.methodName !=null and extraSearch.methodName !=''">
+					and method_name like CONCAT('%',#{extraSearch.methodName},'%')
+				</if>
+				<if test="extraSearch.params !=null and extraSearch.params !=''">
+					and params like CONCAT('%',#{extraSearch.params},'%')
+				</if>
+				<if test="extraSearch.status !=null and extraSearch.status !=''">
+					and status = #{extraSearch.status}
+				</if>
+			</where>
+		</if>
+	</sql>
+
+	<select id="queryTotal" resultType="long">
+		select count(*) from schedule_job where is_deleted = 0
+	</select>
+
+	<select id="queryListTotal" parameterType="com.yaofei.springmvcmybatis.plugins.datatables.domain.DataTablesRequest"
+			resultType="long">
+		select count(*) from schedule_job
+		<!-- 引用sql片段 -->
+		<include refid="query_list_where"/>
+	</select>
+
+	<select id="queryList" resultType="com.yaofei.springmvcmybatis.entity.ScheduleJob">
+		select * from schedule_job
+		<!-- 引用sql片段 -->
+		<include refid="query_list_where"/>
+
+		<choose>
+			<when test="orderString != null and orderString != ''">
+				order by ${orderString}
+			</when>
+			<otherwise>
+				order by id DESC
+			</otherwise>
+		</choose>
+		<if test="start != null and length != null">
+			limit #{start}, #{length}
+		</if>
+	</select>
+
+	 
+	<insert id="save" parameterType="com.yaofei.springmvcmybatis.entity.ScheduleJob" useGeneratedKeys="true" keyProperty="id">
+		insert into schedule_job
+		(
+			`bean_name`, 
+			`method_name`, 
+			`params`, 
+			`cron_expression`, 
+			`remark`,
+			`created_by`,
+			`created_ip`, 
+			`modification_by`,
+			`modification_ip`
+		)
+		values
+		(
+			#{beanName}, 
+			#{methodName}, 
+			#{params}, 
+			#{cronExpression}, 
+			#{remark},
+			#{createdBy},
+			#{createdIp}, 
+			#{modificationBy},
+			#{modificationIp}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yaofei.springmvcmybatis.entity.ScheduleJob">
+		update schedule_job 
+		<set>
+			<if test="beanName != null">`bean_name` = #{beanName}, </if>
+			<if test="methodName != null">`method_name` = #{methodName}, </if>
+			<if test="params != null">`params` = #{params}, </if>
+			<if test="cronExpression != null">`cron_expression` = #{cronExpression}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="remark != null">`remark` = #{remark}, </if>
+			<if test="isDeleted != null">`is_deleted` = #{isDeleted}, </if>
+			<if test="modificationBy != null">`modification_by` = #{modificationBy}, </if>
+			<if test="modificationIp != null">`modification_ip` = #{modificationIp}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from schedule_job where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from schedule_job where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<select id="queryObject" resultType="com.yaofei.springmvcmybatis.entity.ScheduleJob">
+		select * from schedule_job where id = #{value}
+	</select>
+
+
+	<!-- 批量更新状态 -->
+	<update id="updateStatusByIds">
+		update schedule_job set status = #{status} where id in
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+
+
+
+	<!--批量插入定时任务-->
+	<insert id="batchAdd" parameterType="com.yaofei.springmvcmybatis.entity.ScheduleJob"  useGeneratedKeys="true" keyProperty="id">
+		insert into schedule_job
+		(
+		`bean_name`,
+		`method_name`,
+		`params`,
+		`cron_expression`,
+		`remark`,
+		`created_by`,
+		`created_ip`,
+		`relate_id`,
+		`schedule_type`
+		)
+		values
+		<foreach collection="list" item="scheduleJobs" index="index"
+				 separator=",">
+			(
+			#{beanName},
+			#{methodName},
+			#{params},
+			#{cronExpression},
+			#{remark},
+			#{createdBy},
+			#{createdIp},
+			#{relateId},
+			#{scheduleType}
+			)
+		</foreach>
+	</insert>
+
+	<!--关联删除-->
+	<delete id="relateDelete">
+		delete from schedule_job where relate_id = #{relateId}
+	</delete>
+
+	<!--批量关联删除-->
+	<delete id="relateDeleteBatch">
+		delete from schedule_job where relate_id in
+		<foreach item="relateId" collection="array" open="(" separator="," close=")">
+			#{relateId}
+		</foreach>
+	</delete>
+
+	<!--关联查询-->
+	<select id="queryByRelateId" resultType="com.yaofei.springmvcmybatis.entity.ScheduleJob">
+		select * from schedule_job where relate_id = #{relateId}
+	</select>
+</mapper>

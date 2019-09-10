@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yaofei.springmvcmybatis.repository.IntelligenceImportRepository">
+
+    <!-- sql片段 -->
+    <sql id="query_list_where">
+        <if test="extraSearch !=null">
+            <!-- where可以自动去除第一个and -->
+            <where>
+                and is_deleted = 0
+                <if test="extraSearch.businessTypeId !=null and extraSearch.businessTypeId !=''">
+                    and business_type_id = #{extraSearch.businessTypeId}
+                </if>
+                <if test="extraSearch.fileType !=null and extraSearch.fileType !=''">
+                    and file_type = #{extraSearch.fileType}
+                </if>
+                <if test="extraSearch.filename !=null and extraSearch.filename !=''">
+                    and filename like CONCAT('%',#{extraSearch.filename},'%')
+                </if>
+                <if test="extraSearch.filedesc !=null and extraSearch.filedesc !=''">
+                    and file_desc like CONCAT('%',#{extraSearch.filedesc},'%')
+                </if>
+
+                <if test="extraSearch.collectTimeBegin !=null and extraSearch.collectTimeBegin !=''">
+                    and collect_time >= #{extraSearch.collectTimeBegin}
+                </if>
+                <if test="extraSearch.collectTimeEnd !=null and extraSearch.collectTimeEnd !=''">
+                    and collect_time &lt; date_add(#{extraSearch.collectTimeEnd}, interval 1 day)
+                </if>
+
+            </where>
+        </if>
+    </sql>
+
+    <select id="queryTotal" resultType="long">
+		select count(*) from intelligence_import where is_deleted = 0
+	</select>
+
+    <select id="queryListTotal" parameterType="com.yaofei.springmvcmybatis.plugins.datatables.domain.DataTablesRequest"
+            resultType="long">
+        select count(*) from intelligence_import
+        <!-- 引用sql片段 -->
+        <include refid="query_list_where"/>
+    </select>
+
+    <select id="queryList" resultType="com.yaofei.springmvcmybatis.entity.IntelligenceImport">
+        select * from (select a.*, IFNULL(b.name,'根') as business_type_name from intelligence_import a left join
+        intelligence_business_type b on a.business_type_id=b.id) ab
+        <!-- 引用sql片段 -->
+        <include refid="query_list_where"/>
+
+        <choose>
+            <when test="orderString != null and orderString != ''">
+                order by ${orderString}
+            </when>
+            <otherwise>
+                order by id DESC
+            </otherwise>
+        </choose>
+        <if test="start != null and length != null">
+            limit #{start}, #{length}
+        </if>
+    </select>
+
+    <insert id="save" parameterType="com.yaofei.springmvcmybatis.entity.IntelligenceImport" useGeneratedKeys="true"
+            keyProperty="id">
+		insert into intelligence_import
+		(
+		`business_type_id`,
+		`file_type`,
+		`filename`,
+		`file_url`,
+		`file_desc`,
+		`collect_time`,
+		`created_by`,
+		`created_ip`,
+		`remark`
+		)
+		values
+		(
+		#{businessTypeId},
+		#{fileType},
+		#{filename},
+		#{fileUrl},
+		#{fileDesc},
+		#{collectTime},
+		#{createdBy},
+		#{createdIp},
+		#{remark}
+		)
+	</insert>
+
+    <update id="update" parameterType="com.yaofei.springmvcmybatis.entity.IntelligenceImport">
+        update intelligence_import
+        <set>
+            <if test="businessTypeId != null">`business_type_id` = #{businessTypeId},</if>
+            <if test="fileType != null">`file_type` = #{fileType},</if>
+            <if test="filename != null">`filename` = #{filename},</if>
+            <if test="fileUrl != null">`file_url` = #{fileUrl},</if>
+            <if test="fileDesc != null">`file_desc` = #{fileDesc},</if>
+            <if test="collectTime != null">`collect_time` = #{collectTime},</if>
+            <if test="isDeleted != null">`is_deleted` = #{isDeleted},</if>
+            <if test="modificationTime != null">`modification_time` = #{modificationTime},</if>
+            <if test="modificationBy != null">`modification_by` = #{modificationBy},</if>
+            <if test="modificationIp != null">`modification_ip` = #{modificationIp},</if>
+            <if test="remark != null">`remark` = #{remark}</if>
+        </set>
+        where id = #{id} and is_deleted = 0
+    </update>
+
+    <delete id="delete">
+		delete from intelligence_import where id = #{value}
+	</delete>
+
+    <delete id="deleteBatch">
+        delete from intelligence_import where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="queryObject" resultType="com.yaofei.springmvcmybatis.entity.IntelligenceImport">
+		select * from intelligence_import where id = #{value}
+	</select>
+
+</mapper>

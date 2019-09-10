@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yaofei.springmvcmybatis.repository.StaticFileClassRepository">
+
+    <!-- sql片段 -->
+    <sql id="query_list_where">
+        <!-- where可以自动去除第一个and -->
+        <where>
+            and is_deleted = 0
+            <if test="extraSearch !=null">
+                <if test="extraSearch.name !=null and extraSearch.name !=''">
+                    and name like CONCAT('%',#{extraSearch.name},'%')
+                </if>
+                <if test="extraSearch.mobile !=null and extraSearch.mobile !=''">
+                    and mobile = #{extraSearch.mobile}
+                </if>
+            </if>
+        </where>
+    </sql>
+
+    <select id="queryTotal" resultType="long">
+		select count(*) from static_file_class where is_deleted = 0
+	</select>
+
+    <select id="queryListTotal" parameterType="com.yaofei.springmvcmybatis.plugins.datatables.domain.DataTablesRequest"
+            resultType="long">
+        select count(*) from static_file_class
+        <!-- 引用sql片段 -->
+        <include refid="query_list_where"/>
+    </select>
+
+    <select id="queryList" resultType="com.yaofei.springmvcmybatis.entity.StaticFileClass">
+        select * from static_file_class
+        <!-- 引用sql片段 -->
+        <include refid="query_list_where"/>
+
+        <choose>
+            <when test="orderString != null and orderString != ''">
+                order by ${orderString}
+            </when>
+            <otherwise>
+                order by id DESC
+            </otherwise>
+        </choose>
+        <if test="start != null and length != null">
+            limit #{start}, #{length}
+        </if>
+    </select>
+
+    <insert id="save" parameterType="com.yaofei.springmvcmybatis.entity.StaticFileClass" useGeneratedKeys="true"
+            keyProperty="id">
+		insert into static_file_class
+		(
+                 `name`,
+                 `sex`,
+                 `id_card_no`,
+                 `address`,
+                 `nation`,
+                 `profession`,
+                 `detail`,
+                 `remark`,
+                 `created_by`,
+                 `created_ip`,
+                 `area_id`,
+                 `business_type_id`,
+                 `file_type`,
+                 `details_url`,
+                 `collect_time`,
+                 `es_index_name`
+            		)
+		values
+		(
+                  #{name},
+                  #{sex},
+                  #{idCardNo},
+                  #{address},
+                  #{nation},
+                  #{profession},
+                  #{detail},
+                  #{remark},
+                  #{createdBy},
+                  #{createdIp},
+                  #{areaId},
+                  #{businessTypeId},
+                  #{fileType},
+                  #{detailsUrl},
+                  #{collectTime},
+                  #{esIndexName}
+            		)
+	</insert>
+
+    <insert id="saveAll" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        insert into static_file_class
+        (
+        `name`,
+        `sex`,
+        `id_card_no`,
+        `address`,
+        `nation`,
+        `profession`,
+        `detail`,
+        `remark`,
+        `created_by`,
+        `created_ip`,
+        `area_id`,
+        `business_type_id`,
+        `file_type`,
+        `details_url`,
+        `collect_time`,
+        `es_index_name`
+        )
+        values
+        <foreach collection="list" item="staticFileClass" separator=",">
+            (
+            #{staticFileClass.name},
+            #{staticFileClass.sex},
+            #{staticFileClass.idCardNo},
+            #{staticFileClass.address},
+            #{staticFileClass.nation},
+            #{staticFileClass.profession},
+            #{staticFileClass.detail},
+            #{staticFileClass.remark},
+            #{staticFileClass.createdBy},
+            #{staticFileClass.createdIp},
+            #{staticFileClass.areaId},
+            #{staticFileClass.businessTypeId},
+            #{staticFileClass.fileType},
+            #{staticFileClass.detailsUrl},
+            #{staticFileClass.collectTime},
+            #{staticFileClass.esIndexName}
+            )
+        </foreach>
+    </insert>
+
+    <update id="update" parameterType="com.yaofei.springmvcmybatis.entity.StaticFileClass">
+        update static_file_class
+        <set>
+            <if test="name != null">`name` = #{name},</if>
+            <if test="sex != null">`sex` = #{sex},</if>
+            <if test="idCardNo != null">`id_card_no` = #{idCardNo},</if>
+            <if test="address != null">`address` = #{address},</if>
+            <if test="nation != null">`nation` = #{nation},</if>
+            <if test="profession != null">`profession` = #{profession},</if>
+            <if test="detail != null">`detail` = #{detail},</if>
+            <if test="remark != null">`remark` = #{remark},</if>
+            <if test="modificationTime != null">`modification_time` = #{modificationTime},</if>
+            <if test="modificationBy != null">`modification_by` = #{modificationBy},</if>
+            <if test="modificationIp != null">`modification_ip` = #{modificationIp},</if>
+            <if test="areaId != null">`area_id` = #{areaId},</if>
+            <if test="businessTypeId != null">`business_type_id` = #{businessTypeId},</if>
+            <if test="fileType != null">`file_type` = #{fileType},</if>
+            <if test="detailsUrl != null">`details_url` = #{detailsUrl},</if>
+            <if test="collectTime != null">`collect_time` = #{collectTime},</if>
+            <if test="esIndexName != null">`es_index_name` = #{esIndexName}</if>
+        </set>
+        where id = #{id} and is_deleted = 0
+    </update>
+
+    <update id="updateAll" parameterType="java.util.List">
+        <foreach collection="list" item="staticFileClass" index="index" open="" close="" separator=";">
+          update static_file_class
+          <set>
+              <if test="staticFileClass.name != null">`name` = #{staticFileClass.name}, </if>
+              <if test="staticFileClass.sex != null">`sex` = #{staticFileClass.sex}, </if>
+              <if test="staticFileClass.idCardNo != null">`id_card_no` = #{staticFileClass.idCardNo}, </if>
+              <if test="staticFileClass.address != null">`address` = #{staticFileClass.address}, </if>
+              <if test="staticFileClass.nation != null">`nation` = #{staticFileClass.nation}, </if>
+              <if test="staticFileClass.profession != null">`profession` = #{staticFileClass.profession}, </if>
+              <if test="staticFileClass.detail != null">`detail` = #{staticFileClass.detail}, </if>
+              <if test="staticFileClass.remark != null">`remark` = #{staticFileClass.remark}, </if>
+              <if test="staticFileClass.modificationTime != null">`modification_time` = #{staticFileClass.modificationTime}, </if>
+              <if test="staticFileClass.modificationBy != null">`modification_by` = #{staticFileClass.modificationBy}, </if>
+              <if test="staticFileClass.modificationIp != null">`modification_ip` = #{staticFileClass.modificationIp}, </if>
+              <if test="staticFileClass.areaId != null">`area_id` = #{staticFileClass.areaId}, </if>
+              <if test="staticFileClass.businessTypeId != null">`business_type_id` = #{staticFileClass.businessTypeId}, </if>
+              <if test="staticFileClass.fileType != null">`file_type` = #{staticFileClass.fileType}, </if>
+              <if test="staticFileClass.detailsUrl != null">`details_url` = #{staticFileClass.detailsUrl}, </if>
+              <if test="staticFileClass.collectTime != null">`collect_time` = #{staticFileClass.collectTime}, </if>
+              <if test="staticFileClass.esIndexName != null">`es_index_name` = #{staticFileClass.esIndexName}</if>
+          </set>
+         where id = #{staticFileClass.id} and is_deleted = 0
+        </foreach>
+    </update>
+
+    <delete id="delete">
+		delete from static_file_class where id = #{value}
+	</delete>
+
+    <delete id="deleteBatch">
+        delete from static_file_class where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="queryObject" resultType="com.yaofei.springmvcmybatis.entity.StaticFileClass">
+		select * from static_file_class where id = #{value}
+	</select>
+
+</mapper>

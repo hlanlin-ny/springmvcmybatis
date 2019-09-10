@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/cache
+       http://www.springframework.org/schema/cache/spring-cache-4.1.xsd">
+
+    <!--启用缓存注解功能-->
+    <cache:annotation-driven cache-manager="cacheManager"/>
+
+    <!--声明缓存管理器-->
+    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+        <property name="cacheManager" ref="ehCacheManager"/>
+    </bean>
+
+    <!-- 缓存管理器工厂加载ehcache的配置 -->
+    <bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+        <property name="configLocation" value="classpath:ehcache/ehcache.xml"/>
+    </bean>
+
+
+    <!--对象缓存-->
+    <!--对象缓存就是将查询的数据，添加到缓存中，下次再次查询的时候直接从缓存中获取，而不去数据库中查询。-->
+    <!--对象缓存一般是针对方法、类而来的，结合Spring的Aop对象、方法缓存就很简单。这里需要用到切面编程，用到了Spring的MethodInterceptor或是用@Aspect。-->
+    <!-- 配置一个简单的缓存工厂bean对象 -->
+    <bean id="databaseCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+        <property name="cacheManager" ref="ehCacheManager" />
+        <!-- 使用缓存 关联ehcache.xml中的缓存配置 -->
+        <property name="cacheName" value="databaseCache" />
+    </bean>
+
+</beans>

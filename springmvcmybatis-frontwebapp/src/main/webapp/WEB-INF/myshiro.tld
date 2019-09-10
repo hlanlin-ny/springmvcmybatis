@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taglib version="2.1" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd">
+	<tlib-version>1.0</tlib-version>
+	<short-name>sso-auth</short-name>
+	<uri>http://www.yaofei.com/myshiro.tld</uri>
+
+	<tag>
+		<name>currentId</name>
+		<tag-class>com.yaofei.springmvcmybatis.webapp.taglibs.myshiro.CurrentIdTag</tag-class>
+		<body-content>JSP</body-content>
+	</tag>
+
+	<tag>
+		<name>currentName</name>
+		<tag-class>com.yaofei.springmvcmybatis.webapp.taglibs.myshiro.CurrentNameTag</tag-class>
+		<body-content>JSP</body-content>
+	</tag>
+
+	<tag>
+		<name>currentAreaId</name>
+		<tag-class>com.yaofei.springmvcmybatis.webapp.taglibs.myshiro.CurrentAreaId</tag-class>
+		<body-content>JSP</body-content>
+	</tag>
+
+	<tag>
+		<name>hasAllPermissions</name>
+		<tag-class>com.yaofei.springmvcmybatis.webapp.taglibs.myshiro.HasAllPermissionsTag</tag-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<name>permissions</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>String</type>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>hasAnyPermission</name>
+		<tag-class>com.yaofei.springmvcmybatis.webapp.taglibs.myshiro.HasAnyPermissionTag</tag-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<name>permissions</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>String</type>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>hasAllRoles</name>
+		<tag-class>com.yaofei.springmvcmybatis.webapp.taglibs.myshiro.HasAllRolesTag</tag-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<name>roles</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>String</type>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>hasAnyRole</name>
+		<tag-class>com.yaofei.springmvcmybatis.webapp.taglibs.myshiro.HasAnyRoleTag</tag-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<name>roles</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>String</type>
+		</attribute>
+	</tag>
+</taglib>

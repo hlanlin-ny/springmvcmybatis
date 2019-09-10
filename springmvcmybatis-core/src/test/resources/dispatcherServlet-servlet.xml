@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+
+    <!-- 第一步 -->
+    <!-- 自动扫描包 -->
+    <context:component-scan base-package="com.yaofei.springmvcmybatis.webapp" use-default-filters="false">
+        <context:include-filter type="annotation"
+                                expression="org.springframework.stereotype.Controller"/>
+        <context:include-filter type="annotation"
+                                expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+    </context:component-scan>
+
+
+    <!-- 开启MVC注解扫描 -->
+    <!--
+        conversion-service=""注册自定义转换器到SpirngMVC上下文中
+        自动注册RequestMappingHandlerMapping
+        RequestMappingHandlerAdapter
+        ExceptionHandlerExceptionResolver三个bean
+        还支持Conversion-service对表单参数进行类型转换
+        支持使用@NumberFormat annotation
+        @DateTimeFormat注解完成数据类型的格式化
+        支持使用@Valid注解对JavaBean实例进行JSR303验证
+        支持使用@RequestBody @ResponseBody注解
+        -->
+    <mvc:annotation-driven validator="validator"/>
+
+    <!-- 以下 validator  ConversionService 在使用 mvc:annotation-driven 会 自动注册-->
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <property name="providerClass" value="org.hibernate.validator.HibernateValidator"/>
+        <!-- 如果不设置, 默认使用classpath下的 ValidationMessages.properties -->
+        <property name="validationMessageSource" ref="messageSource"/>
+    </bean>
+
+    <!--配置国际化资源文件 主要用于显示/错误消息定制 -->
+    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+        <!--<property name="basename" value="i18n/ValidationMessages"/>-->
+        <property name="basenames">
+            <list>
+                <value>i18n/ValidationMessages</value>
+                <value>i18n/Messages</value>
+            </list>
+        </property>
+        <property name="useCodeAsDefaultMessage" value="true"/>
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="cacheSeconds" value="120"/>
+    </bean>
+
+    <!-- 配置国际化locale解析器 -->
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+        <property name="cookieMaxAge" value="100000"></property>
+        <property name="cookieName" value="clientLanguage"></property>
+        <property name="cookiePath" value="/"></property>
+        <property name="defaultLocale" value="zh_CN"></property>
+    </bean>
+    <!-- 配置 本地化:Spring MVC的本地化解析器
+          AcceptHeaderLocaleResolver：根据HTTP报文头的Accept-Language参数确定本地化类型，
+        如果没有显式定义本地化解析器，Spring MVC默认采用AcceptHeader- LocaleResolver。
+          CookieLocaleResolver：根据指定Cookie值确定本地化类型。
+          SessionLocaleResolver：根据Session中特定的属性值确定本地化类型。
+          LocaleChangeInterceptor：从请求参数中获取本次请求对应的本地化类型。
+    -->
+    <mvc:interceptors>
+        <bean
+                class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+        </bean>
+    </mvc:interceptors>
+
+
+    <!-- 类型转换 -->
+    <!-- 配置 ConversionService -->
+    <!--<bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">-->
+    <!--&lt;!&ndash;<property name="converters">&ndash;&gt;-->
+    <!--&lt;!&ndash;<set>&ndash;&gt;-->
+    <!--&lt;!&ndash;<ref bean="pubUserConverter"/>&ndash;&gt;-->
+    <!--&lt;!&ndash;</set>&ndash;&gt;-->
+    <!--&lt;!&ndash;</property>&ndash;&gt;-->
+    <!--</bean>-->
+
+
+    <!-- 静态资源配置 -->
+    <mvc:resources mapping="/resources/**" location="/resources/" cache-period="31556926"/>
+    <mvc:resources mapping="/favicon.ico" location="/resources/favicon.ico" cache-period="31556926"/>
+    <mvc:resources mapping="/servlet/" location="/servlet/" cache-period="31556926"/>
+    <mvc:resources mapping="/android/" location="/android/" cache-period="31556926"/>
+    <mvc:default-servlet-handler/>
+
+    <!-- csrf CookieCsrfTokenRepository -->
+    <!--<bean class="com.yaofei.springmvcmybatis.webapp.plugins.csrf.CookieCsrfTokenRepository" />-->
+    <!-- Spring csrf 拦截器 -->
+    <!--<mvc:interceptors>-->
+        <!--<mvc:interceptor>-->
+            <!--<mvc:mapping path="/admin/login/login" />-->
+            <!--<bean class="com.yaofei.springmvcmybatis.webapp.plugins.csrf.CsrfInterceptor" />-->
+        <!--</mvc:interceptor>-->
+    <!--</mvc:interceptors>-->
+
+    <!-- 配置视图解析器 -->
+    <!-- 第二步 -->
+    <!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/views/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+    <!--<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
+    <!--<property name="viewClass" value="org.springframework.web.servlet.view.InternalResourceView"/>-->
+    <!--<property name="prefix" value="/WEB-INF/views/"></property>-->
+    <!--<property name="suffix" value=".html"></property>-->
+    <!--</bean>-->
+    <!-- 配置直接转发的页面 -->
+    <!-- 可以直接相应转发的页面, 而无需再经过 Handler 的方法.  -->
+    <!--Forwards requests to the "/" resource to the "index" view-->
+    <!--<mvc:view-controller path="/" view-name="admin/index"/>-->
+
+    <!--上传文件解析类-->
+    <!--Only needed because we require fileupload in the org.springframework.samples.mvc.fileupload package-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="maxUploadSize" value="104857600"/>
+        <!--<property name="maxUploadSize" value="104857600"/>-->
+        <property name="maxInMemorySize" value="4096"/>
+        <!--resolveLazily属性启用是为了推迟文件解析，以便在UploadController 中捕获文件大小异常-->
+        <property name="resolveLazily" value="true"/>
+    </bean>
+
+
+    <!--<mvc:interceptors>-->
+    <!--&lt;!&ndash; 配置自定义的拦截器 &ndash;&gt;-->
+    <!--<bean class="com.yaofei.myprojectframework.web.interceptor.FirstInterceptor"></bean>-->
+
+    <!--&lt;!&ndash; 配置拦截器(不)作用的路径 &ndash;&gt;-->
+    <!--<mvc:interceptor>-->
+    <!--<mvc:mapping path="/emps"/>-->
+    <!--<bean class="com.yaofei.myprojectframework.web.interceptor.SecondInterceptor"></bean>-->
+    <!--</mvc:interceptor>-->
+
+    <!--&lt;!&ndash; 配置 LocaleChanceInterceptor &ndash;&gt;-->
+    <!--<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"></bean>-->
+    <!--</mvc:interceptors>-->
+
+</beans>
