@@ -12,4 +12,6 @@ import com.yaofei.springmvcmybatis.entity.EconomicalInfoToCityTransfer;
 public interface EconomicalInfoToCityTransferService extends BaseService<EconomicalInfoToCityTransfer> {
 
     void insertEconomical(EconomicalInfoToCityTransfer economicalInfoToCityTransfer);
+
+    long selectMaxID();
 }

@@ -15,4 +15,9 @@ public class EconomicalInfoToCityTransferServiceImpl extends AbstractBaseService
 	public void insertEconomical(EconomicalInfoToCityTransfer economicalInfoToCityTransfer) {
 		economicalInfoToCityTransferRepository.insertEconomical(economicalInfoToCityTransfer);
 	}
+
+	@Override
+	public long selectMaxID() {
+		return economicalInfoToCityTransferRepository.selectMaxID();
+	}
 }

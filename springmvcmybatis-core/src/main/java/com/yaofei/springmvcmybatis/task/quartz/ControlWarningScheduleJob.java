@@ -264,11 +264,11 @@ public class ControlWarningScheduleJob {
                         String jd = "";
                         String xq = "";
                         for (int j = 0; j < arr.length; j++) {
-                            if(arr[j].indexOf("手机") != -1 || arr[j].indexOf("电话") != -1) {
+                            if (arr[j].indexOf("手机") != -1 || arr[j].indexOf("电话") != -1) {
                                 dhhm = arr[j].substring(arr[j].indexOf("=") + 1);
                                 staticFileToCityTransfer.setLXDH(dhhm);
                             }
-                            if (arr[j].indexOf("卡号") != -1 ||  arr[j].indexOf("户号") != -1 || arr[j].indexOf("表号") != -1) {
+                            if (arr[j].indexOf("卡号") != -1 || arr[j].indexOf("户号") != -1 || arr[j].indexOf("表号") != -1) {
                                 kh = arr[j].substring(arr[j].indexOf("=") + 1);
                                 staticFileToCityTransfer.setUSER_SERIAL(kh);
                             }
@@ -276,7 +276,7 @@ public class ControlWarningScheduleJob {
                                 yqdz = arr[j].substring(arr[j].indexOf("=") + 1);
                                 staticFileToCityTransfer.setSYDZ_DZMC(yqdz);
                             }
-                            if (arr[j].indexOf("身份号码") != -1 || arr[j].indexOf("身份") != -1  || arr[j].indexOf("证件号码") != -1) {
+                            if (arr[j].indexOf("身份号码") != -1 || arr[j].indexOf("身份") != -1 || arr[j].indexOf("证件号码") != -1) {
                                 sfzjh = arr[j].substring(arr[j].indexOf("=") + 1);
                                 staticFileToCityTransfer.setCYZJHM(sfzjh);
                             }
@@ -298,7 +298,7 @@ public class ControlWarningScheduleJob {
                             }
                         }
                     }
-                    if (staticFileToCityTransfer.getSYDZ_DZMC() == null || "".equals(staticFileToCityTransfer.getSYDZ_DZMC())){
+                    if (staticFileToCityTransfer.getSYDZ_DZMC() == null || "".equals(staticFileToCityTransfer.getSYDZ_DZMC())) {
                         staticFileToCityTransfer.setSYDZ_DZMC("桐柏县燃气公司");
                     }
                     staticFileToCityService.insert(staticFileToCityTransfer);
@@ -370,7 +370,7 @@ public class ControlWarningScheduleJob {
                                 staticWaterToCityTransfer.setYHCKBH(dhhm);
                                 medicalStaticWaterToCityTransfer.setKhWpbzh(dhhm);
                             }
-                            if (arr[j].indexOf("身份号码") != -1 || arr[j].indexOf("身份") != -1  || arr[j].indexOf("身份证号") != -1) {
+                            if (arr[j].indexOf("身份号码") != -1 || arr[j].indexOf("身份") != -1 || arr[j].indexOf("身份证号") != -1) {
                                 sfzjh = arr[j].substring(arr[j].indexOf("=") + 1);
                                 medicalStaticWaterToCityTransfer.setGmsfhm(sfzjh);
                             }
@@ -408,7 +408,7 @@ public class ControlWarningScheduleJob {
                                     medicalStaticWaterToCityTransfer.setDrsj(new Date());
                                 }
                             }
-                            if ((arr[j].indexOf("开户日期") != -1 && arr[j].indexOf("年") == -1)||(arr[j].indexOf("开户") != -1 && arr[j].indexOf("年") == -1)) {
+                            if ((arr[j].indexOf("开户日期") != -1 && arr[j].indexOf("年") == -1) || (arr[j].indexOf("开户") != -1 && arr[j].indexOf("年") == -1)) {
                                 try {
                                     dz = arr[j].substring(arr[j].indexOf("=") + 1);
                                     SimpleDateFormat sdf = null;
@@ -435,7 +435,7 @@ public class ControlWarningScheduleJob {
                                 bycj = arr[j].substring(arr[j].indexOf("=") + 1);
                                 medicalStaticWaterToCityTransfer.setXb(bycj);
                             }
-                            if(medicalStaticWaterToCityTransfer.getKhrq() == null || ("").equals(medicalStaticWaterToCityTransfer.getKhrq())){
+                            if (medicalStaticWaterToCityTransfer.getKhrq() == null || ("").equals(medicalStaticWaterToCityTransfer.getKhrq())) {
                                 medicalStaticWaterToCityTransfer.setKhrq(new Date());
                             }
                         }
@@ -531,8 +531,8 @@ public class ControlWarningScheduleJob {
                                     medicalStaticPeopleToCityTransfer.setXbdm("9");
                                 }
                             }
-                            if (arr[j].indexOf("身份号码") != -1 || arr[j].indexOf("身份") != -1  || arr[j].indexOf("身份证号") != -1
-                            || arr[j].indexOf("证件号码") != -1) {
+                            if (arr[j].indexOf("身份号码") != -1 || arr[j].indexOf("身份") != -1 || arr[j].indexOf("身份证号") != -1
+                                    || arr[j].indexOf("证件号码") != -1) {
                                 sfzhm = arr[j].substring(arr[j].indexOf("=") + 1);
                                 medicalStaticPeopleToCityTransfer.setZjhm(sfzhm);
                             }
@@ -540,7 +540,7 @@ public class ControlWarningScheduleJob {
                                 zgzh = arr[j].substring(arr[j].indexOf("=") + 1);
                                 medicalStaticPeopleToCityTransfer.setCyzgzh(zgzh);
                             }
-                            if (arr[j].indexOf("资格证号") != -1 ||arr[j].indexOf("从业资格") != -1) {
+                            if (arr[j].indexOf("资格证号") != -1 || arr[j].indexOf("从业资格") != -1) {
                                 zgzh = arr[j].substring(arr[j].indexOf("=") + 1);
                                 medicalStaticPeopleToCityTransfer.setCyzgzh(zgzh);
                             }
@@ -548,7 +548,7 @@ public class ControlWarningScheduleJob {
                                 danwei = arr[j].substring(arr[j].indexOf("=") + 1);
                                 medicalStaticPeopleToCityTransfer.setDwmc(danwei);
                             }
-                            if (arr[j].indexOf("行业类型") != -1||arr[j].indexOf("类型") != -1) {
+                            if (arr[j].indexOf("行业类型") != -1 || arr[j].indexOf("类型") != -1) {
                                 jszc = arr[j].substring(arr[j].indexOf("=") + 1);
                                 staticTrifficPeopleToCityTransfer.setGZ(jszc);
                                 medicalStaticPeopleToCityTransfer.setZyzgmc(jszc);
@@ -557,7 +557,7 @@ public class ControlWarningScheduleJob {
                                 dhhm = arr[j].substring(arr[j].indexOf("=") + 1);
                                 medicalStaticPeopleToCityTransfer.setLxdh(dhhm);
                             }
-                            if (arr[j].indexOf("户籍地址") != -1||arr[j].indexOf("户籍") != -1) {
+                            if (arr[j].indexOf("户籍地址") != -1 || arr[j].indexOf("户籍") != -1) {
                                 hjdz = arr[j].substring(arr[j].indexOf("=") + 1);
                                 medicalStaticPeopleToCityTransfer.setHjdzDzmc(hjdz);
                             }
@@ -676,7 +676,7 @@ public class ControlWarningScheduleJob {
                                 jszc = arr[j].substring(arr[j].indexOf("=") + 1);
                                 staticHealthyToCityTransfer.setBZZT(jszc);
                             }
-                            if (staticHealthyToCityTransfer.getDWMC()== null || "".equals(staticHealthyToCityTransfer.getDWMC())){
+                            if (staticHealthyToCityTransfer.getDWMC() == null || "".equals(staticHealthyToCityTransfer.getDWMC())) {
                                 staticHealthyToCityTransfer.setDWMC("暂无");
                             }
                             if (arr[j].indexOf("日期") != -1 && arr[j].indexOf("年") == -1) {
@@ -702,7 +702,7 @@ public class ControlWarningScheduleJob {
                             }
                         }
                     }
-                    if (staticHealthyToCityTransfer.getTJRQ()== null){
+                    if (staticHealthyToCityTransfer.getTJRQ() == null) {
                         staticHealthyToCityTransfer.setTJRQ(new Date());
                     }
                     staticHealthyToCityTransfer.setXXRKSJ(new Date());
@@ -1020,7 +1020,7 @@ public class ControlWarningScheduleJob {
                         String dzmc = "";
                         String xb = "";
                         for (int j = 0; j < arr.length; j++) {
-                            if (arr[j].indexOf("身份证号码") != -1 || arr[j].indexOf("身份证") != -1 || arr[j].indexOf("身份证号") != -1)  {
+                            if (arr[j].indexOf("身份证号码") != -1 || arr[j].indexOf("身份证") != -1 || arr[j].indexOf("身份证号") != -1) {
                                 sfzhm = arr[j].substring(arr[j].indexOf("=") + 1);
                                 medicalAccumulationFundToCityTransfer.setZjhm(sfzhm);
                             }
@@ -1090,7 +1090,7 @@ public class ControlWarningScheduleJob {
                                 djbm = arr[j].substring(arr[j].indexOf("=") + 1);
                                 medicalLettersCallsToCityTransfer.setSldwDwmc(djbm);
                             }
-                            if (arr[j].indexOf("身份证号码") != -1 || arr[j].indexOf("身份证") != -1 || arr[j].indexOf("身份证号") != -1)  {
+                            if (arr[j].indexOf("身份证号码") != -1 || arr[j].indexOf("身份证") != -1 || arr[j].indexOf("身份证号") != -1) {
                                 sfzhm = arr[j].substring(arr[j].indexOf("=") + 1);
                                 medicalLettersCallsToCityTransfer.setXfrGmsfhm(sfzhm);
                             }
@@ -1122,7 +1122,7 @@ public class ControlWarningScheduleJob {
                             }
                         }
                     }
-                    if(medicalLettersCallsToCityTransfer.getXfsyJyqk() == null || "".equals(medicalLettersCallsToCityTransfer.getXfsyJyqk())){
+                    if (medicalLettersCallsToCityTransfer.getXfsyJyqk() == null || "".equals(medicalLettersCallsToCityTransfer.getXfsyJyqk())) {
                         medicalLettersCallsToCityTransfer.setXfsyJyqk("群众信访");
                     }
                     staticLettersCallsToCityService.insert(medicalLettersCallsToCityTransfer);
@@ -1168,7 +1168,7 @@ public class ControlWarningScheduleJob {
                         String drsj = "";
                         String gzdw = "";
                         for (int j = 0; j < arr.length; j++) {
-                            if (arr[j].indexOf("用户号") != -1 || arr[j].indexOf("账号") != -1 || arr[j].indexOf("用户编号") != -1 )    {
+                            if (arr[j].indexOf("用户号") != -1 || arr[j].indexOf("账号") != -1 || arr[j].indexOf("用户编号") != -1) {
                                 yhzh = arr[j].substring(arr[j].indexOf("=") + 1);
                                 medicalTelevisionToCityTransfer.setJfKh(yhzh);
                                 medicalTelevisionToCityTransfer.setKh(yhzh);
@@ -1182,11 +1182,11 @@ public class ControlWarningScheduleJob {
                                 medicalTelevisionToCityTransfer.setXb(xb);
                             }
                             if (arr[j].indexOf("安装地址") != -1 || arr[j].indexOf("家庭地址") != -1 || arr[j].indexOf("通讯地址") != -1
-                            || arr[j].indexOf("地址") != -1) {
+                                    || arr[j].indexOf("地址") != -1) {
                                 cyxzz = arr[j].substring(arr[j].indexOf("=") + 1);
                                 medicalTelevisionToCityTransfer.setJtzzDzmc(cyxzz);
                             }
-                            if (arr[j].indexOf("单位") != -1 ) {
+                            if (arr[j].indexOf("单位") != -1) {
                                 gzdw = arr[j].substring(arr[j].indexOf("=") + 1);
                                 medicalTelevisionToCityTransfer.setFwcs(gzdw);
                             }
@@ -1200,27 +1200,27 @@ public class ControlWarningScheduleJob {
                                 sfzjh = arr[j].substring(arr[j].indexOf("=") + 1);
                                 medicalTelevisionToCityTransfer.setGmsfhm(sfzjh);
                             }
-                             if (arr[j].indexOf("安装日期") != -1 && arr[j].indexOf("年") == -1) {
-                                 try {
-                                     sfsj = arr[j].substring(arr[j].indexOf("=") + 1);
-                                     if (!"".equals(sfsj)) {
-                                         SimpleDateFormat sdf = null;
-                                         if (sfsj.contains("-")) {
-                                             sdf = new SimpleDateFormat("yyyy-MM-dd");
-                                         } else if (sfsj.contains("/")) {
-                                             sdf = new SimpleDateFormat("yyyy/MM/dd");
-                                         } else if (sfsj.contains(".")) {
-                                             sdf = new SimpleDateFormat("yyyy.MM.dd");
-                                         } else {
-                                             sdf = new SimpleDateFormat("yyyyMMdd");
-                                         }
-                                         Date date = sdf.parse(sfsj);
-                                         medicalTelevisionToCityTransfer.setAzrq(date);
-                                     }
-                                 } catch (Exception e) {
-                                     medicalTelevisionToCityTransfer.setAzrq(new Date());
-                                 }
-                             }
+                            if (arr[j].indexOf("安装日期") != -1 && arr[j].indexOf("年") == -1) {
+                                try {
+                                    sfsj = arr[j].substring(arr[j].indexOf("=") + 1);
+                                    if (!"".equals(sfsj)) {
+                                        SimpleDateFormat sdf = null;
+                                        if (sfsj.contains("-")) {
+                                            sdf = new SimpleDateFormat("yyyy-MM-dd");
+                                        } else if (sfsj.contains("/")) {
+                                            sdf = new SimpleDateFormat("yyyy/MM/dd");
+                                        } else if (sfsj.contains(".")) {
+                                            sdf = new SimpleDateFormat("yyyy.MM.dd");
+                                        } else {
+                                            sdf = new SimpleDateFormat("yyyyMMdd");
+                                        }
+                                        Date date = sdf.parse(sfsj);
+                                        medicalTelevisionToCityTransfer.setAzrq(date);
+                                    }
+                                } catch (Exception e) {
+                                    medicalTelevisionToCityTransfer.setAzrq(new Date());
+                                }
+                            }
                             if (arr[j].indexOf("终止日期") != -1 && arr[j].indexOf("年") == -1) {
                                 try {
                                     zzsj = arr[j].substring(arr[j].indexOf("=") + 1);
@@ -1368,11 +1368,11 @@ public class ControlWarningScheduleJob {
                             }
                             if (arr[j].indexOf("成员姓名") != -1 || arr[j].indexOf("母亲姓名") != -1 || arr[j].indexOf("父亲姓名") != -1) {
                                 cyxm = arr[j].substring(arr[j].indexOf("=") + 1);
-                                if (cyxm.indexOf(",") != -1){
-                                    String cc [] = cyxm.split(",");
+                                if (cyxm.indexOf(",") != -1) {
+                                    String cc[] = cyxm.split(",");
                                     medicalStudentToCityTransfer.setFqXm(cc[0]);
                                     medicalStudentToCityTransfer.setMqXm(cc[1]);
-                                }else {
+                                } else {
                                     medicalStudentToCityTransfer.setFqXm(cyxm);
                                     medicalStudentToCityTransfer.setMqXm(cyxm);
                                 }
@@ -1544,7 +1544,7 @@ public class ControlWarningScheduleJob {
                     Date now = new Date();
                     SimpleDateFormat sdf = null;
                     sdf = new SimpleDateFormat("yyyy-MM-dd");
-                    if(tYlbjTjxx.getRyrq() == null){
+                    if (tYlbjTjxx.getRyrq() == null) {
                         tYlbjTjxx.setRyrq(new Date());
                     }
                     tYlbjTjxx.setScrqzjsj(sdf.format(now));
@@ -1763,7 +1763,7 @@ public class ControlWarningScheduleJob {
                             String xxbsm = "";
                             String drsj = "";
                             String cyxm = "";
-                            String bz= "";
+                            String bz = "";
                             if (arr[j].indexOf("车牌号码") != -1) {
                                 xxbsm = arr[j].substring(arr[j].indexOf("=") + 1);
                                 carGpsInfoToCityTransfer.setCph(xxbsm);
@@ -1856,7 +1856,7 @@ public class ControlWarningScheduleJob {
                                 xxbsm = arr[j].substring(arr[j].indexOf("=") + 1);
                                 visitorInfoToCityTransfer.setXMPY(xxbsm);
                             }
-                            if (arr[j].indexOf("身份号码") != -1 || arr[j].indexOf("身份") != -1  || arr[j].indexOf("身份证号") != -1) {
+                            if (arr[j].indexOf("身份号码") != -1 || arr[j].indexOf("身份") != -1 || arr[j].indexOf("身份证号") != -1) {
                                 sfzjh = arr[j].substring(arr[j].indexOf("=") + 1);
                                 visitorInfoToCityTransfer.setSFZH(sfzjh);
                             }
@@ -1893,8 +1893,8 @@ public class ControlWarningScheduleJob {
                             }
                         }
                     }
-                    if (visitorInfoToCityTransfer.getCFSJ() == null){
-                        visitorInfoToCityTransfer.setCFSJ(DateTimeUtil.getDateBeforeOrAfter(new Date(),-7));
+                    if (visitorInfoToCityTransfer.getCFSJ() == null) {
+                        visitorInfoToCityTransfer.setCFSJ(DateTimeUtil.getDateBeforeOrAfter(new Date(), -7));
                     }
                     visitorInfoToCityTransferService.insertVisitor(visitorInfoToCityTransfer);
                     intelligenceImportCityService.updateIfUpload(id);
@@ -1910,86 +1910,38 @@ public class ControlWarningScheduleJob {
 
     /**
      * 将电动车车辆信息上传市局数据库
-     *
      * @param param
      * @throws Exception
      */
     public void updateEconomicalToCity(String param) throws Exception {
         try {
-            List<StaticFileClass> list = intelligenceImportCityService.selectEconomical();
-            EconomicalInfoToCityTransfer economicalInfoToCityTransfer = new EconomicalInfoToCityTransfer();
-            int n = 5;
-            long id = 0L;
-            for (int i = 0; i < n; i++) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+            Map<String, Object> params = new HashMap<>();
+            String url = "http://nanyang.89iot.wang/portal/api/nanyang_get_user_info";
+            String token = SignatureUtil.md5("南阳市公安局" + dateFormat.format(new Date()));
+            long  maxid = economicalInfoToCityTransferService.selectMaxID();
+            maxid = Math.abs(maxid - (long)(Math.random() * 100));
+            params.put("token", token);
+            params.put("max_id", String.valueOf(maxid));
+            JSON json = HttpRequestUtils.httpPost(params, url);
+            JSONArray list = ((JSONObject) json).getJSONArray("data");
+            for (int i = 0; i < list.size(); i++) {
                 try {
-                    id = list.get(i).getId();
-                    economicalInfoToCityTransfer.setId(id);
-                    economicalInfoToCityTransfer.setXXZJBH(id);
-                    if (!Empty.equals(list.get(i).getName()) && list.get(i).getName() != null) {
-                        economicalInfoToCityTransfer.setXM(list.get(i).getName());
-                    }
-                    if (!Empty.equals(list.get(i).getDetail()) && list.get(i).getDetail() != null) {
-                        String details = list.get(i).getDetail();
-                        String[] arr = details.split(";");
-                        economicalInfoToCityTransfer.setGAJGMC("桐柏县公安局");
-                        for (int j = 0; j < arr.length; j++) {
-                            String xjh = "";
-                            String xsxm = "";
-                            String sfzjh = "";
-                            String xb = "";
-                            String xxmc = "";
-                            String drsj = "";
-                            String cyxm = "";
-                            if (arr[j].indexOf("身份证号") != -1 || arr[j].indexOf("身份证") != -1 ) {
-                                sfzjh = arr[j].substring(arr[j].indexOf("=") + 1);
-                                economicalInfoToCityTransfer.setGMSFHM(sfzjh);
-                            }
-                            if (arr[j].indexOf("手机") != -1 || arr[j].indexOf("电话") != -1) {
-                                xxmc = arr[j].substring(arr[j].indexOf("=") + 1);
-                                economicalInfoToCityTransfer.setLXDH(xxmc);
-                            }
-                            if (arr[j].indexOf("号牌号码") != -1) {
-                                cyxm = arr[j].substring(arr[j].indexOf("=") + 1);
-                                economicalInfoToCityTransfer.setHPHM(cyxm);
-                            }
-                            if (arr[j].indexOf("品牌") != -1) {
-                                xjh = arr[j].substring(arr[j].indexOf("=") + 1);
-                                economicalInfoToCityTransfer.setDDC_PP(xjh);
-                            }
-                            if (arr[j].indexOf("电动机号") != -1) {
-                                xsxm = arr[j].substring(arr[j].indexOf("=") + 1);
-                                economicalInfoToCityTransfer.setDDJH(xsxm);
-                            }
-                            if (arr[j].indexOf("车轮数量") != -1) {
-                                xb = arr[j].substring(arr[j].indexOf("=") + 1);
-                                economicalInfoToCityTransfer.setCLSL(xb);
-                            }
-                            if (arr[j].indexOf("购买日期") != -1 || arr[j].indexOf("时间") == -1 ||  arr[j].indexOf("日期") == -1) {
-                                try {
-                                    drsj = arr[j].substring(arr[j].indexOf("=") + 1);
-                                    SimpleDateFormat sdf = null;
-                                    if (drsj.contains("-")) {
-                                        sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                                    } else if (drsj.contains("/")) {
-                                        sdf = new SimpleDateFormat("yyyy/MM/dd");
-                                    } else if (drsj.contains(".")) {
-                                        sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm");
-                                    } else {
-                                        sdf = new SimpleDateFormat("yyyyMMdd HH:mm");
-                                    }
-                                    Date date = sdf.parse(drsj);
-                                    economicalInfoToCityTransfer.setGM_RQ(date);
-                                } catch (Exception e) {
-                                    economicalInfoToCityTransfer.setGM_RQ(new Date());
-                                }
-                            }
-                        }
-                    }
+                    EconomicalInfoToCityTransfer economicalInfoToCityTransfer = new EconomicalInfoToCityTransfer();
+                    JSONObject object = (JSONObject) list.get(i);
+                    economicalInfoToCityTransfer.setId(Long.parseLong(String.valueOf(object.get("id"))));
+                    economicalInfoToCityTransfer.setXM(String.valueOf(object.get("username")));
+                    economicalInfoToCityTransfer.setGMSFHM(String.valueOf(object.get("id_number")));
+                    economicalInfoToCityTransfer.setZS_DZMC(String.valueOf(object.get("address")));
+                    economicalInfoToCityTransfer.setLXDH(String.valueOf(object.get("phone")));
+                    economicalInfoToCityTransfer.setHPHM(String.valueOf(object.get("chepai_number")));
+                    economicalInfoToCityTransfer.setGAJGMC("桐柏县公安局");
+                    economicalInfoToCityTransfer.setBXPZH("桐柏电动车信息");
+                    economicalInfoToCityTransfer.setCLSL(String.valueOf(object.get("wheel_number")));
+                    economicalInfoToCityTransfer.setXxrksj(new Date());
                     economicalInfoToCityTransferService.insertEconomical(economicalInfoToCityTransfer);
-                    intelligenceImportCityService.updateIfUpload(id);
                 } catch (Exception e) {
-                    intelligenceImportCityService.updateIfUpload(id);
-                    e.printStackTrace();
+                    continue;
                 }
             }
         } catch (Exception e) {
@@ -2023,9 +1975,9 @@ public class ControlWarningScheduleJob {
                             String xsxm = "";
                             String cyxzz = "";
                             String cyxm = "";
-                            String jfje ="";
+                            String jfje = "";
                             String dz = "";
-                            String drsj ="";
+                            String drsj = "";
                             if (arr[j].indexOf("名称") != -1 || arr[j].indexOf("姓名") != -1) {
                                 cyxm = arr[j].substring(arr[j].indexOf("=") + 1);
                                 gasFeeInfoToCityTransfer.setMETCARDNAME(cyxm);
@@ -2042,11 +1994,11 @@ public class ControlWarningScheduleJob {
                                 jfje = arr[j].substring(arr[j].indexOf("=") + 1);
                                 gasFeeInfoToCityTransfer.setACTUALEARN(jfje);
                             }
-                            if(arr[j].indexOf("地址") != -1){
+                            if (arr[j].indexOf("地址") != -1) {
                                 dz = arr[j].substring(arr[j].indexOf("=") + 1);
                                 gasFeeInfoToCityTransfer.setBALANCE(dz);
                             }
-                            if ( arr[j].indexOf("时间") == -1 ||  arr[j].indexOf("日期") == -1) {
+                            if (arr[j].indexOf("时间") == -1 || arr[j].indexOf("日期") == -1) {
                                 try {
                                     drsj = arr[j].substring(arr[j].indexOf("=") + 1);
                                     SimpleDateFormat sdf = null;
@@ -2089,124 +2041,42 @@ public class ControlWarningScheduleJob {
      * @param param
      * @throws Exception
      */
-    public void updateEcoGpsToCity(String param) throws Exception{
+    public void updateEcoGpsToCity(String param) throws Exception {
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
             Map<String, Object> params = new HashMap<>();
             String url = "http://nanyang.89iot.wang/portal/api/nanyang_getting_data";
-            String token= SignatureUtil.md5("南阳市公安局"+dateFormat.format(new Date()));
+            String token = SignatureUtil.md5("南阳市公安局" + dateFormat.format(new Date()));
             params.put("token", token);
             JSON json = HttpRequestUtils.httpPost(params, url);
             JSONArray list = ((JSONObject) json).getJSONArray("data");
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            for (int i = 0 ; i < list.size(); i++) {
-                EcoGpsInfoToCityTransfer ecoGpsInfoToCityTransfer = new EcoGpsInfoToCityTransfer();
-                JSONObject object = (JSONObject)list.get(i);
-                ecoGpsInfoToCityTransfer.setSsqy("桐柏县");
-                ecoGpsInfoToCityTransfer.setClid(String.valueOf(object.get("chip_number")));
-                ecoGpsInfoToCityTransfer.setJd(String.valueOf(object.get("lng"))); //经度
-                ecoGpsInfoToCityTransfer.setWd(String.valueOf(object.get("lat"))); //纬度
-                ecoGpsInfoToCityTransfer.setCph(String.valueOf(object.get("chepai_number")));
-                ecoGpsInfoToCityTransfer.setHphm(String.valueOf(object.get("chepai_number")));
-                ecoGpsInfoToCityTransfer.setDjdw_gajgmc("桐柏县公安局");
-                ecoGpsInfoToCityTransfer.setSjly("桐柏电动车轨迹信息");
-                ecoGpsInfoToCityTransfer.setDjr_xm("付岩峰");
-                ecoGpsInfoToCityTransfer.setSd(String.valueOf(object.get("speed")));
-                ecoGpsInfoToCityTransfer.setDwsj(sdf.parse(String.valueOf(object.get("locTime"))));
-                ecoGpsInfoToCityTransfer.setDrsj(sdf.parse(String.valueOf(object.get("addtime"))));
-                ecoGpsInfoToCityTransfer.setXxrksj(new Date());
+            for (int i = 0; i < list.size(); i++) {
                 try {
+                    EcoGpsInfoToCityTransfer ecoGpsInfoToCityTransfer = new EcoGpsInfoToCityTransfer();
+                    JSONObject object = (JSONObject) list.get(i);
+                    ecoGpsInfoToCityTransfer.setSsqy("桐柏县");
+                    ecoGpsInfoToCityTransfer.setClid(String.valueOf(object.get("chip_number")));
+                    ecoGpsInfoToCityTransfer.setJd(String.valueOf(object.get("lng"))); //经度
+                    ecoGpsInfoToCityTransfer.setWd(String.valueOf(object.get("lat"))); //纬度
+                    ecoGpsInfoToCityTransfer.setCph(String.valueOf(object.get("chepai_number")));
+                    ecoGpsInfoToCityTransfer.setHphm(String.valueOf(object.get("chepai_number")));
+                    ecoGpsInfoToCityTransfer.setDjdw_gajgmc("桐柏县公安局");
+                    ecoGpsInfoToCityTransfer.setSjly("桐柏电动车轨迹信息");
+                    ecoGpsInfoToCityTransfer.setDjr_xm("付岩峰");
+                    ecoGpsInfoToCityTransfer.setSd(String.valueOf(object.get("speed")));
+                    ecoGpsInfoToCityTransfer.setDwsj(sdf.parse(String.valueOf(object.get("locTime"))));
+                    ecoGpsInfoToCityTransfer.setDrsj(sdf.parse(String.valueOf(object.get("addtime"))));
+                    ecoGpsInfoToCityTransfer.setXxrksj(new Date());
                     ecoGpsInfoToCityTransferService.insertEcoGps(ecoGpsInfoToCityTransfer);
                 } catch (Exception e) {
                     continue;
                 }
             }
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-     /*public void updateEcoGpsToCity(String param) throws Exception{
-        try {
-            List<StaticFileClass> list = intelligenceImportCityService.selectEcoGps();
-            EcoGpsInfoToCityTransfer ecoGpsInfoToCityTransfer = new EcoGpsInfoToCityTransfer();
-            int n = 5;
-            long id = 0L;
-            for (int i = 0; i < n; i++) {
-                try {
-                    id = list.get(i).getId();
-                    ecoGpsInfoToCityTransfer.setId(id);
-                    ecoGpsInfoToCityTransfer.setXxzjbh(id);
-                    if (!Empty.equals(list.get(i).getName()) && list.get(i).getName() != null) {
-                        ecoGpsInfoToCityTransfer.setXm(list.get(i).getName());
-                    }
-                    ecoGpsInfoToCityTransfer.setSsqy("桐柏县");
-                    if (!Empty.equals(list.get(i).getDetail()) && list.get(i).getDetail() != null) {
-                        String details = list.get(i).getDetail();
-                        String[] arr = details.split(";");
-                        for (int j = 0; j < arr.length; j++) {
-                            String xjh = "";
-                            String xsxm = "";
-                            String sfzjh = "";
-                            String cyxzz = "";
-                            String drsj = "";
-                            String cyxm = "";
-                            if (arr[j].indexOf("经度") != -1) {
-                                cyxm = arr[j].substring(arr[j].indexOf("=") + 1);
-                                ecoGpsInfoToCityTransfer.setJd(cyxm);
-                            }
-
-                            if (arr[j].indexOf("纬度") != -1) {
-                                xsxm = arr[j].substring(arr[j].indexOf("=") + 1);
-                                ecoGpsInfoToCityTransfer.setWd(xsxm);
-                            }
-
-                            if (arr[j].indexOf("速度") != -1) {
-                                cyxzz = arr[j].substring(arr[j].indexOf("=") + 1);
-                                ecoGpsInfoToCityTransfer.setSd(cyxzz);
-                            }
-
-                            if (arr[j].indexOf("手机") != -1 || arr[j].indexOf("电话") != -1) {
-                                xjh = arr[j].substring(arr[j].indexOf("=") + 1);
-                                ecoGpsInfoToCityTransfer.setLxdh(xjh);
-                            }
-                            if (arr[j].indexOf("身份证") != -1) {
-                                sfzjh = arr[j].substring(arr[j].indexOf("=") + 1);
-                                ecoGpsInfoToCityTransfer.setGmsfhm(sfzjh);
-                            }
-                            ecoGpsInfoToCityTransfer.setDjr_xm("付岩峰");
-                            ecoGpsInfoToCityTransfer.setDjdw_gajgmc("桐柏县公安局");
-                            if (arr[j].indexOf("时间") != -1 && arr[j].indexOf("年") == -1) {
-                                try {
-                                    drsj = arr[j].substring(arr[j].indexOf("=") + 1);
-                                    SimpleDateFormat sdf = null;
-                                    if (drsj.contains("-")) {
-                                        sdf = new SimpleDateFormat("yyyy-MM-dd");
-                                    } else if (drsj.contains("/")) {
-                                        sdf = new SimpleDateFormat("yyyy/MM/dd");
-                                    } else if (drsj.contains(".")) {
-                                        sdf = new SimpleDateFormat("yyyy.MM.dd");
-                                    } else {
-                                        sdf = new SimpleDateFormat("yyyyMMdd");
-                                    }
-                                    Date date = sdf.parse(drsj);
-                                    ecoGpsInfoToCityTransfer.setDwsj(date);
-                                } catch (Exception e) {
-                                    ecoGpsInfoToCityTransfer.setDwsj(new Date());
-                                }
-                            }
-                        }
-                    }
-                    ecoGpsInfoToCityTransferService.insertEcoGps(ecoGpsInfoToCityTransfer);
-                    intelligenceImportCityService.updateIfUpload(id);
-                } catch (Exception e) {
-                    intelligenceImportCityService.updateIfUpload(id);
-                    e.printStackTrace();
-                }
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }*/
+    }
 
     /**
      * 将快递信息上传市局数据库
@@ -2259,7 +2129,7 @@ public class ControlWarningScheduleJob {
                                 cyxzz = arr[j].substring(arr[j].indexOf("=") + 1);
                                 expressInfoToCityTransfer.setWLZGS_DWMC(cyxzz);
                             }
-                            if (arr[j].indexOf("手机") != -1 || arr[j].indexOf("电话") != -1){
+                            if (arr[j].indexOf("手机") != -1 || arr[j].indexOf("电话") != -1) {
                                 xjh = arr[j].substring(arr[j].indexOf("=") + 1);
                                 expressInfoToCityTransfer.setSHHR_LXDH(xjh);
                             }
@@ -2361,37 +2231,37 @@ public class ControlWarningScheduleJob {
                                 xb = arr[j].substring(arr[j].indexOf("=") + 1);
                                 medicalNewbornRecordTransfer.setXB_DMMS(xb);
                             }
-                            if (arr[j].indexOf("母") != -1 && arr[j].indexOf("姓")!= -1) {
+                            if (arr[j].indexOf("母") != -1 && arr[j].indexOf("姓") != -1) {
                                 xsxm = arr[j].substring(arr[j].indexOf("=") + 1);
                                 medicalNewbornRecordTransfer.setMQ_XM(xsxm);
                             }
 
-                            if (arr[j].indexOf("父") != -1&& arr[j].indexOf("姓")!= -1) {
+                            if (arr[j].indexOf("父") != -1 && arr[j].indexOf("姓") != -1) {
                                 cyxzz = arr[j].substring(arr[j].indexOf("=") + 1);
                                 medicalNewbornRecordTransfer.setFQ_XM(cyxzz);
                             }
-                            if (arr[j].indexOf("母") != -1 && arr[j].indexOf("民")!= -1) {
+                            if (arr[j].indexOf("母") != -1 && arr[j].indexOf("民") != -1) {
                                 hkxz = arr[j].substring(arr[j].indexOf("=") + 1);
                                 medicalNewbornRecordTransfer.setMQ_MZ_DMMS(hkxz);
                             }
 
-                            if (arr[j].indexOf("父") != -1&& arr[j].indexOf("民")!= -1) {
+                            if (arr[j].indexOf("父") != -1 && arr[j].indexOf("民") != -1) {
                                 tjsj = arr[j].substring(arr[j].indexOf("=") + 1);
                                 medicalNewbornRecordTransfer.setMQ_MZ_DMMS(tjsj);
                             }
-                            if ((arr[j].indexOf("母") != -1 && arr[j].indexOf("手机") != -1) || (arr[j].indexOf("母") != -1 && arr[j].indexOf("手机") != -1)){
+                            if ((arr[j].indexOf("母") != -1 && arr[j].indexOf("手机") != -1) || (arr[j].indexOf("母") != -1 && arr[j].indexOf("手机") != -1)) {
                                 xjh = arr[j].substring(arr[j].indexOf("=") + 1);
                                 medicalNewbornRecordTransfer.setMQ_LXDH(xjh);
                             }
-                            if ((arr[j].indexOf("父") != -1 && arr[j].indexOf("手机") != -1) || (arr[j].indexOf("父") != -1 && arr[j].indexOf("手机") != -1)){
+                            if ((arr[j].indexOf("父") != -1 && arr[j].indexOf("手机") != -1) || (arr[j].indexOf("父") != -1 && arr[j].indexOf("手机") != -1)) {
                                 sfzjh = arr[j].substring(arr[j].indexOf("=") + 1);
                                 medicalNewbornRecordTransfer.setFQ_LXDH(sfzjh);
                             }
-                            if ((arr[j].indexOf("母") != -1 && arr[j].indexOf("身份") != -1) ){
+                            if ((arr[j].indexOf("母") != -1 && arr[j].indexOf("身份") != -1)) {
                                 xxmc = arr[j].substring(arr[j].indexOf("=") + 1);
                                 medicalNewbornRecordTransfer.setMQ_GMSFZH(xxmc);
                             }
-                            if ((arr[j].indexOf("父") != -1 && arr[j].indexOf("身份") != -1)){
+                            if ((arr[j].indexOf("父") != -1 && arr[j].indexOf("身份") != -1)) {
                                 xxbsm = arr[j].substring(arr[j].indexOf("=") + 1);
                                 medicalNewbornRecordTransfer.setFQ_GMSFZH(xxbsm);
                             }
@@ -2539,7 +2409,7 @@ public class ControlWarningScheduleJob {
                         String details = list.get(i).getDetail();
                         String[] arr = details.split(";");
                         for (int j = 0; j < arr.length; j++) {
-                            String xm= "";
+                            String xm = "";
                             String kh = "";
                             String dh = "";
                             String gddw = "";
@@ -2549,7 +2419,7 @@ public class ControlWarningScheduleJob {
                                 xm = arr[j].substring(arr[j].indexOf("=") + 1);
                                 medicalStaticPowerDataToCityTransfer.setHM(xm);
                             }
-                            if (arr[j].indexOf("号") != -1 || arr[j].indexOf("卡号") != -1 ) {
+                            if (arr[j].indexOf("号") != -1 || arr[j].indexOf("卡号") != -1) {
                                 kh = arr[j].substring(arr[j].indexOf("=") + 1);
                                 medicalStaticPowerDataToCityTransfer.setHH(kh);
                             }
@@ -2626,7 +2496,7 @@ public class ControlWarningScheduleJob {
                 String prefix = fileName.substring(fileName.lastIndexOf("."));
                 int num = prefix.length();//得到后缀名长度
                 String nameSuffix = file.getAbsolutePath();//得到文件绝对路径名字，路径中包含
-                if (nameSuffix.indexOf("电力") != -1 && nameSuffix.indexOf("费")!= -1) {
+                if (nameSuffix.indexOf("电力") != -1 && nameSuffix.indexOf("费") != -1) {
                     businessTypeId = 115L;
                 }
                 if (nameSuffix.indexOf("电力") != -1 && nameSuffix.indexOf("用户") != -1) {

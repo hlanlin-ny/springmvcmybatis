@@ -84,5 +84,7 @@
 		select count(*) from medical_static_economical_to_city_transferc where 1=1
 		<include refid="query_list_and"/>
 	</select>
-
+	<select id="selectMaxID" parameterType="com.yaofei.springmvcmybatis.plugins.datatables.domain.DataTablesRequest" resultType="long">
+		select max(id) as id from medical_static_economical_to_city_transferc
+	</select>
 </mapper>
