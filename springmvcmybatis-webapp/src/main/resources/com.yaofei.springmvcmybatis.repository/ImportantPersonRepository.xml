@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yaofei.springmvcmybatis.repository.ImportantPersonRepository">
+
+    <!-- sql片段 -->
+    <sql id="query_list_where">
+        <!-- where可以自动去除第一个and -->
+        <where>
+            and is_deleted = 0
+            <if test="extraSearch !=null">
+                <if test="extraSearch.name !=null and extraSearch.name !=''">
+                    and name like CONCAT('%',#{extraSearch.name},'%')
+                </if>
+                <if test="extraSearch.idCardNo !=null and extraSearch.idCardNo !=''">
+                    and id_card_no = #{extraSearch.idCardNo}
+                </if>
+                <if test="extraSearch.controlName !=null and extraSearch.controlName !=''">
+                    and control_name  like CONCAT('%',#{extraSearch.controlName},'%')
+                </if>
+                <if test="extraSearch.controlUnit !=null and extraSearch.controlUnit !=''">
+                    and control_unit = #{extraSearch.controlUnit}
+                </if>
+                <if test="extraSearch.areaId !=null and extraSearch.areaId !=''">
+                    and area_id = #{extraSearch.areaId}
+                </if>
+            </if>
+        </where>
+    </sql>
+
+    <select id="queryTotal" resultType="long">
+		select count(*) from important_person where is_deleted = 0
+	</select>
+
+    <select id="queryListTotal" parameterType="com.yaofei.springmvcmybatis.plugins.datatables.domain.DataTablesRequest"
+            resultType="long">
+        select count(*) from important_person
+        <!-- 引用sql片段 -->
+        <include refid="query_list_where"/>
+    </select>
+
+    <select id="queryList" resultType="com.yaofei.springmvcmybatis.entity.ImportantPerson">
+        select * from important_person
+        <!-- 引用sql片段 -->
+        <include refid="query_list_where"/>
+
+        <choose>
+            <when test="orderString != null and orderString != ''">
+                order by ${orderString}
+            </when>
+            <otherwise>
+                order by id DESC
+            </otherwise>
+        </choose>
+        <if test="start != null and length != null">
+            limit #{start}, #{length}
+        </if>
+    </select>
+
+    <insert id="save" parameterType="com.yaofei.springmvcmybatis.entity.ImportantPerson" useGeneratedKeys="true"
+            keyProperty="id">
+		insert into important_person
+		(
+                    		`name`, 
+                    		`id_card_no`, 
+                    		`sex`, 
+                    		`nation`, 
+                    		`born_time`, 
+                    		`address`, 
+                    		`person_type`, 
+                    		`control_name`,
+                    		`control_person_unit`,
+                    		`control_unit`,
+                    		`control_tel`,
+                    		`status`,
+                    		`created_by`,
+                    		`created_ip`,
+                    		`remark`,
+                    		`area_id`
+            		)
+		values
+		(
+                    			#{name}, 
+                    			#{idCardNo}, 
+                    			#{sex}, 
+                    			#{nation}, 
+                    			#{bornTime}, 
+                    			#{address}, 
+                    			#{personType}, 
+                    			#{controlName},
+                    			#{controlPersonUnit},
+                    			#{controlUnit},
+                    			#{controlTel},
+                    			'未布控',
+                    			#{createdBy},
+                    			#{createdIp},
+                    			#{remark},
+                    			#{areaId}
+            		)
+	</insert>
+
+    <update id="update" parameterType="com.yaofei.springmvcmybatis.entity.ImportantPerson">
+        update important_person
+        <set>
+            <if test="name != null">`name` = #{name},</if>
+            <if test="idCardNo != null">`id_card_no` = #{idCardNo},</if>
+            <if test="sex != null">`sex` = #{sex},</if>
+            <if test="nation != null">`nation` = #{nation},</if>
+            <if test="bornTime != null">`born_time` = #{bornTime},</if>
+            <if test="address != null">`address` = #{address},</if>
+            <if test="personType != null">`person_type` = #{personType},</if>
+            <if test="controlName != null">`control_name` = #{controlName},</if>
+            <if test="controlPersonUnit != null">`control_person_unit` = #{controlPersonUnit},</if>
+            <if test="controlUnit != null">`control_unit` = #{controlUnit},</if>
+            <if test="controlTel != null">`control_tel` = #{controlTel},</if>
+            <if test="status != null">`status` = #{status},</if>
+            <if test="modificationTime != null">`modification_time` = #{modificationTime},</if>
+            <if test="modificationBy != null">`modification_by` = #{modificationBy},</if>
+            <if test="modificationIp != null">`modification_ip` = #{modificationIp},</if>
+            <if test="remark != null">`remark` = #{remark},</if>
+            <if test="areaId != null">`area_id` = #{areaId}</if>
+        </set>
+        where id = #{id} and is_deleted = 0
+    </update>
+
+    <delete id="delete">
+		delete from important_person where id = #{value}
+	</delete>
+
+    <delete id="deleteBatch">
+        delete from important_person where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="queryObject" resultType="com.yaofei.springmvcmybatis.entity.ImportantPerson">
+		select * from important_person where id = #{value}
+	</select>
+
+    <insert id="batchAdd" parameterType="java.util.List">
+        insert into important_person
+        (
+        `name`,
+        `id_card_no`,
+        `sex`,
+        `nation`,
+        `born_time`,
+        `address`,
+        `person_type`,
+        `control_name`,
+        `control_person_unit`,
+        `control_unit`,
+        `control_tel`,
+        `status`,
+        `created_by`,
+        `created_ip`,
+        `remark`,
+        `area_id`
+        )
+        values
+        <foreach collection="list" item="importantPersons" index="index"
+                 separator=",">
+            (
+            #{importantPersons.name},
+            #{importantPersons.idCardNo},
+            #{importantPersons.sex},
+            #{importantPersons.nation},
+            #{importantPersons.bornTime},
+            #{importantPersons.address},
+            #{importantPersons.personType},
+            #{importantPersons.controlName},
+            #{importantPersons.controlPersonUnit},
+            #{importantPersons.controlUnit},
+            #{importantPersons.controlTel},
+            #{importantPersons.status},
+            #{importantPersons.createdBy},
+            #{importantPersons.createdIp},
+            #{importantPersons.remark},
+            #{importantPersons.areaId}
+            )
+        </foreach>
+    </insert>
+
+    <select id="queryBatch" resultType="com.yaofei.springmvcmybatis.entity.ImportantPerson">
+        select * from important_person
+    </select>
+
+    <select id="queryPerson" resultType="com.yaofei.springmvcmybatis.entity.ImportantPerson" parameterType="string">
+        select * from important_person
+        where id_card_no =  #{idcardno}
+    </select>
+
+    <select id="queryTel" resultType="string">
+        select tel from important_person
+        where id =  #{id}
+    </select>
+
+    <select id="queryIDcard" resultType="string">
+        select id_card_no from important_person
+        where id =  #{id}
+    </select>
+
+    <select id="queryByTel" resultType="com.yaofei.springmvcmybatis.entity.ImportantPerson">
+        select * from important_person
+        where tel = #{tel}
+    </select>
+
+    <select id="queryByCard" resultType="com.yaofei.springmvcmybatis.entity.ImportantPerson">
+        select * from important_person
+        where id_card_no = #{card}
+    </select>
+</mapper>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yaofei.springmvcmybatis.repository.IntelligenceBusinessTypeRepository">
+
+    <!-- sql片段 -->
+    <sql id="query_list_where">
+        <!-- where可以自动去除第一个and -->
+        <where>
+            and is_deleted = 0
+            <if test="extraSearch !=null">
+                <if test="extraSearch.name !=null and extraSearch.name !=''">
+                    and name like CONCAT('%',#{extraSearch.name},'%')
+                </if>
+                <if test="extraSearch.remark !=null and extraSearch.remark !=''">
+                    and remark like CONCAT('%',#{extraSearch.remark},'%')
+                </if>
+                <if test="extraSearch.areaId !=null and extraSearch.areaId !=''">
+                    and area_id = #{extraSearch.areaId}
+                </if>
+            </if>
+        </where>
+    </sql>
+
+    <select id="queryTotal" resultType="long">
+		select count(*) from intelligence_business_type where is_deleted = 0
+	</select>
+
+    <select id="queryListTotal" parameterType="com.yaofei.springmvcmybatis.plugins.datatables.domain.DataTablesRequest"
+            resultType="long">
+        select count(*) from intelligence_business_type
+        <!-- 引用sql片段 -->
+        <include refid="query_list_where"/>
+    </select>
+
+    <select id="queryList" resultType="com.yaofei.springmvcmybatis.entity.IntelligenceBusinessType">
+        select * from (select a.*, IFNULL(b.name,'根') as parent_name from intelligence_business_type a left join
+        intelligence_business_type b on a.parent_id=b.id) ab
+        <!-- 引用sql片段 -->
+        <include refid="query_list_where"/>
+
+        <choose>
+            <when test="orderString != null and orderString != ''">
+                order by ${orderString}
+            </when>
+            <otherwise>
+                order by id DESC
+            </otherwise>
+        </choose>
+        <if test="start != null and length != null">
+            limit #{start}, #{length}
+        </if>
+    </select>
+
+    <insert id="save" parameterType="com.yaofei.springmvcmybatis.entity.IntelligenceBusinessType"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into intelligence_business_type
+        (
+        `parent_id`,
+        `name`,
+        `area_id`,
+        `order_num`,
+        `created_by`,
+        `created_ip`,
+        `remark`
+        )
+        values
+        (
+        #{parentId},
+        #{name},
+        #{areaId},
+        #{orderNum},
+        #{createdBy},
+        #{createdIp},
+        #{remark}
+        )
+        <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+            SELECT last_insert_id() as id
+        </selectKey>
+    </insert>
+
+    <update id="update" parameterType="com.yaofei.springmvcmybatis.entity.IntelligenceBusinessType">
+        update intelligence_business_type
+        <set>
+            <if test="parentId != null">`parent_id` = #{parentId},</if>
+            <if test="name != null">`name` = #{name},</if>
+            <if test="areaId != null">`area_id` = #{areaId},</if>
+            <if test="orderNum != null">`order_num` = #{orderNum},</if>
+            <if test="isDeleted != null">`is_deleted` = #{isDeleted},</if>
+            <if test="modificationBy != null">`modification_by` = #{modificationBy},</if>
+            <if test="modificationIp != null">`modification_ip` = #{modificationIp},</if>
+            <if test="remark != null">`remark` = #{remark}</if>
+        </set>
+        where id = #{id} and is_deleted = 0
+    </update>
+
+    <delete id="delete">
+		delete from intelligence_business_type where id = #{value}
+	</delete>
+
+    <delete id="deleteBatch">
+        delete from intelligence_business_type where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="queryObject" resultType="com.yaofei.springmvcmybatis.entity.IntelligenceBusinessType">
+		select * from intelligence_business_type where id = #{value}
+	</select>
+
+    <select id="getParentList" resultType="com.yaofei.springmvcmybatis.entity.IntelligenceBusinessType">
+        select * from intelligence_business_type where FIND_IN_SET(id,getParentListIntelligenceBusinessType(#{value})) order by order_num asc
+    </select>
+
+</mapper>

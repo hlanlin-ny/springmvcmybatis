@@ -1,0 +1,22 @@
+package ${package}.controller;
+
+import ${package}.entity.${className};
+import ${package}.service.${className}Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+/**
+ * ${comments}
+ * 
+ * @author ${author}
+ * @email ${email}
+ * @date ${datetime}
+ */
+@Controller
+@RequestMapping("/admin/${pathName}")
+public class ${className}Controller extends BaseCRUDController<${className}>  {
+	@Autowired
+	private ${className}Service ${classname}Service;
+
+}

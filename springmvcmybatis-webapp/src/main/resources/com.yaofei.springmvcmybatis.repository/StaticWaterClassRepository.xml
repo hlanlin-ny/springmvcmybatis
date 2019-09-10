@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yaofei.springmvcmybatis.repository.StaticWaterToCityRepository">
+
+    <insert id="insert" parameterType="com.yaofei.springmvcmybatis.entity.MedicalStaticWaterToCityTransfer"  useGeneratedKeys="true" keyProperty="id">
+        insert into medical_static_waterdata_to_city_transfer
+        (
+        `id`,
+        `XXZJBH`,
+        `KH_WPBZH`,
+        `XM`,
+        `XB`,
+        `XZZ_DZMC`,
+        `GMSFHM`,
+        `YSXZ`,
+        `GDDH`,
+        `YDDH`,
+        `LXR_XM`,
+        `KHRQ`,
+        `GSRK_RS`,
+        `YHLX`,
+        `DRSJ`,
+        `DJDW_GAJGJGDM`,
+        `DJDW_GAJGMC`,
+        `DJR_XM`,
+        `DJR_GMSFHM`,
+        `DJR_LXDH`,
+        `XXLY_XZQHDM`,
+        `BZ`
+        )
+        values
+        (
+        #{id},
+        #{xxzjbh},
+        #{khWpbzh},
+        #{xm},
+        #{xb},
+        #{xzzDzmc},
+        #{gmsfhm},
+        #{ysxz},
+        #{gddh},
+        #{yddh},
+        #{lxrXm},
+        #{khrq},
+        #{gsrkRs},
+        #{yhlx},
+        #{drsj},
+        #{djdwGajgjgdm},
+        #{djdwGajgmc},
+        #{djrXm},
+        #{djrGmsfhm},
+        #{djrLxdh},
+        #{xxlyXzqhdm},
+        #{bz}
+        )
+    </insert>
+
+</mapper>

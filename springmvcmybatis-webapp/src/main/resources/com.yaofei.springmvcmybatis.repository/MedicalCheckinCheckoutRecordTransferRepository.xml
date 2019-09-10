@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yaofei.springmvcmybatis.repository.MedicalCheckinCheckoutRecordTransferRepository">
+
+    <!-- sql片段 -->
+    <sql id="query_list_where">
+        <!-- where可以自动去除第一个and -->
+        <where>
+            and is_deleted = 0
+            <if test="extraSearch !=null">
+                <if test="extraSearch.name !=null and extraSearch.name !=''">
+                    and name like CONCAT('%',#{extraSearch.name},'%')
+                </if>
+                <if test="extraSearch.userId !=null and extraSearch.userId !=''">
+                    and user_id = #{extraSearch.userId}
+                </if>
+                <if test="extraSearch.idCardNum !=null and extraSearch.idCardNum !=''">
+                    and id_card_num = #{extraSearch.idCardNum}
+                </if>
+                <if test="extraSearch.phone !=null and extraSearch.phone !=''">
+                    and phone = #{extraSearch.phone}
+                </if>
+                <if test="extraSearch.address !=null and extraSearch.address !=''">
+                    and address like CONCAT('%',#{extraSearch.address},'%')
+                </if>
+                <if test="extraSearch.profession !=null and extraSearch.profession !=''">
+                    and profession like CONCAT('%',#{extraSearch.profession},'%')
+                </if>
+                <if test="extraSearch.organization !=null and extraSearch.organization !=''">
+                    and organization like CONCAT('%',#{extraSearch.organization},'%')
+                </if>
+                <if test="extraSearch.hospitalizationNo !=null and extraSearch.hospitalizationNo !=''">
+                    and hospitalization_no like CONCAT('%',#{extraSearch.hospitalizationNo},'%')
+                </if>
+                <if test="extraSearch.hospitalizationDepartment !=null and extraSearch.hospitalizationDepartment !=''">
+                    and hospitalization_department like CONCAT('%',#{extraSearch.hospitalizationDepartment},'%')
+                </if>
+                <if test="extraSearch.hospitalizationDatetimeBegin !=null and extraSearch.hospitalizationDatetimeBegin !=''">
+                    and hospitalization_datetime >= #{extraSearch.hospitalizationDatetimeBegin}
+                </if>
+                <if test="extraSearch.hospitalizationDatetimeEnd !=null and extraSearch.hospitalizationDatetimeEnd !=''">
+                    and hospitalization_datetime &lt; date_add(#{extraSearch.hospitalizationDatetimeEnd}, interval 1 day)
+                </if>
+                <if test="extraSearch.leavehospitalDatetimeBegin !=null and extraSearch.leavehospitalDatetimeBegin !=''">
+                    and leaveHospital_datetime >= #{extraSearch.leavehospitalDatetimeBegin}
+                </if>
+                <if test="extraSearch.leavehospitalDatetimeEnd !=null and extraSearch.leavehospitalDatetimeEnd !=''">
+                    and leaveHospital_datetime &lt; date_add(#{extraSearch.leavehospitalDatetimeEnd}, interval 1 day)
+                </if>
+                <if test="extraSearch.remark !=null and extraSearch.remark !=''">
+                    and remark like CONCAT('%',#{extraSearch.remark},'%')
+                </if>
+                <if test="extraSearch.areaId !=null and extraSearch.areaId !=''">
+                    and area_id = #{extraSearch.areaId}
+                </if>
+            </if>
+        </where>
+    </sql>
+
+    <select id="queryTotal" resultType="long">
+		select count(*) from medical_checkin_checkout_record_transfer where is_deleted = 0
+	</select>
+
+    <select id="queryListTotal" parameterType="com.yaofei.springmvcmybatis.plugins.datatables.domain.DataTablesRequest"
+            resultType="long">
+        select count(*) from medical_checkin_checkout_record_transfer
+        <!-- 引用sql片段 -->
+        <include refid="query_list_where"/>
+    </select>
+
+    <select id="queryList" resultType="com.yaofei.springmvcmybatis.entity.MedicalCheckinCheckoutRecordTransfer">
+        select * from medical_checkin_checkout_record_transfer
+        <!-- 引用sql片段 -->
+        <include refid="query_list_where"/>
+
+        <choose>
+            <when test="orderString != null and orderString != ''">
+                order by ${orderString}
+            </when>
+            <otherwise>
+                order by id DESC
+            </otherwise>
+        </choose>
+        <if test="start != null and length != null">
+            limit #{start}, #{length}
+        </if>
+    </select>
+
+    <insert id="save" parameterType="com.yaofei.springmvcmybatis.entity.MedicalCheckinCheckoutRecordTransfer"
+            useGeneratedKeys="true" keyProperty="id">
+		insert into medical_checkin_checkout_record_transfer
+		(
+                    	           `XXZJBH`,
+                    		`name`,
+                    		`XMHYPY`,
+                    		`XB`,
+                    		`XBDM`,
+                    		`CSRQ`,
+                    		`NL`,
+                    		`idCardNo`,
+                    		`phone`,
+                    		`address`,
+                    		`profession`,
+                    		`workUnit`,
+                    		`HZ_XM`,
+                    		`JTRK_RS`,
+                    		`JTLB`,
+                    		`JTLBDM`,
+                    		`YY_DWMC`,
+                    		`YBZ_ZJHM`,
+                    		`hospitalizationNo`,
+                    		`hospitalizationDepartment`,
+                    		`CH`,
+                    		`RYTJ_JYQK`,
+                    		`YS_XM`,
+                    		`RYZD_JYQK`,
+                    		`CYZD_JYQK`,
+                    		`JZDX_PDBZ`,
+                    		`JZDXLB`,
+                    		`JZJ_JE`,
+                    		`JBR_XM`,
+                    		`hospitalizationDatetime`,
+                    		`leaveHospitalDatetime`,
+                    		`BZ`,
+                    		`created_by`,
+                    		`created_ip`
+            		)
+		values
+		(
+                    		        #{XXZJBH},
+                    			#{name},
+                    			#{XMHYPY},
+                    			#{XB},
+                    			#{XBDM},
+                    			#{CSRQ},
+                    			#{NL},
+                    			#{idCardNo},
+                    			#{phone},
+                    			#{address},
+                    			#{profession},
+                    			#{workUnit},
+                    			#{HZ_XM},
+                    			#{JTRK_RS},
+                    			#{JTLB},
+                    			#{JTLBDM},
+                    			#{YY_DWMC},
+                    			#{YBZ_ZJHM},
+                    			#{hospitalizationNo},
+                    			#{hospitalizationDepartment},
+                    			#{CH},
+                    			#{RYTJ_JYQK},
+                    			#{YS_XM},
+                    			#{RYZD_JYQK},
+                    			#{CYZD_JYQK},
+                    			#{JZDX_PDBZ},
+                    			#{JZDXLB},
+                    			#{JZJ_JE},
+                    			#{JBR_XM},
+                    			#{hospitalizationDatetime},
+                    			#{leavehospitalDatetime},
+                    			#{BZ},
+                    			#{createdBy},
+                    			#{createdIp}
+            		)
+	</insert>
+
+    <update id="update" parameterType="com.yaofei.springmvcmybatis.entity.MedicalCheckinCheckoutRecordTransfer">
+        update medical_checkin_checkout_record_transfer
+        <set>
+            <if test="XXZJBH != null">`XXZJBH` = #{XXZJBH}, </if>
+            <if test="name != null">`name` = #{name}, </if>
+            <if test="XMHYPY != null">`XMHYPY` = #{XMHYPY}, </if>
+            <if test="XB != null">`XB` = #{XB}, </if>
+            <if test="XBDM != null">`XBDM` = #{XBDM}, </if>
+            <if test="CSRQ != null">`CSRQ` = #{CSRQ}, </if>
+            <if test="NL != null">`NL` = #{NL}, </if>
+            <if test="idCardNo != null">`idCardNo` = #{idCardNo}, </if>
+            <if test="phone != null">`phone` = #{phone}, </if>
+            <if test="address != null">`address` = #{address}, </if>
+            <if test="profession != null">`profession` = #{profession}, </if>
+            <if test="workUnit != null">`workUnit` = #{workUnit}, </if>
+            <if test="hz_XM != null">`HZ_XM` = #{hz_XM}, </if>
+            <if test="JTRK_RS != null">`JTRK_RS` = #{JTRK_RS}, </if>
+            <if test="JTLBDM != null">`JTLBDM` = #{JTLBDM}, </if>
+            <if test="JTLB != null">`JTLB` = #{JTLB}, </if>
+            <if test="YY_DWMC != null">`YY_DWMC` = #{YY_DWMC}, </if>
+            <if test="YBZ_ZJHM != null">`YBZ_ZJHM` = #{YBZ_ZJHM}, </if>
+            <if test="hospitalizationNo != null">`hospitalizationNo` = #{hospitalizationNo}, </if>
+            <if test="hospitalizationDepartment != null">`hospitalizationDepartment` = #{hospitalizationDepartment}, </if>
+            <if test="CH != null">`CH` = #{CH}, </if>
+            <if test="RYTJ_JYQK != null">`RYTJ_JYQK` = #{RYTJ_JYQK}, </if>
+            <if test="YS_XM != null">`YS_XM` = #{YS_XM}, </if>
+            <if test="RYZD_JYQK != null">`RYZD_JYQK` = #{RYZD_JYQK}, </if>
+            <if test="CYZD_JYQK != null">`CYZD_JYQK` = #{CYZD_JYQK}, </if>
+            <if test="JZDX_PDBZ != null">`JZDX_PDBZ` = #{JZDX_PDBZ}, </if>
+            <if test="JZDXLB != null">`JZDXLB` = #{JZDXLB}, </if>
+            <if test="JZJ_JE != null">`JZJ_JE` = #{JZJ_JE}, </if>
+            <if test="JBR_XM != null">`JBR_XM` = #{JBR_XM}, </if>
+            <if test="hospitalizationDatetime != null">`hospitalizationDatetime` = #{hospitalizationDatetime}, </if>
+            <if test="leavehospitalDatetime != null">`leavehospitalDatetime` = #{leavehospitalDatetime}, </if>
+            <if test="BZ != null">`BZ` = #{BZ},</if>
+            <if test="modificationBy != null">`modification_by` = #{modificationBy}, </if>
+            <if test="modificationIp != null">`modification_ip` = #{modificationIp}</if>
+        </set>
+        where id = #{id} and is_deleted = 0
+    </update>
+
+    <delete id="delete">
+		delete from medical_checkin_checkout_record_transfer where id = #{value}
+	</delete>
+
+    <delete id="deleteBatch">
+        delete from medical_checkin_checkout_record_transfer where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="queryObject" resultType="com.yaofei.springmvcmybatis.entity.MedicalCheckinCheckoutRecordTransfer">
+		select * from medical_checkin_checkout_record_transfer where id = #{value}
+	</select>
+
+    <select id="queryBatch" resultType="com.yaofei.springmvcmybatis.entity.MedicalCheckinCheckoutRecordTransfer">
+        select * from medical_checkin_checkout_record_transfer
+    </select>
+
+</mapper>

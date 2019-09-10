@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+          http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         version="3.0">
+
+  <display-name>Archetype Created Web Application</display-name>
+
+  <!--Spring begin-->
+  <!-- Spring 的监听器可以通过这个上下文参数来获取applicationContext.xml (beans.xml) 的位置 -->
+  <!--加载Spring XML配置文件，Spring安全配置及各类资源文件-->
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath:spring-config/spring.xml</param-value>
+  </context-param>
+
+  <!-- 配置启动 Spring IOC 容器的 Listener , 自动装配ApplicationContext的配置信息 -->
+  <!-- Bootstraps the root web application context before servlet initialization -->
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  <!-- Spring刷新Interceptor防止内存泄漏 -->
+  <listener>
+    <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+  </listener>
+  <!--Spring end-->
+
+
+  <!--Spring mvc begin-->
+  <!-- 配置 Spring MVC核心控制器 DispatcherServlet , 启动 WEB 层的 Spring 容器  -->
+  <servlet>
+    <servlet-name>dispatcherServlet</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <!-- 配置 DispatcherServlet 的一个初始化参数: 配置 SpringMVC 配置文件的位置和名称 -->
+    <!-- 实际上也可以不通过 contextConfigLocation 来配置 SpringMVC 的配置文件, 而使用默认的. 默认的配置文件为:
+/WEB-INF/<servlet-name>-servlet.xml -->
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:dispatcherServlet-servlet.xml</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>dispatcherServlet</servlet-name>
+    <url-pattern>/</url-pattern>
+    <!--<url-pattern>*.htm</url-pattern>-->
+  </servlet-mapping>
+  <!--Spring mvc end-->
+
+
+  <!-- 中文编码-begin -->
+  <!-- 字符编码过滤器必须配置在所有过滤器的最前面! -->
+  <filter>
+    <filter-name>CharacterEncodingFilter</filter-name>
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>CharacterEncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <!-- 中文编码-end -->
+
+
+  <session-config>
+    <session-timeout>30</session-timeout>
+  </session-config>
+
+  <!--欢迎页面 -->
+  <!--<welcome-file-list>-->
+  <!--<welcome-file>index.html</welcome-file>-->
+  <!--</welcome-file-list>-->
+</web-app>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yaofei.springmvcmybatis.repository.StaticAccumulationFundToCityRepository">
+    <sql id="query_list_and">
+        <if test="extraSearch.xm != null and extraSearch.xm != ''">
+            and xm like CONCAT('%',#{extraSearch.xm},'%')
+        </if>
+        <if test="extraSearch.xb != null and extraSearch.xb != ''">
+            and xb like CONCAT('%',#{extraSearch.xb},'%')
+        </if>
+        <if test="extraSearch.zjhm != null and extraSearch.zjhm != ''">
+            and zjhm like CONCAT('%',#{extraSearch.zjhm},'%')
+        </if>
+        <if test="extraSearch.xzzDzmc != null and extraSearch.xzzDzmc != ''">
+            and xzz_dzmc like CONCAT('%',#{extraSearch.xzzDzmc},'%')
+        </if>
+        <if test="extraSearch.fwcs != null and extraSearch.fwcs != ''">
+            and fwcs like CONCAT('%',#{extraSearch.fwcs},'%')
+        </if>
+        <if test="extraSearch.bz != null and extraSearch.bz != ''">
+            and bz like CONCAT('%',#{extraSearch.bz},'%')
+        </if>
+    </sql>
+
+    <select id="queryList" resultType="com.yaofei.springmvcmybatis.entity.MedicalAccumulationFundToCityTransfer">
+        select *
+        from medical_accumulation_fund_to_city_transfer
+        <include refid="query_list_and"/>
+        <choose>
+            <when test="orderString != null and orderString != ''">
+                order by ${orderString}
+            </when>
+            <otherwise>
+                order by id DESC
+            </otherwise>
+        </choose>
+        <if test="start != null and length != null">
+            limit #{start}, #{length}
+        </if>
+    </select>
+
+    <select id="queryListTotal" parameterType="com.yaofei.springmvcmybatis.plugins.datatables.domain.DataTablesRequest" resultType="long">
+        select count(*) from medical_ncms_to_city_transfer where 1=1
+        <include refid="query_list_and"/>
+    </select>
+</mapper>

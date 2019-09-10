@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yaofei.springmvcmybatis.repository.CarGpsInfoToCityTransferRepository">
+
+	<sql id="query_list_and">
+		<if test="extraSearch.cph != null and extraSearch.cph != ''">
+			and cph like CONCAT('%',#{extraSearch.cph},'%')
+		</if>
+		<if test="extraSearch.ssqy != null and extraSearch.ssqy != ''">
+			and ssqy like CONCAT('%',#{extraSearch.ssqy},'%')
+		</if>
+		<if test="extraSearch.jd != null and extraSearch.jd != ''">
+			and jd=#{extraSearch.jd}
+		</if>
+		<if test="extraSearch.wd != null and extraSearch.wd != ''">
+			and wd =#{extraSearch.wd}
+		</if>
+	</sql>
+    <insert id="insertCarGps" parameterType="com.yaofei.springmvcmybatis.entity.CarGpsInfoToCityTransfer"  useGeneratedKeys="true" keyProperty="id">
+		insert into medical_static_cargps_to_city_transferc
+		(
+                    		`id`,
+                    		`xxzjbh`,
+                    		`clid`,
+                    		`cph`,
+                    		`czdh`,
+                    		`ssqy`,
+                    		`dwsj`,
+                    		`jd`,
+                    		`wd`,
+                    		`sd`,
+                    		`drztms`,
+                    		`drfk`,
+                    		`bz`,
+                    		`djdw_gajgjgdm`,
+                    		`djdw_gajgmc`,
+                    		`djr_xm`,
+                    		`djr_gmsfhm`,
+                    		`djr_lxdh`,
+                    		`xxly_xzqhdm`,
+                    		`sjly`
+            		)
+		values
+		(
+                    			#{id},
+                    			#{xxzjbh},
+                    			#{clid},
+                    			#{cph},
+                    			#{czdh},
+                    			#{ssqy},
+                    			#{dwsj},
+                    			#{jd},
+                    			#{wd},
+                    			#{sd},
+                    			#{drztms},
+                    			#{drfk},
+                    			#{bz},
+                    			#{djdwGajgjgdm},
+                    			#{djdwGajgmc},
+                    			#{djrXm},
+                    			#{djrGmsfhm},
+                    			#{djrLxdh},
+                    			#{xxlyXzqhdm},
+                    			#{sjly}
+            		)
+	</insert>
+
+	<select id="queryList" resultType="com.yaofei.springmvcmybatis.entity.CarGpsInfoToCityTransfer">
+		select * from medical_static_cargps_to_city_transferc
+		<include refid="query_list_and"/>
+		<choose>
+			<when test="orderString != null and orderString != ''">
+				order by ${orderString}
+			</when>
+			<otherwise>
+				order by id DESC
+			</otherwise>
+		</choose>
+		<if test="start != null and length != null">
+			limit #{start}, #{length}
+		</if>
+	</select>
+
+	<select id="queryListTotal" parameterType="com.yaofei.springmvcmybatis.plugins.datatables.domain.DataTablesRequest" resultType="long">
+		select count(*) from medical_static_cargps_to_city_transferc
+		<include refid="query_list_and"/>
+	</select>
+</mapper>

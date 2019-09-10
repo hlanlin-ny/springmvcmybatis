@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yaofei.springmvcmybatis.repository.VipInfoToCityTransferRepository">
+
+	<!-- sql片段 -->
+	<sql id="query_list_and">
+		<if test="extraSearch !=null">
+			<!-- where可以自动去除第一个and -->
+			<where>
+				<if test="extraSearch.xm !=null and extraSearch.xm !=''">
+					and xm like CONCAT('%',#{extraSearch.xm},'%')
+				</if>
+				<if test="extraSearch.sfzh !=null and extraSearch.sfzh !=''">
+					and sfzh = #{extraSearch.sfzh}
+				</if>
+				<if test="extraSearch.xzddzmc !=null and extraSearch.xzddzmc !=''">
+					and xzd_dzmc like CONCAT('%',#{extraSearch.xzddzmc},'%')
+				</if>
+				<if test="extraSearch.lxdh !=null and extraSearch.lxdh !=''">
+					and lxdh like CONCAT('%',#{extraSearch.lxdh},'%')
+				</if>
+			</where>
+		</if>
+	</sql>
+    <insert id="insertVip" parameterType="com.yaofei.springmvcmybatis.entity.VipInfoToCityTransfer"  useGeneratedKeys="true" keyProperty="id">
+		insert into medical_static_vip_to_city_transfer
+		(
+                    		`id`,
+                    		`XXZJBH`,
+                    		`XM`,
+                    		`SFZH`,
+                    		`XMHYPY`,
+                    		`XZD_DZMC`,
+                    		`LXSJ`,
+                    		`LXDH`,
+                    		`BLSJ`,
+                    		`BLDZ_DZMC`,
+                    		`BZ`,
+                    		`DJDW_GAJGJGDM`,
+                    		`DJDW_GAJGMC`,
+                    		`DJR_XM`,
+                    		`DJR_GMSFHM`,
+                    		`DJR_LXDH`,
+                    		`XXLY_XZQHDM`,
+                    		`SJLY`
+            		)
+		values
+		(
+                    			#{id},
+                    			#{xxzjbh},
+                    			#{xm},
+                    			#{sfzh},
+                    			#{xmhypy},
+                    			#{xzddzmc},
+                    			#{lxsj},
+                    			#{lxdh},
+                    			#{blsj},
+                    			#{bldzdzmc},
+                    			#{bz},
+                    			#{djdwGajgjgdm},
+                    			#{djdwGajgmc},
+                    			#{djrXm},
+                    			#{djrGmsfhm},
+                    			#{djrLxdh},
+                    			#{xxlyXzqhdm},
+                    			#{sjly}
+            		)
+	</insert>
+	<select id="queryList" resultType="com.yaofei.springmvcmybatis.entity.VipInfoToCityTransfer">
+		select *
+		from medical_static_vip_to_city_transfer
+		<include refid="query_list_and"/>
+		<choose>
+			<when test="orderString != null and orderString != ''">
+				order by ${orderString}
+			</when>
+			<otherwise>
+				order by id DESC
+			</otherwise>
+		</choose>
+		<if test="start != null and length != null">
+			limit #{start}, #{length}
+		</if>
+	</select>
+
+	<select id="queryListTotal" parameterType="com.yaofei.springmvcmybatis.plugins.datatables.domain.DataTablesRequest" resultType="long">
+		select count(*) from medical_static_vip_to_city_transfer
+		<include refid="query_list_and"/>
+	</select>
+
+</mapper>

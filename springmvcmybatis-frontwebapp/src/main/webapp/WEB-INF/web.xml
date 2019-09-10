@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+          http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         id="WebApp_ID"
+         metadata-complete="true"
+         version="3.0">
+
+    <display-name>Archetype Created Web Application</display-name>
+
+    <!--Spring begin-->
+    <!-- Spring 的监听器可以通过这个上下文参数来获取applicationContext.xml (beans.xml) 的位置 -->
+    <!--加载Spring XML配置文件，Spring安全配置及各类资源文件-->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:spring-config/spring.xml</param-value>
+    </context-param>
+
+    <!-- 配置启动 Spring IOC 容器的 Listener , 自动装配ApplicationContext的配置信息 -->
+    <!-- Bootstraps the root web application context before servlet initialization -->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    <!-- Spring刷新Interceptor防止内存泄漏 -->
+    <listener>
+        <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+    </listener>
+    <!--Spring end-->
+
+
+    <!--Spring mvc begin-->
+    <!-- 配置 Spring MVC核心控制器 DispatcherServlet , 启动 WEB 层的 Spring 容器  -->
+    <servlet>
+        <servlet-name>dispatcherServlet</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <!-- 配置 DispatcherServlet 的一个初始化参数: 配置 SpringMVC 配置文件的位置和名称 -->
+        <!-- 实际上也可以不通过 contextConfigLocation 来配置 SpringMVC 的配置文件, 而使用默认的. 默认的配置文件为:
+    /WEB-INF/<servlet-name>-servlet.xml -->
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:dispatcherServlet-servlet.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>dispatcherServlet</servlet-name>
+        <url-pattern>/</url-pattern>
+        <!--<url-pattern>*.htm</url-pattern>-->
+    </servlet-mapping>
+    <!--Spring mvc end-->
+
+    <!--配置Shiro过滤器,先让Shiro过滤系统接收到的请求-->
+    <!--这里filter-name必须对应applicationContext.xml中定义的<bean id="shiroFilter"/>-->
+    <!--使用[/*]匹配所有请求,保证所有的可控请求都经过Shiro的过滤-->
+    <!--通常会将此filter-mapping放置到最前面(即其他filter-mapping前面),以保证它是过滤器链中第一个起作用的-->
+    <filter>
+        <filter-name>shiroFilter</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+        <init-param>
+            <!-- 该值缺省为false,表示生命周期由SpringApplicationContext管理,设置为true则表示由ServletContainer管理 -->
+            <param-name>targetFilterLifecycle</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>shiroFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- 中文编码-begin -->
+    <!-- 字符编码过滤器必须配置在所有过滤器的最前面! -->
+    <filter>
+        <filter-name>CharacterEncodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>CharacterEncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <!-- 中文编码-end -->
+
+
+    <!-- 加载系统初始化配置参数 -->
+    <servlet>
+        <servlet-name>initServlet</servlet-name>
+        <servlet-class>com.yaofei.springmvcmybatis.webapp.servlet.InitServlet</servlet-class>
+        <load-on-startup>10</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>initServlet</servlet-name>
+        <url-pattern>/initServlet</url-pattern>
+    </servlet-mapping>
+    <!-- 加载系统初始化配置参数 -->
+
+    <!--通过CORS实现跨域方案-->
+    <!--<filter>-->
+    <!--<filter-name>CORSFilter</filter-name>-->
+    <!--<filter-class>com.yaofei.springmvcmybatis.webapp.filter.CORSFilter</filter-class>-->
+    <!--</filter>-->
+    <!--<filter-mapping>-->
+    <!--<filter-name>CORSFilter</filter-name>-->
+    <!--<url-pattern>/*</url-pattern>-->
+    <!--</filter-mapping>-->
+
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+
+    <!-- 欢迎页面 -->
+    <!--<welcome-file-list>-->
+    <!--<welcome-file>index.html</welcome-file>-->
+    <!--</welcome-file-list>-->
+
+    <!-- 异常跳转页面 -->
+    <!--<error-page>-->
+    <!--<error-code>404</error-code>-->
+    <!--<location>/404.html</location>-->
+    <!--</error-page>-->
+
+
+    <!--Druid的相关配置-->
+    <!--Druid的内置监控页面 /druid/index.html -->
+    <servlet>
+        <servlet-name>DruidStatView</servlet-name>
+        <servlet-class>com.alibaba.druid.support.http.StatViewServlet</servlet-class>
+        <!--<init-param>-->
+        <!--&lt;!&ndash; 允许清空统计数据 &ndash;&gt;-->
+        <!--<param-name>resetEnable</param-name>-->
+        <!--<param-value>true</param-value>-->
+        <!--</init-param>-->
+        <init-param>
+            <!-- 用户名 -->
+            <param-name>loginUsername</param-name>
+            <param-value>druid</param-value>
+        </init-param>
+        <init-param>
+            <!-- 密码 -->
+            <param-name>loginPassword</param-name>
+            <param-value>druid</param-value>
+        </init-param>
+        <!--配置allow和deny-->
+        <!--<init-param>-->
+        <!--<param-name>allow</param-name>-->
+        <!--<param-value>128.242.127.1/24,128.242.128.1</param-value>-->
+        <!--</init-param>-->
+        <!--<init-param>-->
+        <!--<param-name>deny</param-name>-->
+        <!--<param-value>128.242.127.4</param-value>-->
+        <!--</init-param>-->
+    </servlet>
+    <servlet>
+        <servlet-name>GetGoodsDetailService</servlet-name>
+        <servlet-class>com.yaofei.springmvcmybatis.webapp.servlet.GetGoodsDetailService</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AfterSalesService</servlet-name>
+        <servlet-class>com.yaofei.springmvcmybatis.webapp.servlet.AfterSalesService</servlet-class>
+    </servlet>
+
+
+    <servlet-mapping>
+        <servlet-name>DruidStatView</servlet-name>
+        <url-pattern>/druid/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetGoodsDetailService</servlet-name>
+        <url-pattern>/servlet/GetGoodsDetailService</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AfterSalesService</servlet-name>
+        <url-pattern>/servlet/AfterSalesService</url-pattern>
+    </servlet-mapping>
+
+    <!-- WebStatFilter用于采集web-jdbc关联监控的数据 -->
+    <filter>
+        <filter-name>DruidWebStatFilter</filter-name>
+        <filter-class>com.alibaba.druid.support.http.WebStatFilter</filter-class>
+        <init-param>
+            <param-name>exclusions</param-name>
+            <param-value>/resources/*,*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*</param-value>
+        </init-param>
+        <init-param>
+            <param-name>sessionStatEnable</param-name>
+            <param-value>false</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>DruidWebStatFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <!--Druid的相关配置-->
+
+
+    <!-- 在service层获取应用层中的核心数据 -->
+    <filter>
+        <filter-name>webRequestContextFilter</filter-name>
+        <filter-class>com.yaofei.springmvcmybatis.webapp.context.WebRequestContextFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>webRequestContextFilter</filter-name>
+        <url-pattern>/admin/*</url-pattern>
+    </filter-mapping>
+    <!-- 在service层获取应用层中的核心数据 -->
+
+
+    <!--缓存、gzip压缩核心过滤器-->
+    <filter>
+        <filter-name>PageEhCacheFilter</filter-name>
+        <filter-class>com.yaofei.springmvcmybatis.webapp.filter.PageEhCacheFilter</filter-class>
+        <init-param>
+            <param-name>patterns</param-name>
+            <!-- 配置你需要缓存的url -->
+            <param-value>/cache.jsp, product.action, market.action</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>PageEhCacheFilter</filter-name>
+        <url-pattern>*.action</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>PageEhCacheFilter</filter-name>
+        <url-pattern>*.jsp</url-pattern>
+    </filter-mapping>
+
+
+    <!-- 配置log url 请求输出 到 console -->
+    <filter>
+        <filter-name>commonsRequestLoggingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CommonsRequestLoggingFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>commonsRequestLoggingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- 记录访问日志，比如审计之类的可用 -->
+    <!--<filter>-->
+    <!--<filter-name>AccessLogFilter</filter-name>-->
+    <!--<filter-class>com.yaofei.springmvcmybatis.framework.web.filter.AccessLogFilter</filter-class>-->
+    <!--<async-supported>true</async-supported>-->
+    <!--<init-param>-->
+    <!--<param-name>blackListURL</param-name>-->
+    <!--<param-value>/resources/**,*.js,*.css,*.jpg,*.gif,*.png,*.ico,/admin/monitor/druid/**</param-value>-->
+    <!--</init-param>-->
+    <!--<init-param>-->
+    <!--<param-name>whiteListURL</param-name>-->
+    <!--<param-value>/**</param-value>-->
+    <!--</init-param>-->
+    <!--</filter>-->
+    <!--<filter-mapping>-->
+    <!--<filter-name>AccessLogFilter</filter-name>-->
+    <!--<url-pattern>/*</url-pattern>-->
+    <!--<dispatcher>REQUEST</dispatcher>-->
+    <!--</filter-mapping>-->
+
+
+</web-app>

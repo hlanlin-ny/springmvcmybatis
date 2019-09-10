@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yaofei.springmvcmybatis.repository.SysCodeGeneratorRepository">
+
+	<!-- sql片段 -->
+	<sql id="query_list_where">
+		<if test="extraSearch !=null">
+			<!-- where可以自动去除第一个and -->
+			<where>
+				<if test="extraSearch.tableName !=null and extraSearch.tableName !=''">
+					and table_name like CONCAT('%',#{extraSearch.tableName},'%')
+				</if>
+			</where>
+		</if>
+	</sql>
+
+	<select id="queryTotalTables" parameterType="com.yaofei.springmvcmybatis.plugins.datatables.domain.DataTablesRequest"
+			resultType="long">
+		select count(*) from information_schema.tables where table_schema = (select database())
+		<!-- 引用sql片段 -->
+		<include refid="query_list_where"/>
+	</select>
+
+	<select id="queryListTables" resultType="com.yaofei.springmvcmybatis.entity.SysCodeGenerator">
+		select table_name tableName, engine, table_comment tableComment, create_time createTime from information_schema.tables
+		where table_schema = (select database())
+		<!-- 引用sql片段 -->
+		<include refid="query_list_where"/>
+
+		<choose>
+			<when test="orderString != null and orderString != ''">
+				order by ${orderString}
+			</when>
+			<otherwise>
+				order by id DESC
+			</otherwise>
+		</choose>
+		<if test="start != null and length != null">
+			limit #{start}, #{length}
+		</if>
+	</select>
+
+	<select id="queryTable" resultType="map">
+		select table_name tableName, engine, table_comment tableComment, create_time createTime from information_schema.tables
+		where table_schema = (select database()) and table_name = #{value}
+	</select>
+
+	<select id="queryColumns" resultType="map">
+		select column_name columnName, data_type dataType, column_comment columnComment, column_key columnKey, extra from information_schema.columns
+ 			where table_name = #{value} and table_schema = (select database()) order by ordinal_position
+	</select>
+
+</mapper>

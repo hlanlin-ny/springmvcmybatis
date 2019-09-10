@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yaofei.springmvcmybatis.repository.ActivityDetailRepository">
+
+    <!-- sql片段 -->
+    <sql id="query_list_where">
+        <!-- where可以自动去除第一个and -->
+        <where>
+            and is_deleted = 0
+            <if test="extraSearch !=null">
+                <if test="extraSearch.warningTime !=null and extraSearch.warningTime !=''">
+                    and warning_time = #{extraSearch.warningTime}
+                </if>
+                <if test="extraSearch.warningLevel !=null and extraSearch.warningLevel !=''">
+                    and warning_level = #{extraSearch.warningLevel}
+                </if>
+            </if>
+        </where>
+    </sql>
+
+    <select id="queryByRelateId" resultType="com.yaofei.springmvcmybatis.entity.ActivityDetail">
+         select * from activity_detail
+         WHERE   id = #{id}
+    </select>
+
+    <insert id="save" parameterType="com.yaofei.springmvcmybatis.entity.ActivityDetail" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into activity_detail
+        (
+                                `occur_time`,
+                                `area_id`,
+                                `area_name`,
+                                `provider_address`,
+                                `information_provider`,
+                                `police_office`,
+                                `activity_information`,
+                                `register_name`,
+                                `register_idcard_no`,
+                                `register_born_date`,
+                                `dynamic_information_type`,
+                                `dynamic_information_provider`,
+                                `accept_provider`,
+                                `warning_level`,
+                                `relate_important_id`,
+                                `relate_control_id`,
+                                `claim_status`,
+                                `created_by`,
+                                `created_ip`,
+                                `remark`
+           )
+        VALUES
+       (
+                                 #{occurTime},
+                                 #{areaId},
+                                 #{areaName},
+                                 #{providerAddress},
+                                 #{informationProvider},
+                                 #{policeOffice},
+                                 #{activityInformation},
+                                 #{registerName},
+                                 #{registerIDcardNo},
+                                 #{registerBornDate},
+                                 #{dynamicInformationType},
+                                 #{dynamicInformationProvider},
+                                 #{acceptProvider},
+                                 #{warningLevel},
+                                 #{relateImportantId},
+                                 #{relateControlId},
+                                 #{claimStatus},
+                                 #{createdBy},
+                                 #{createdIp},
+                                 #{remark}
+          )
+    </insert>
+
+    <update id="update" parameterType="com.yaofei.springmvcmybatis.entity.ActivityDetail">
+        update activity_detail
+        <set>
+            <!--<if test="occurTime != null">`occur_time` = #{occurTime},</if>-->
+            <if test="areaId != null">`area_id` = #{areaId},</if>
+            <if test="areaName != null">`area_name` = #{areaName},</if>
+            <if test="providerAddress != null">`provider_address` = #{providerAddress},</if>
+            <if test="informationProvider != null">`informationP_provider` = #{informationProvider},</if>
+            <if test="policeOffice != null">`police_office` = #{policeOffice},</if>
+            <if test="activityInformation != null">`activity_information` = #{activityInformation},</if>
+            <if test="registerName != null">`register_name` = #{registerName},</if>
+            <if test="registerIDcardNo != null">`register_idcard_no` = #{registerIDcardNo},</if>
+            <if test="registerBornDate != null">`register_born_date` = #{registerBornDate},</if>
+            <if test="dynamicInformationType != null">`dynamic_information_type` = #{dynamicInformationType},</if>
+            <if test="dynamicInformationProvider != null">`dynamic_information_provider` =
+                #{dynamicInformationProvider},
+            </if>
+            <if test="acceptProvider != null">`accept_provider` = #{acceptProvider},</if>
+            <if test="warningLevel != null">`warning_level` = #{warningLevel},</if>
+            <if test="claimStatus != null">`claim_status` = #{claimStatus},</if>
+            <if test="modificationBy != null">`modification_by` = #{modificationBy},</if>
+            <if test="modificationIp != null">`modification_ip` = #{modificationIp},</if>
+            <if test="remark != null">`remark` = #{remark}</if>
+        </set>
+        where id = #{id} and is_deleted = 0
+    </update>
+
+    <select id="queryAlikeByImportant" resultType="com.yaofei.springmvcmybatis.entity.ActivityDetail">
+        select a.provider_address,i.`name`
+            from activity_detail a,important_person i
+             where a.relate_important_id = i.id
+             and a.provider_address = #{providerAddress}
+             and i.name=#{name}
+    </select>
+
+    <select id="queryAlikeByControl" resultType="com.yaofei.springmvcmybatis.entity.ActivityDetail">
+        select a.provider_address,c.`control_by_name`
+        from activity_detail a,control_apply_application c
+        where a.relate_control_id = c.id
+        and a.provider_address = #{providerAddress}
+        and c.control_by_name=#{name}
+    </select>
+
+    <update id="claim">
+        UPDATE
+          activity_detail
+        SET
+          claim_status = '已签收'
+        WHERE
+          id = #{id}
+    </update>
+
+    <select id="queryObject" resultType="com.yaofei.springmvcmybatis.entity.ActivityDetail">
+        select * from activity_detail where id = #{value}
+    </select>
+
+
+
+    <select id="selectMarder" resultType="com.yaofei.springmvcmybatis.entity.MedicalCheckinCheckoutRecordTransfer">
+        select *
+            from medical_checkin_checkout_record_transfer
+             where idCardNo =#{idCard} and collect_time>=DATE_SUB(NOW(),INTERVAL 10 MINUTE)
+    </select>
+
+    <select id="selectPatient" resultType="com.yaofei.springmvcmybatis.entity.MedicalOutpatientRecordTransfer">
+        select *
+            from medical_outpatient_record_transfer
+             where idCardNo =#{idCard} and collect_time>=DATE_SUB(NOW(),INTERVAL 10 MINUTE)
+    </select>
+</mapper>

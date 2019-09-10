@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yaofei.springmvcmybatis.repository.UpdatingFileCountRepository">
+
+    <!-- sql片段 -->
+    <sql id="query_list_where">
+        <!-- where可以自动去除第一个and -->
+        <where>
+            <if test="extraSearch !=null">
+                <if test="extraSearch.businessTypeId !=null and extraSearch.businessTypeId !=''">
+                    and a.business_type_id = #{extraSearch.businessTypeId}
+                </if>
+            </if>
+        </where>
+    </sql>
+
+    <select id="queryTotal" resultType="long">
+        select count(*) from (SELECT c.name as business_type_name,a.wsc,a.ysc from
+        (SELECT business_type_id,count(*) wsc,null as ysc from static_file_class WHERE if_upload='N' GROUP BY business_type_id
+        UNION ALL
+        SELECT business_type_id,null as wsc,count(*) ysc from static_file_class WHERE if_upload='Y' GROUP BY business_type_id) a
+        LEFT JOIN intelligence_business_type c on a.business_type_id = c.id
+        <!-- 引用sql片段 -->
+        <include refid="query_list_where"/>
+        GROUP BY a.business_type_id)b
+	</select>
+
+    <select id="queryListTotal" parameterType="com.yaofei.springmvcmybatis.plugins.datatables.domain.DataTablesRequest"
+            resultType="long">
+        select count(*) from (SELECT c.name as business_type_name,a.wsc,a.ysc from
+        (SELECT business_type_id,count(*) wsc,null as ysc from static_file_class WHERE if_upload='N' GROUP BY business_type_id
+        UNION ALL
+        SELECT business_type_id,null as wsc,count(*) ysc from static_file_class WHERE if_upload='Y' GROUP BY business_type_id) a
+        LEFT JOIN intelligence_business_type c on a.business_type_id = c.id
+        <!-- 引用sql片段 -->
+        <include refid="query_list_where"/>
+        GROUP BY a.business_type_id)b
+    </select>
+
+    <select id="queryOfficerNames" resultType="com.yaofei.springmvcmybatis.entity.UpdatingFileClass">
+        select * from static_file_class where is_deleted = 0 and status='0'
+        <if test="value !=null and value !=''">
+            and area_id =  #{value}
+        </if>
+    </select>
+
+    <select id="queryList" resultType="com.yaofei.springmvcmybatis.entity.UpdatingFileClass">
+        SELECT c.name as business_type_name,a.wsc from
+        (SELECT business_type_id,count(*) wsc from updating_file_class GROUP BY business_type_id) a
+        LEFT JOIN intelligence_business_type c on a.business_type_id = c.id
+        GROUP BY a.business_type_id
+        <!-- 引用sql片段 -->
+        <include refid="query_list_where"/>
+
+        <if test="start != null and length != null">
+            limit #{start}, #{length}
+        </if>
+    </select>
+
+
+    <select id="querySum" resultType="com.yaofei.springmvcmybatis.entity.UpdatingFileClass">
+       SELECT COUNT(*) AS totalCount
+        FROM updating_file_class
+    </select>
+
+    <delete id="delete">
+		delete from static_file_class where id = #{value}
+	</delete>
+
+    <delete id="deleteBatch">
+        delete from static_file_class where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="queryObject" resultType="com.yaofei.springmvcmybatis.entity.UpdatingFileClass">
+		select * from static_file_class where id = #{value}
+	</select>
+
+</mapper>

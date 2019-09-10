@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yaofei.springmvcmybatis.repository.MedicalOutpatientRecordRepository">
+
+    <!-- sql片段 -->
+    <sql id="query_list_where">
+        <!-- where可以自动去除第一个and -->
+        <where>
+            and is_deleted = 0
+            <if test="extraSearch !=null">
+                <if test="extraSearch.name !=null and extraSearch.name !=''">
+                    and name like CONCAT('%',#{extraSearch.name},'%')
+                </if>
+                <if test="extraSearch.userId !=null and extraSearch.userId !=''">
+                    and user_id = #{extraSearch.userId}
+                </if>
+                <if test="extraSearch.idCardNum !=null and extraSearch.idCardNum !=''">
+                    and id_card_num like CONCAT('%',#{extraSearch.idCardNum},'%')
+                </if>
+                <if test="extraSearch.phone !=null and extraSearch.phone !=''">
+                    and phone like CONCAT('%',#{extraSearch.phone},'%')
+                </if>
+                <if test="extraSearch.address !=null and extraSearch.address !=''">
+                    and address like CONCAT('%',#{extraSearch.address},'%')
+                </if>
+                <if test="extraSearch.diagnoseDatetimeBegin !=null and extraSearch.diagnoseDatetimeBegin !=''">
+                    and diagnose_datetime >= #{extraSearch.diagnoseDatetimeBegin}
+                </if>
+                <if test="extraSearch.diagnoseDatetimeEnd !=null and extraSearch.diagnoseDatetimeEnd !=''">
+                    and diagnose_datetime &lt; date_add(#{extraSearch.diagnoseDatetimeEnd}, interval 1 day)
+                </if>
+                <if test="extraSearch.diagnoseNo !=null and extraSearch.diagnoseNo !=''">
+                    and diagnose_no like CONCAT('%',#{extraSearch.diagnoseNo},'%')
+                </if>
+                <if test="extraSearch.diagnoseDepartment !=null and extraSearch.diagnoseDepartment !=''">
+                    and diagnose_department like CONCAT('%',#{extraSearch.diagnoseDepartment},'%')
+                </if>
+                <if test="extraSearch.costType !=null and extraSearch.costType !=''">
+                    and cost_type like CONCAT('%',#{extraSearch.costType},'%')
+                </if>
+                <if test="extraSearch.medicareCardNo !=null and extraSearch.medicareCardNo !=''">
+                    and medicare_card_no like CONCAT('%',#{extraSearch.medicareCardNo},'%')
+                </if>
+                <if test="extraSearch.remark !=null and extraSearch.remark !=''">
+                    and remark like CONCAT('%',#{extraSearch.remark},'%')
+                </if>
+                <if test="extraSearch.areaId !=null and extraSearch.areaId !=''">
+                    and area_id = #{extraSearch.areaId}
+                </if>
+            </if>
+        </where>
+    </sql>
+
+    <select id="queryTotal" resultType="long">
+		select count(*) from medical_outpatient_record where is_deleted = 0
+	</select>
+
+    <select id="queryListTotal" parameterType="com.yaofei.springmvcmybatis.plugins.datatables.domain.DataTablesRequest"
+            resultType="long">
+        select count(*) from medical_outpatient_record
+        <!-- 引用sql片段 -->
+        <include refid="query_list_where"/>
+    </select>
+
+    <select id="queryList" resultType="com.yaofei.springmvcmybatis.entity.MedicalOutpatientRecord">
+        select * from medical_outpatient_record
+        <!-- 引用sql片段 -->
+        <include refid="query_list_where"/>
+
+        <choose>
+            <when test="orderString != null and orderString != ''">
+                order by ${orderString}
+            </when>
+            <otherwise>
+                order by id DESC
+            </otherwise>
+        </choose>
+        <if test="start != null and length != null">
+            limit #{start}, #{length}
+        </if>
+    </select>
+
+    <insert id="save" parameterType="com.yaofei.springmvcmybatis.entity.MedicalOutpatientRecord" useGeneratedKeys="true"
+            keyProperty="id">
+		insert into medical_outpatient_record
+		(
+
+                    		  `info_key`,
+                    	    `name`,
+                    		`name_spell`,
+                    		`sex`,
+                    		`sex_code`,
+                    		`born_time`,
+                    		`age`,
+                    		`id_card_num`,
+                    		`phone`,
+                    		`address`,
+                    		`profession`,
+                    		`organization`,
+                    		`hospital_unit_name`,
+                    		`diagnose_datetime`,
+                    		`diagnose_no`,
+                    		`diagnose_department`,
+                    		`cost_type`,
+                    		`cost_type_code`,
+                    		`medicare_card_no`,
+                    		`diagnose_result`,
+                    		`cost`,
+                    		`remark`,
+                    		`created_by`,
+                    		`created_ip`
+            		)
+		values
+		(
+                    		 #{infoKey},
+                    			#{name},
+                    			#{nameSpell},
+                    			#{sex},
+                    			#{sexCode},
+                    			#{bornTime},
+                    			#{age},
+                    			#{idCardNum},
+                    			#{phone},
+                    			#{address},
+                    			#{profession},
+                    			#{organization},
+                    			#{hospitalUnitName},
+                    			#{diagnoseDatetime},
+                    			#{diagnoseNo},
+                    			#{diagnoseDepartment},
+                    			#{costType},
+                    			#{costTypeCode},
+                    			#{medicareCardNo},
+                    			#{diagnoseResult},
+                    			#{cost},
+                    			#{remark},
+                    			#{createdBy},
+                    			#{createdIp}
+            		)
+	</insert>
+
+    <update id="update" parameterType="com.yaofei.springmvcmybatis.entity.MedicalOutpatientRecord">
+        update medical_outpatient_record
+        <set>
+            <if test="areaId != null">`area_id` = #{areaId},</if>
+            <if test="businessTypeId != null">`business_type_id` = #{businessTypeId},</if>
+            <if test="fileType != null">`file_type` = #{fileType},</if>
+            <if test="detailsUrl != null">`details_url` = #{detailsUrl},</if>
+            <if test="collectTime != null">`collect_time` = #{collectTime},</if>
+            <if test="esIndexName != null">`es_index_name` = #{esIndexName},</if>
+            <if test="userId != null">`user_id` = #{userId},</if>
+            <if test="name != null">`name` = #{name},</if>
+            <if test="modificationBy != null">`modification_by` = #{modificationBy},</if>
+            <if test="modificationIp != null">`modification_ip` = #{modificationIp}</if>
+        </set>
+        where id = #{id} and is_deleted = 0
+    </update>
+
+    <delete id="delete">
+		delete from medical_outpatient_record where id = #{value}
+	</delete>
+
+    <delete id="deleteBatch">
+        delete from medical_outpatient_record where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="queryObject" resultType="com.yaofei.springmvcmybatis.entity.MedicalOutpatientRecord">
+		select * from medical_outpatient_record where id = #{value}
+	</select>
+
+    <select id="queryBatch" resultType="com.yaofei.springmvcmybatis.entity.MedicalOutpatientRecord">
+        select * from medical_outpatient_record
+    </select>
+
+    <select id="queryListAll" resultType="com.yaofei.springmvcmybatis.entity.MedicalOutpatientRecord">
+        select * from medical_outpatient_record
+    </select>
+
+</mapper>

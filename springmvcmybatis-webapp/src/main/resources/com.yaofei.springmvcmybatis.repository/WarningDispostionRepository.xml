@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yaofei.springmvcmybatis.repository.WarningDispostionRepository">
+
+    <!-- sql片段 -->
+    <sql id="query_list_where">
+        <!-- where可以自动去除第一个and -->
+        <where>
+            and is_deleted = 0
+            <if test="extraSearch !=null">
+                <if test="extraSearch.name !=null and extraSearch.name !=''">/*根据姓名查询*/
+                    and name like CONCAT('%',#{extraSearch.name},'%')
+                </if>
+                <if test="extraSearch.idCardNo !=null and extraSearch.idCardNo !=''">/*根据身份证号码查询*/
+                    and id_card_no = #{extraSearch.idCardNo}
+                </if>
+                <if test="extraSearch.importantPersonType !=null and extraSearch.importantPersonType !=''">/*根据人员类别查询*/
+                    and important_person_type = #{extraSearch.importantPersonType}
+                </if>
+                <if test="extraSearch.warningLevel !=null and extraSearch.warningLevel !=''">/*根据预警级别查询*/
+                    and warning_level = #{extraSearch.warningLevel}
+                </if>
+                <if test="extraSearch.warningTimeBegin !=null and extraSearch.warningTimeBegin !=''">
+                    and warning_time >= #{extraSearch.warningTimeBegin}
+                </if>
+                <if test="extraSearch.warningTimeEnd !=null and extraSearch.warningTimeEnd !=''">
+                    and warning_time &lt; #{extraSearch.warningTimeEnd}
+                </if>
+                <if test="extraSearch.informationType !=null and extraSearch.informationType !=''">/*根据信息类型查询*/
+                    and information_type like CONCAT('%',#{extraSearch.informationType},'%')
+                </if>
+                <if test="extraSearch.providerAddress !=null and extraSearch.providerAddress !=''">/*根据活动发生区域查询*/
+                    and provider_address like CONCAT('%',#{extraSearch.providerAddress},'%')
+                </if>
+                <if test="extraSearch.policeOffice !=null and extraSearch.policeOffice !=''">/*根据所属公安机关查询*/
+                    and police_office like CONCAT('%',#{extraSearch.policeOffice},'%')
+                </if>
+                <if test="extraSearch.issueProvider !=null and extraSearch.issueProvider !=''">/*根据指令接受单位查询*/
+                    and issue_provider like CONCAT('%',#{extraSearch.issueProvider},'%')
+                </if>
+                <if test="extraSearch.dispositionStatus !=null and extraSearch.dispositionStatus !=''">/*根据处置状态查询*/
+                    and disposition_status like CONCAT('%',#{extraSearch.dispositionStatus},'%')
+                </if>
+                <!--<if test="extraSearch.feedBackStatus !=null and extraSearch.feedBackStatus !=''">/*根据反馈状态查询*/-->
+                <!--and  feed_back_status like CONCAT('%',#{extraSearch.feedBackStatus},'%')-->
+                <!--</if>-->
+                <!--<if test="extraSearch.feedBackResult !=null and extraSearch.feedBackResult !=''">/*根据反馈结果查询*/-->
+                <!--and   feed_back_result like CONCAT('%',#{extraSearch.feedBackResult},'%')-->
+                <!--</if>-->
+            </if>
+        </where>
+    </sql>
+
+    <select id="queryTotal" resultType="long">
+		select count(*) from warning_dispostion where is_deleted = 0
+	</select>
+
+    <select id="queryListTotal" parameterType="com.yaofei.springmvcmybatis.plugins.datatables.domain.DataTablesRequest"
+            resultType="long">
+        select count(*) from warning_dispostion
+        <!-- 引用sql片段 -->
+        <include refid="query_list_where"/>
+    </select>
+
+    <select id="queryList" resultType="com.yaofei.springmvcmybatis.entity.WarningDispostion">
+        select * from warning_dispostion
+        <!-- 引用sql片段 -->
+        <include refid="query_list_where"/>
+
+        <choose>
+            <when test="orderString != null and orderString != ''">
+                order by ${orderString}
+            </when>
+            <otherwise>
+                order by id DESC
+            </otherwise>
+        </choose>
+        <if test="start != null and length != null">
+            limit #{start}, #{length}
+        </if>
+    </select>
+
+    <insert id="save" parameterType="com.yaofei.springmvcmybatis.entity.WarningDispostion" useGeneratedKeys="true"
+            keyProperty="id">
+		insert into warning_dispostion
+		(
+                    		`name`, 
+                    		`id_card_no`, 
+                    		`warning_person_type`,
+                    		`warning_level`,
+                    		`information_type`, 
+                    		`issue_provider`, 
+                    		`information_provider`, 
+                    		`provider_address`, 
+                    		`police_office`, 
+                    		`accept_provider`,
+                    		`created_by`,
+                    		`created_ip`,
+                    		`remark`, 
+                    		`relate_id`
+            		)
+		values
+		(
+                    			#{name}, 
+                    			#{idCardNo}, 
+                    			#{warningPersonType},
+                    			#{warningLevel},
+                    			#{informationType}, 
+                    			#{issueProvider}, 
+                    			#{informationProvider}, 
+                    			#{providerAddress}, 
+                    			#{policeOffice}, 
+                    			#{acceptProvider},
+                    			#{createdBy}, 
+                    			#{createdIp},
+                    			#{remark}, 
+                    			#{relateId}
+            		)
+	</insert>
+
+    <update id="update" parameterType="com.yaofei.springmvcmybatis.entity.WarningDispostion">
+        update warning_dispostion
+        <set>
+            <if test="name != null">`name` = #{name},</if>
+            <if test="idCardNo != null">`id_card_no` = #{idCardNo},</if>
+            <if test="warningPersonType != null">`warning_person_type` = #{warningPersonType},</if>
+            <if test="warningLevel != null">`warning_level` = #{warningLevel},</if>
+            <if test="informationType != null">`information_type` = #{informationType},</if>
+            <if test="issueProvider != null">`issue_provider` = #{issueProvider},</if>
+            <if test="informationProvider != null">`information_provider` = #{informationProvider},</if>
+            <if test="providerAddress != null">`provider_address` = #{providerAddress},</if>
+            <if test="policeOffice != null">`police_office` = #{policeOffice},</if>
+            <if test="acceptProvider != null">`accept_provider` = #{acceptProvider},</if>
+            <if test="dispositionStatus != null">`disposition_status` = #{dispositionStatus},</if>
+            <if test="dispositionTimeLimit != null">`disposition_time` = #{dispositionTime},</if>
+            <if test="feedBackStatus != null">`feed_back_status` = #{feedBackStatus},</if>
+            <if test="feedBackTimeLimit != null">`feed_back_time` = #{feedBackTime},</if>
+            <if test="feedBackResult != null">`feed_back_result` = #{feedBackResult},</if>
+            <if test="claimStatus != null">`claim_status` = #{claimStatus},</if>
+            <if test="modificationBy != null">`modification_by` = #{modificationBy},</if>
+            <if test="modificationIp != null">`modification_ip` = #{modificationIp},</if>
+            <if test="remark != null">`remark` = #{remark},</if>
+            <if test="relateId != null">`relate_id` = #{relateId}</if>
+        </set>
+        where id = #{id} and is_deleted = 0
+    </update>
+
+    <delete id="delete">
+		delete from warning_dispostion where id = #{value}
+	</delete>
+
+    <delete id="deleteBatch">
+        delete from warning_dispostion where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="queryObject" resultType="com.yaofei.springmvcmybatis.entity.WarningDispostion">
+		select * from warning_dispostion where id = #{value}
+	</select>
+
+    <select id="queryByRelateId" resultType="com.yaofei.springmvcmybatis.entity.WarningDispostion">
+        select * from warning_dispostion where relate_id = #{relateId}
+    </select>
+
+    <select id="queryUnClaim" resultType="int">
+        select count(*) from warning_dispostion where claim_status = '未签收'
+    </select>
+
+    <update id="updateDispostionStatus">
+        UPDATE
+          warning_dispostion
+        SET
+        disposition_status = '处置完成'
+        ,disposition_time = #{dispositionTime}
+        WHERE
+           relate_id = #{relateId}
+    </update>
+
+
+    <update id="claim">
+        UPDATE
+        warning_dispostion
+        SET
+            claim_status = '已签收'
+        WHERE
+        id = #{id}
+    </update>
+
+
+    <select id="queryByTime" resultType="com.yaofei.springmvcmybatis.entity.WarningDispostion">
+        select * from warning_dispostion
+        where claim_status = '未签收'
+    </select>
+
+</mapper>

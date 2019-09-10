@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yaofei.springmvcmybatis.repository.DispositionResultRepository">
+
+
+    <insert id="save" parameterType="com.yaofei.springmvcmybatis.entity.DispositionResult" useGeneratedKeys="true"
+            keyProperty="id">
+
+		insert into disposition_result
+		(
+                    		`disposition_time`, 
+                    		`disposition_status`, 
+                    		`disposition_result`, 
+                    		`relate_id`,
+                    		`created_by`, 
+                    		`created_ip`
+            		)
+		values
+		(
+                    			#{dispositionTime},
+                    			#{dispositionStatus},
+                    			#{dispositionResult},
+                    			#{relateId},
+                    			#{createdBy},
+                    			#{createdIp}
+            		)
+	</insert>
+
+    <update id="update" parameterType="com.yaofei.springmvcmybatis.entity.DispositionResult">
+        update disposition_result
+        <set>
+            <if test="dispositionTime != null">`disposition_time` = #{dispositionTime},</if>
+            <if test="dispositionStatus != null">`disposition_status` = #{dispositionStatus},</if>
+            <if test="dispositionResult != null">`disposition_result` = #{dispositionResult},</if>
+            <if test="relateId != null">`relate_id` = #{relateId},</if>
+            <if test="modificationTime != null">`modification_time` = CURRENT_TIMESTAMP,</if>
+            <if test="modificationBy != null">`modification_by` = #{modificationBy},</if>
+            <if test="modificationIp != null">`modification_ip` = #{modificationIp}</if>
+        </set>
+        where id = #{id} and is_deleted = 0
+    </update>
+
+
+    <select id="query" resultType="com.yaofei.springmvcmybatis.entity.DispositionResult">
+		select * from disposition_result where relate_id = #{relateId}
+	</select>
+
+
+</mapper>

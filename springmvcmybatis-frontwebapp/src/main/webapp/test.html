@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html data-ng-app="app">
+<head>
+    <meta charset="utf-8"/>
+    <title>Be Angular</title>
+    <meta name="description" content="Be Angular"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <link rel="stylesheet" href="resources/css/bootstrap.css" type="text/css"/>
+    <link rel="stylesheet" href="resources/css/animate.css" type="text/css"/>
+    <link rel="stylesheet" href="resources/css/font-awesome.min.css" type="text/css"/>
+    <link rel="stylesheet" href="resources/css/simple-line-icons.css" type="text/css"/>
+    <link rel="stylesheet" href="resources/css/font.css" type="text/css"/>
+    <link rel="stylesheet" href="resources/css/app.css" type="text/css"/>
+
+    <link rel="icon" href="resources/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="resources/favicon.ico" type="image/x-icon" />
+</head>
+<body ng-controller="AppCtrl">
+<div class="app" id="app"
+     ng-class="{'app-header-fixed':app.settings.headerFixed, 'app-aside-fixed':app.settings.asideFixed, 'app-aside-folded':app.settings.asideFolded, 'app-aside-dock':app.settings.asideDock, 'container':app.settings.container}"
+     ui-view>
+
+</div>
+
+
+<!-- jQuery -->
+<script src="resources/vendor/jquery/jquery.min.js"></script>
+
+<!-- Angular -->
+<script src="resources/vendor/angular/angular.js"></script>
+
+<script src="resources/vendor/angular/angular-animate/angular-animate.js"></script>
+<script src="resources/vendor/angular/angular-cookies/angular-cookies.js"></script>
+<script src="resources/vendor/angular/angular-resource/angular-resource.js"></script>
+<script src="resources/vendor/angular/angular-sanitize/angular-sanitize.js"></script>
+<script src="resources/vendor/angular/angular-touch/angular-touch.js"></script>
+<!-- Vendor -->
+<script src="resources/vendor/angular/angular-ui-router/angular-ui-router.js"></script>
+<script src="resources/vendor/angular/ngstorage/ngStorage.js"></script>
+<script src="resources/vendor/modules/angularjs-toaster/toaster.js"></script>
+<script src="resources/vendor/angular/angular-breadcrumb/angular-breadcrumb.min.js"></script>
+
+<!-- bootstrap -->
+<script src="resources/vendor/angular/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<!-- lazyload -->
+<script src="resources/vendor/angular/oclazyload/ocLazyLoad.js"></script>
+<!-- translate -->
+<script src="resources/vendor/angular/angular-translate/angular-translate.js"></script>
+<script src="resources/vendor/angular/angular-translate/loader-static-files.js"></script>
+<script src="resources/vendor/angular/angular-translate/storage-cookie.js"></script>
+<script src="resources/vendor/angular/angular-translate/storage-local.js"></script>
+
+<!-- App -->
+
+<script src="resources/js/app.module.js"></script>
+<script src="resources/js/config.js"></script>
+<script src="resources/js/config.lazyload.js"></script>
+<script src="resources/js/app.state.js"></script>
+<script src="resources/js/app.constants.js"></script>
+<script src="resources/js/main.js"></script>
+
+<script src="resources/js/services/ui-load.js"></script>
+<script src="resources/js/filters/fromNow.js"></script>
+<script src="resources/js/directives/setnganimate.js"></script>
+<script src="resources/js/directives/ui-butterbar.js"></script>
+<script src="resources/js/directives/ui-focus.js"></script>
+<script src="resources/js/directives/ui-fullscreen.js"></script>
+<script src="resources/js/directives/ui-jq.js"></script>
+<script src="resources/js/directives/ui-module.js"></script>
+<script src="resources/js/directives/ui-nav.js"></script>
+<script src="resources/js/directives/ui-scroll.js"></script>
+<script src="resources/js/directives/ui-shift.js"></script>
+<script src="resources/js/directives/ui-toggleclass.js"></script>
+<script src="resources/js/directives/ui-validate.js"></script>
+<script src="resources/js/controllers/bootstrap.js"></script>
+<!-- Lazy loading -->
+
+
+<!-- Custom -->
+<script src="resources/js/app/components/util/module.js"></script>
+<script src="resources/js/app/components/util/encoding/module.js"></script>
+<script src="resources/js/app/components/util/encoding/services/base64Service.js"></script>
+
+<script src="resources/js/app/components/util/version/module.js"></script>
+<script src="resources/js/app/components/util/version/directives/versionDdirective.js"></script>
+<script src="resources/js/app/components/util/version/filters/interpolate.js"></script>
+
+<script src="resources/js/app/account/account.state.js"></script>
+<script src="resources/js/app/account/login/login.state.js"></script>
+
+<script src="resources/js/app/services/myHttpService.js"></script>
+
+<script src="resources/js/app/usermanager/usermanager.state.js"></script>
+<script src="resources/js/app/usermanager/subsystem/subsystem.state.js"></script>
+
+</body>
+</html>

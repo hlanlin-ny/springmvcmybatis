@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yaofei.springmvcmybatis.repository.MedicalInsuranceCardRecordTransferRepository">
+
+    <!-- sql片段 -->
+    <sql id="query_list_where">
+        <!-- where可以自动去除第一个and -->
+        <where>
+            and is_deleted = 0
+            <if test="extraSearch !=null">
+                <if test="extraSearch.name !=null and extraSearch.name !=''">
+                    and name like CONCAT('%',#{extraSearch.name},'%')
+                </if>
+                <if test="extraSearch.mobile !=null and extraSearch.mobile !=''">
+                    and mobile = #{extraSearch.mobile}
+                </if>
+            </if>
+        </where>
+    </sql>
+
+    <select id="queryTotal" resultType="long">
+		select count(*) from medical_insurance_card_record_transfer where is_deleted = 0
+	</select>
+
+    <select id="queryListTotal" parameterType="com.yaofei.springmvcmybatis.plugins.datatables.domain.DataTablesRequest"
+            resultType="long">
+        select count(*) from medical_insurance_card_record_transfer
+        <!-- 引用sql片段 -->
+        <include refid="query_list_where"/>
+    </select>
+
+    <select id="queryList" resultType="com.yaofei.springmvcmybatis.entity.MedicalInsuranceCardRecordTransfer">
+        select * from medical_insurance_card_record_transfer
+        <!-- 引用sql片段 -->
+        <include refid="query_list_where"/>
+
+        <choose>
+            <when test="orderString != null and orderString != ''">
+                order by ${orderString}
+            </when>
+            <otherwise>
+                order by id DESC
+            </otherwise>
+        </choose>
+        <if test="start != null and length != null">
+            limit #{start}, #{length}
+        </if>
+    </select>
+
+    <insert id="save" parameterType="com.yaofei.springmvcmybatis.entity.MedicalInsuranceCardRecordTransfer"
+            useGeneratedKeys="true" keyProperty="id">
+		insert into medical_insurance_card_record_transfer
+		(
+		                    `XXZJBH`,
+                    		`YLLB`,
+                    		`YLLBDM`,
+                    		`YLF_JE`,
+                    		`RYRQ`,
+                    		`CYRQ`,
+                    		`RYJB_JYQK`,
+                    		`QZJB_JYQK`,
+                    		`BFZ_JYQK`,
+                    		`CYYY_JYQK`,
+                    		`YS_XM`,
+                    		`ZYH`,
+                    		`KS_DWMC`,
+                    		`BLRQ`,
+                    		`JBR_XM`,
+                    		`YYBH`,
+                    		`GRBH`,
+                    		`DWBH`,
+                    		`BXBZ`,
+                    		`BXBZ_JYQK`,
+                    		`JSZT`,
+                    		`JSZT_JYQK`,
+                    		`BZ`,
+                    		`created_by`,
+                    		`created_ip`
+            		)
+		values
+		(
+
+		                        #{XXZJBH},
+                    				#{YLLB},
+                    			#{YLLBDM},
+                    			#{YLF_JE},
+                    			#{RYRQ},
+                    			#{CYRQ},
+                    			#{RYJB_JYQK},
+                    			#{QZJB_JYQK},
+                    			#{BFZ_JYQK},
+                    			#{CYYY_JYQK},
+                    			#{YS_XM},
+                    			#{ZYH},
+                    			#{KS_DWMC},
+                    			#{BLRQ},
+                    			#{JBR_XM},
+                    			#{YYBH},
+                    			#{GRBH},
+                    			#{DWBH},
+                    			#{BXBZ},
+                    			#{BXBZ_JYQK},
+                    			#{JSZT},
+                    			#{JSZT_JYQK},
+                    			#{BZ},
+                    			#{createdBy}, 
+                    			#{createdIp}
+            		)
+	</insert>
+
+    <update id="update" parameterType="com.yaofei.springmvcmybatis.entity.MedicalInsuranceCardRecordTransfer">
+        update medical_insurance_card_record_transfer
+        <set>
+            <if test="XXZJBH != null">`XXZJBH` = #{XXZJBH}, </if>
+            <if test="areaId != null">`area_id` = #{areaId},</if>
+            <if test="businessTypeId != null">`business_type_id` = #{businessTypeId},</if>
+            <if test="fileType != null">`file_type` = #{fileType},</if>
+            <if test="detailsUrl != null">`details_url` = #{detailsUrl},</if>
+            <if test="collectTime != null">`collect_time` = #{collectTime},</if>
+            <if test="esIndexName != null">`es_index_name` = #{esIndexName},</if>
+            <if test="userId != null">`user_id` = #{userId},</if>
+            <if test="YLLB != null">`YLLB` = #{YLLB},</if>
+            <if test="YLLBDM != null">`YLLBDM` = #{YLLBDM},</if>
+            <if test="YLF_JE != null">`YLF_JE` = #{YLF_JE},</if>
+            <if test="RYRQ != null">`RYRQ` = #{RYRQ},</if>
+            <if test="CYRQ != null">`CYRQ` = #{CYRQ},</if>
+            <if test="RYJB_JYQK != null">`RYJB_JYQK` = #{RYJB_JYQK},</if>
+            <if test="RYJB_JYQK != null">`RYJB_JYQK` = #{RYJB_JYQK},</if>
+            <if test="BFZ_JYQK != null">`BFZ_JYQK` = #{BFZ_JYQK},</if>
+            <if test="CYYY_JYQK != null">`CYYY_JYQK` = #{CYYY_JYQK},</if>
+            <if test="YS_XM">`YS_XM` = #{YS_XM},</if>
+            <if test="ZYH != null">`ZYH` = #{ZYH},</if>
+            <if test="KS_DWMC != null">`KS_DWMC` = #{KS_DWMC},</if>
+            <if test="BLRQ != null">`BLRQ` = #{BLRQ},</if>
+            <if test="JBR_XM != null">`JBR_XM` = #{JBR_XM},</if>
+            <if test="YYBH != null">`YYBH` = #{YYBH},</if>
+            <if test="GRBH != null">`GRBH` = #{GRBH},</if>
+            <if test="DWBH != null">`DWBH` = #{DWBH},</if>
+            <if test="BXBZ != null">`BXBZ` = #{BXBZ},</if>
+            <if test="BXBZ_JYQK != null">`BXBZ_JYQK` = #{BXBZ_JYQK},</if>
+            <if test="JSZT != null">`JSZT` = #{JSZT},</if>
+            <if test="JSZT_JYQK != null">`JSZT_JYQK` = #{JSZT_JYQK},</if>
+            <if test="BZ != null">`BZ` = #{BZ},</if>
+            <if test="modificationBy != null">`modification_by` = #{modificationBy},</if>
+            <if test="modificationIp != null">`modification_ip` = #{modificationIp}</if>
+        </set>
+        where id = #{id} and is_deleted = 0
+    </update>
+
+    <delete id="delete">
+		delete from medical_insurance_card_record_transfer where id = #{value}
+	</delete>
+
+    <delete id="deleteBatch">
+        delete from medical_insurance_card_record_transfer where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="queryObject" resultType="com.yaofei.springmvcmybatis.entity.MedicalInsuranceCardRecordTransfer">
+		select * from medical_insurance_card_record_transfer where id = #{value}
+	</select>
+
+</mapper>

@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yaofei.springmvcmybatis.repository.SysUserRepository">
+
+    <!-- sql片段 -->
+    <sql id="query_list_where">
+        <!-- where可以自动去除第一个and -->
+        <where>
+            and is_deleted = 0
+            <if test="extraSearch !=null">
+                <if test="extraSearch.userDepartmentName !=null and extraSearch.userDepartmentName !=''">
+                    and user_department_id in
+                    (
+                    select id from sys_area where name like CONCAT('%',#{extraSearch.userDepartmentName},'%')
+                    )
+                </if>
+                <if test="extraSearch.userRoleNames !=null and extraSearch.userRoleNames !=''">
+                    and id in
+                    (
+                    select user_id from sys_user_user_role where user_role_id in
+                    (select id from sys_user_role where name like CONCAT('%',#{extraSearch.userRoleNames},'%'))
+                    )
+                </if>
+                <if test="extraSearch.realName !=null and extraSearch.realName !=''">
+                    and real_name like CONCAT('%',#{extraSearch.realName},'%')
+                </if>
+                <if test="extraSearch.username !=null and extraSearch.username !=''">
+                    and username like CONCAT('%',#{extraSearch.username},'%')
+                </if>
+                <if test="extraSearch.mobile !=null and extraSearch.mobile !=''">
+                    and mobile = #{extraSearch.mobile}
+                </if>
+                <if test="extraSearch.email !=null and extraSearch.email !=''">
+                    and email = #{extraSearch.email}
+                </if>
+            </if>
+        </where>
+    </sql>
+
+    <select id="queryTotal" resultType="long">
+		select count(*) from sys_user where is_deleted = 0
+	</select>
+
+    <select id="queryListTotal" parameterType="com.yaofei.springmvcmybatis.plugins.datatables.domain.DataTablesRequest"
+            resultType="long">
+        select count(*) from sys_user
+        <!-- 引用sql片段 -->
+        <include refid="query_list_where"/>
+    </select>
+
+    <select id="queryList" resultType="com.yaofei.springmvcmybatis.entity.SysUser">
+        select * from sys_user
+        <!-- 引用sql片段 -->
+        <include refid="query_list_where"/>
+
+        <choose>
+            <when test="orderString != null and orderString != ''">
+                order by ${orderString}
+            </when>
+            <otherwise>
+                order by id DESC
+            </otherwise>
+        </choose>
+        <if test="start != null and length != null">
+            limit #{start}, #{length}
+        </if>
+    </select>
+
+    <insert id="save" parameterType="com.yaofei.springmvcmybatis.entity.SysUser" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into sys_user
+        (
+        `user_department_id`,
+        `real_name`,
+        `username`,
+        `password`,
+        `password_salt`,
+        `is_admin`,
+        `mobile`,
+        `email`,
+        `activated`,
+        `locked`,
+        `disabled`,
+        `created_by`,
+        `created_ip`,
+        `modification_by`,
+        `modification_ip`,
+        `remark`
+        )
+        values
+        (
+        #{userDepartmentId},
+        #{realName},
+        #{username},
+        #{password},
+        #{passwordSalt},
+        #{isAdmin},
+        #{mobile},
+        #{email},
+        #{activated},
+        #{locked},
+        #{disabled},
+        #{createdBy},
+        #{createdIp},
+        #{modificationBy},
+        #{modificationIp},
+        #{remark}
+        )
+    </insert>
+
+    <update id="update" parameterType="com.yaofei.springmvcmybatis.entity.SysUser">
+        update sys_user
+        <set>
+            <if test="userDepartmentId != null">`user_department_id` = #{userDepartmentId},</if>
+            <if test="realName != null">`real_name` = #{realName},</if>
+            <if test="username != null">`username` = #{username},</if>
+            <if test="password != null">`password` = #{password},</if>
+            <if test="passwordSalt != null">`password_salt` = #{passwordSalt},</if>
+            <if test="isAdmin != null">`is_admin` = #{isAdmin},</if>
+            <if test="mobile != null">`mobile` = #{mobile},</if>
+            <if test="email != null">`email` = #{email},</if>
+            <if test="activated != null">`activated` = #{activated},</if>
+            <if test="locked != null">`locked` = #{locked},</if>
+            <if test="disabled != null">`disabled` = #{disabled},</if>
+            <if test="isDeleted != null">`is_deleted` = #{isDeleted},</if>
+            <if test="modificationBy != null">`modification_by` = #{modificationBy},</if>
+            <if test="modificationIp != null">`modification_ip` = #{modificationIp},</if>
+            <if test="remark != null">`remark` = #{remark}</if>
+        </set>
+        where id = #{id} and is_deleted = 0
+    </update>
+
+    <delete id="delete">
+        delete from sys_user where id = #{value} and is_deleted = 0
+    </delete>
+
+    <delete id="deleteBatch">
+        delete from sys_user where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        and is_deleted = 0
+    </delete>
+
+    <select id="queryObject" resultType="com.yaofei.springmvcmybatis.entity.SysUser">
+		select * from sys_user where id = #{value} and is_deleted = 0
+	</select>
+
+    <select id="querySysUserByUsername" resultType="com.yaofei.springmvcmybatis.entity.SysUser">
+        select * from sys_user where username = #{value} and is_deleted = 0
+    </select>
+
+    <select id="queryTotalByUserNameAndId" resultType="long">
+        select count(*) from sys_user where is_deleted = 0
+        <if test="username !=null and username !=''">
+            and username = #{username}
+        </if>
+        <if test="id !=null and id !=''">
+            and id != #{id}
+        </if>
+    </select>
+
+    <update id="updateLockedByUserByUserName">
+        update sys_user set `locked` = 1 where username = #{value} and is_deleted = 0
+    </update>
+
+
+</mapper>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yaofei.springmvcmybatis.repository.DisposalMeasuresRepository">
+
+
+    <insert id="save" parameterType="com.yaofei.springmvcmybatis.entity.DisposalMeasures" useGeneratedKeys="true"
+            keyProperty="id">
+		insert into disposal_measures
+		(
+                    		`issuer_name`, 
+                    		`disposition_time`,
+                    		`first_feed_time`,
+                    		`issuer_provider`, 
+                    		`remark`, 
+                    		`instruct_reuqest`, 
+                    		`result`, 
+                    		`relate_id`,
+                    		`created_by`, 
+                    		`created_ip`
+            		)
+		values
+		(
+                    			#{issuerName}, 
+                    			#{dispositionTime},
+                    			#{firstFeedTime},
+                    			#{issuerProvider}, 
+                    			#{remark}, 
+                    			#{instructReuqest}, 
+                    			#{result}, 
+                    			#{relateId},
+                    			#{createdBy}, 
+                    			#{createdIp}
+            		)
+	</insert>
+
+    <update id="update" parameterType="com.yaofei.springmvcmybatis.entity.DisposalMeasures">
+        update disposal_measures
+        <set>
+            <if test="issuerName != null">`issuer_name` = #{issuerName},</if>
+            <if test="dispositionTime != null">`disposition_time` = #{dispositionTime},</if>
+            <if test="firstFeedTime != null">`first_feed_time` = #{firstFeedTime},</if>
+            <if test="issuerProvider != null">`issuer_provider` = #{issuerProvider},</if>
+            <if test="remark != null">`remark` = #{remark},</if>
+            <if test="instructReuqest != null">`instruct_reuqest` = #{instructReuqest},</if>
+            <if test="result != null">`result` = #{result},</if>
+            <if test="relateId != null">`relate_id` = #{relateId},</if>
+            <if test="modificationTime != null">`modification_time` = #{modificationTime} ,</if>
+            <if test="modificationBy != null">`modification_by` = #{modificationBy},</if>
+            <if test="modificationIp != null">`modification_ip` = #{modificationIp}</if>
+        </set>
+        where id = #{id} and is_deleted = 0
+    </update>
+
+    <select id="query" resultType="com.yaofei.springmvcmybatis.entity.DisposalMeasures">
+		select * from disposal_measures where relate_id = #{relateId}
+	</select>
+
+</mapper>

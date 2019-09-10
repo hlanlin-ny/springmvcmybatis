@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yaofei.springmvcmybatis.repository.SysSearchwarningConfigRepository">
+
+    <!-- sql片段 -->
+    <sql id="query_list_where">
+        <!-- where可以自动去除第一个and -->
+        <where>
+            and is_deleted = 0
+            <if test="extraSearch !=null">
+                <if test="extraSearch.keywords !=null and extraSearch.keywords !=''">
+                    and keywords like CONCAT('%',#{extraSearch.keywords},'%')
+                </if>
+                <if test="extraSearch.status !=null and extraSearch.status !=''">
+                    and status = #{extraSearch.status}
+                </if>
+                <if test="extraSearch.filetype !=null and extraSearch.filetype !=''">
+                    and filetype = #{extraSearch.filetype}
+                </if>
+                <if test="extraSearch.areaId !=null and extraSearch.areaId !=''">
+                    and area_id = #{extraSearch.areaId}
+                </if>
+            </if>
+        </where>
+    </sql>
+
+    <select id="queryTotal" resultType="long">
+		select count(*) from sys_searchwarning_config where is_deleted = 0
+	</select>
+
+    <select id="queryListTotal" parameterType="com.yaofei.springmvcmybatis.plugins.datatables.domain.DataTablesRequest"
+            resultType="long">
+        select count(*) from sys_searchwarning_config
+        <!-- 引用sql片段 -->
+        <include refid="query_list_where"/>
+    </select>
+
+    <select id="queryList" resultType="com.yaofei.springmvcmybatis.entity.SysSearchwarningConfig">
+        select * from sys_searchwarning_config
+        <!-- 引用sql片段 -->
+        <include refid="query_list_where"/>
+
+        <choose>
+            <when test="orderString != null and orderString != ''">
+                order by ${orderString}
+            </when>
+            <otherwise>
+                order by id DESC
+            </otherwise>
+        </choose>
+        <if test="start != null and length != null">
+            limit #{start}, #{length}
+        </if>
+    </select>
+
+    <insert id="save" parameterType="com.yaofei.springmvcmybatis.entity.SysSearchwarningConfig"            useGeneratedKeys="true" keyProperty="id">
+		insert into sys_searchwarning_config
+		(
+                    		`keywords`, 
+                    		`businessTypeId`,
+                    		`businessTypeName`,
+                    		`fileType`,
+                    		`fileTypeName`,
+                    		`start_time`, 
+                    		`notice_to`, 
+                    		`notice_bccs`, 
+                    		`is_Exact_matching`, 
+                    		`status`, 
+                    		`notice_frequency`, 
+                    		`cron_expression`,
+                    		`cron_frequency`,
+                    		`area_id`,
+                    		`notice_to_name`,
+                    		`remark`, 
+                    		`is_deleted`, 
+                    		`created_time`, 
+                    		`created_by`, 
+                    		`created_ip`
+            		)
+		values
+		(
+                    			#{keywords}, 
+                    			#{businesstypeid},
+                    			#{businesstypename},
+                    			#{filetype},
+                    			#{filetypename},
+                    			#{startTime}, 
+                    			#{noticeTo}, 
+                    			#{noticeBccs}, 
+                    			#{isExactMatching}, 
+                    			#{status}, 
+                    			#{noticeFrequency}, 
+                    			#{cronExpression},
+                    			#{cronFrequency},
+                    			#{areaId},
+                    			#{noticeToName},
+                    			#{remark}, 
+                    			#{isDeleted}, 
+                    			#{createdTime}, 
+                    			#{createdBy}, 
+                    			#{createdIp}
+            		)
+	</insert>
+
+    <update id="update" parameterType="com.yaofei.springmvcmybatis.entity.SysSearchwarningConfig">
+        update sys_searchwarning_config
+        <set>
+                                                                            <if test="keywords != null">`keywords` = #{keywords}, </if>
+                                                                <if test="businesstypeid != null">`businessTypeId` = #{businesstypeid}, </if>
+                                                                <if test="businesstypename != null">`businessTypeName` = #{businesstypename}, </if>
+                                                                <if test="filetype != null">`fileType` = #{filetype}, </if>
+                                                                <if test="filetypename != null">`fileTypeName` = #{filetypename}, </if>
+                                                                <if test="startTime != null">`start_time` = #{startTime}, </if>
+                                                                <if test="noticeTo != null">`notice_to` = #{noticeTo}, </if>
+                                                                <if test="noticeBccs != null">`notice_bccs` = #{noticeBccs}, </if>
+                                                                <if test="isExactMatching != null">`is_Exact_matching` = #{isExactMatching}, </if>
+                                                                <if test="status != null">`status` = #{status}, </if>
+                                                                <if test="noticeFrequency != null">`notice_frequency` = #{noticeFrequency}, </if>
+                                                                <if test="cronExpression != null">`cron_expression` = #{cronExpression}, </if>
+                                                                <if test="cronFrequency != null">`cron_frequency` = #{cronFrequency}, </if>
+            <if test="areaId != null">`area_id` = #{areaId}, </if>
+            <if test="noticeToName != null">`notice_to_name` = #{noticeToName}, </if>
+                                                                <if test="remark != null">`remark` = #{remark}, </if>
+                                                                <if test="isDeleted != null">`is_deleted` = #{isDeleted}, </if>
+                                                                <if test="modificationTime != null">`modification_time` = #{modificationTime}, </if>
+                                                                <if test="modificationBy != null">`modification_by` = #{modificationBy}, </if>
+                                                                <if test="modificationIp != null">`modification_ip` = #{modificationIp}</if>
+                                    </set>
+        where id = #{id} and is_deleted = 0
+    </update>
+
+    <delete id="delete">
+		delete from sys_searchwarning_config where id = #{value}
+	</delete>
+
+    <delete id="deleteBatch">
+        delete from sys_searchwarning_config where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="queryObject" resultType="com.yaofei.springmvcmybatis.entity.SysSearchwarningConfig">
+		select * from sys_searchwarning_config where id = #{value}
+	</select>
+
+    <!-- 批量更新状态 -->
+    <update id="updateStatusByIds">
+        update sys_searchwarning_config set status = #{status} where id in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+</mapper>

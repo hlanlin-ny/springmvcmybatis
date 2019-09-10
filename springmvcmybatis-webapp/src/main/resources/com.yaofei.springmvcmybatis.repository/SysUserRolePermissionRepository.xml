@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yaofei.springmvcmybatis.repository.SysUserRolePermissionRepository">
+
+	<select id="querySysUserRolePermissionsByRoleId" resultType="com.yaofei.springmvcmybatis.entity.SysUserRolePermission">
+		select * from sys_user_role_permission where user_role_id = #{value} and is_deleted = 0
+	</select>
+
+	<insert id="save" parameterType="com.yaofei.springmvcmybatis.entity.SysUserRolePermission" useGeneratedKeys="true" keyProperty="id">
+		insert into sys_user_role_permission
+		(
+		`user_role_id`,
+		`user_permission_id`,
+		`created_by`,
+		`created_ip`,
+		`modification_by`,
+		`modification_ip`,
+		`remark`
+		)
+		values
+		(
+		#{userRoleId},
+		#{userPermissionId},
+		#{createdBy},
+		#{createdIp},
+		#{modificationBy},
+		#{modificationIp},
+		#{remark}
+		)
+	</insert>
+
+
+	<delete id="deleteByUserRoleId">
+		delete from sys_user_role_permission where user_role_id = #{value} and is_deleted = 0
+	</delete>
+
+	<select id="queryObject" resultType="com.yaofei.springmvcmybatis.entity.SysUserRolePermission">
+		select * from sys_user_role_permission where id = #{value} and is_deleted = 0
+	</select>
+
+	<select id="queryList" resultType="com.yaofei.springmvcmybatis.entity.SysUserRolePermission">
+		select * from sys_user_role_permission where is_deleted = 0
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sys_user_role_permission where is_deleted = 0
+	</select>
+	 
+
+	 
+	<update id="update" parameterType="com.yaofei.springmvcmybatis.entity.SysUserRolePermission">
+		update sys_user_role_permission 
+		<set>
+			<if test="userRoleId != null">`user_role_id` = #{userRoleId}, </if>
+			<if test="userPermissionId != null">`user_permission_id` = #{userPermissionId}, </if>
+			<if test="isDeleted != null">`is_deleted` = #{isDeleted}, </if>
+			<if test="modificationBy != null">`modification_by` = #{modificationBy}, </if>
+			<if test="modificationIp != null">`modification_ip` = #{modificationIp}, </if>
+			<if test="remark != null">`remark` = #{remark}</if>
+		</set>
+		where id = #{id} and is_deleted = 0
+	</update>
+	
+	<delete id="delete">
+		delete from sys_user_role_permission where id = #{value} and is_deleted = 0
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sys_user_role_permission where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+		and is_deleted = 0
+	</delete>
+
+</mapper>

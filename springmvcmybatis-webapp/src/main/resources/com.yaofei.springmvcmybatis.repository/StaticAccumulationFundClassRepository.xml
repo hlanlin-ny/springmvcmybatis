@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yaofei.springmvcmybatis.repository.StaticAccumulationFundToCityRepository">
+
+    <insert id="insert" parameterType="com.yaofei.springmvcmybatis.entity.MedicalAccumulationFundToCityTransfer"  useGeneratedKeys="true" keyProperty="id">
+        insert into medical_accumulation_fund_to_city_transfer
+        (
+        `id`,
+        `XXZJBH`,
+        `XM`,
+        `XMHYPY`,
+        `XBDM`,
+        `XB`,
+        `CYZJDM`,
+        `CYZJMC`,
+        `ZJHM`,
+        `XZZ_DZMC`,
+        `FWCS`,
+        `BZ`,
+        `DJDW_GAJGJGDM`,
+        `DJDW_GAJGMC`,
+        `DJR_XM`,
+        `DJR_GMSFHM`,
+        `DJR_LXDH`,
+        `XXLY_XZQHDM`
+        )
+        values
+        (
+        #{id},
+        #{xxzjbh},
+        #{xm},
+        #{xmhypy},
+        #{xbdm},
+        #{xb},
+        #{cyzjdm},
+        #{cyzjmc},
+        #{zjhm},
+        #{xzzDzmc},
+        #{fwcs},
+        #{bz},
+        #{djdwGajgjgdm},
+        #{djdwGajgmc},
+        #{djrXm},
+        #{djrGmsfhm},
+        #{djrLxdh},
+        #{xxlyXzqhdm}
+        )
+    </insert>
+
+</mapper>

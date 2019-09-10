@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yaofei.springmvcmybatis.repository.MedicalExaminationRecordRepository">
+
+    <!-- sql片段 -->
+    <sql id="query_list_where">
+        <!-- where可以自动去除第一个and -->
+        <where>
+            and is_deleted = 0
+            <if test="extraSearch !=null">
+                <if test="extraSearch.name !=null and extraSearch.name !=''">
+                    and name like CONCAT('%',#{extraSearch.name},'%')
+                </if>
+                <if test="extraSearch.userId !=null and extraSearch.userId !=''">
+                    and user_id = #{extraSearch.userId}
+                </if>
+                <if test="extraSearch.idCardNum !=null and extraSearch.idCardNum !=''">
+                    and id_card_num like CONCAT('%',#{extraSearch.idCardNum},'%')
+                </if>
+                <if test="extraSearch.phone !=null and extraSearch.phone !=''">
+                    and phone like CONCAT('%',#{extraSearch.phone},'%')
+                </if>
+                <if test="extraSearch.address !=null and extraSearch.address !=''">
+                    and address like CONCAT('%',#{extraSearch.address},'%')
+                </if>
+                <if test="extraSearch.profession !=null and extraSearch.profession !=''">
+                    and profession like CONCAT('%',#{extraSearch.profession},'%')
+                </if>
+                <if test="extraSearch.organization !=null and extraSearch.organization !=''">
+                    and organization like CONCAT('%',#{extraSearch.organization},'%')
+                </if>
+                <if test="extraSearch.examinationDateimeBegin !=null and extraSearch.examinationDateimeBegin !=''">
+                    and examination_dateime >= #{extraSearch.examinationDateimeBegin}
+                </if>
+                <if test="extraSearch.examinationDateimeEnd !=null and extraSearch.examinationDateimeEnd !=''">
+                    and examination_dateime &lt; date_add(#{extraSearch.examinationDateimeEnd}, interval 1 day)
+                </if>
+                <if test="extraSearch.examinationTerm !=null and extraSearch.examinationTerm !=''">
+                    and examination_term like CONCAT('%',#{extraSearch.examinationTerm},'%')
+                </if>
+                <if test="extraSearch.remark !=null and extraSearch.remark !=''">
+                    and remark like CONCAT('%',#{extraSearch.remark},'%')
+                </if>
+                <if test="extraSearch.areaId !=null and extraSearch.areaId !=''">
+                    and area_id = #{extraSearch.areaId}
+                </if>
+            </if>
+        </where>
+    </sql>
+
+    <select id="queryTotal" resultType="long">
+		select count(*) from medical_examination_record where is_deleted = 0
+	</select>
+
+    <select id="queryListTotal" parameterType="com.yaofei.springmvcmybatis.plugins.datatables.domain.DataTablesRequest"
+            resultType="long">
+        select count(*) from medical_examination_record
+        <!-- 引用sql片段 -->
+        <include refid="query_list_where"/>
+    </select>
+
+    <select id="queryList" resultType="com.yaofei.springmvcmybatis.entity.MedicalExaminationRecord">
+        select * from medical_examination_record
+        <!-- 引用sql片段 -->
+        <include refid="query_list_where"/>
+
+        <choose>
+            <when test="orderString != null and orderString != ''">
+                order by ${orderString}
+            </when>
+            <otherwise>
+                order by id DESC
+            </otherwise>
+        </choose>
+        <if test="start != null and length != null">
+            limit #{start}, #{length}
+        </if>
+    </select>
+
+    <insert id="save" parameterType="com.yaofei.springmvcmybatis.entity.MedicalExaminationRecord"
+            useGeneratedKeys="true" keyProperty="id">
+		insert into medical_examination_record
+		(
+                    		`name`, 
+                    		`id_card_num`, 
+                    		`phone`, 
+                    		`address`, 
+                    		`profession`, 
+                    		`organization`, 
+                    		`examination_dateime`, 
+                    		`examination_term`, 
+                    		`remark`,
+                    		`created_by`, 
+                    		`created_ip`
+            		)
+		values
+		(
+                    			#{name}, 
+                    			#{idCardNum}, 
+                    			#{phone}, 
+                    			#{address}, 
+                    			#{profession}, 
+                    			#{organization}, 
+                    			#{examinationDateime}, 
+                    			#{examinationTerm}, 
+                    			#{remark},
+                    			#{createdBy}, 
+                    			#{createdIp}
+            		)
+	</insert>
+
+    <update id="update" parameterType="com.yaofei.springmvcmybatis.entity.MedicalExaminationRecord">
+        update medical_examination_record
+        <set>
+            <if test="areaId != null">`area_id` = #{areaId},</if>
+            <if test="businessTypeId != null">`business_type_id` = #{businessTypeId},</if>
+            <if test="fileType != null">`file_type` = #{fileType},</if>
+            <if test="detailsUrl != null">`details_url` = #{detailsUrl},</if>
+            <if test="collectTime != null">`collect_time` = #{collectTime},</if>
+            <if test="esIndexName != null">`es_index_name` = #{esIndexName},</if>
+            <if test="userId != null">`user_id` = #{userId},</if>
+            <if test="name != null">`name` = #{name},</if>
+            <if test="idCardNum != null">`id_card_num` = #{idCardNum},</if>
+            <if test="phone != null">`phone` = #{phone},</if>
+            <if test="address != null">`address` = #{address},</if>
+            <if test="profession != null">`profession` = #{profession},</if>
+            <if test="organization != null">`organization` = #{organization},</if>
+            <if test="examinationDateime != null">`examination_dateime` = #{examinationDateime},</if>
+            <if test="examinationTerm != null">`examination_term` = #{examinationTerm},</if>
+            <if test="remark != null">`remark` = #{remark},</if>
+            <if test="modificationBy != null">`modification_by` = #{modificationBy},</if>
+            <if test="modificationIp != null">`modification_ip` = #{modificationIp}</if>
+        </set>
+        where id = #{id} and is_deleted = 0
+    </update>
+
+    <delete id="delete">
+		delete from medical_examination_record where id = #{value}
+	</delete>
+
+    <delete id="deleteBatch">
+        delete from medical_examination_record where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="queryObject" resultType="com.yaofei.springmvcmybatis.entity.MedicalExaminationRecord">
+		select * from medical_examination_record where id = #{value}
+	</select>
+
+    <select id="queryBatch" resultType="com.yaofei.springmvcmybatis.entity.MedicalExaminationRecord">
+        select * from medical_examination_record
+    </select>
+
+</mapper>

@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yaofei.springmvcmybatis.repository.MedicalStudentToCityTransferRepository">
+
+	<!-- sql片段 -->
+	<sql id="query_list_where">
+		<if test="extraSearch !=null">
+			<!-- where可以自动去除第一个and -->
+			<where>
+				<if test="extraSearch.xm !=null and extraSearch.xm !=''">
+					and xm like CONCAT('%',#{extraSearch.xm},'%')
+				</if>
+				<if test="extraSearch.gmsfhm !=null and extraSearch.gmsfhm !=''">
+					and gmsfhm = #{extraSearch.gmsfhm}
+				</if>
+				<if test="extraSearch.jtzzDzmc !=null and extraSearch.jtzzDzmc !=''">
+					and jtzz_dzmc like CONCAT('%',#{extraSearch.jtzzDzmc},'%')
+				</if>
+				<if test="extraSearch.lxdh !=null and extraSearch.lxdh !=''">
+					and lxdh like CONCAT('%',#{extraSearch.lxdh},'%')
+				</if>
+			</where>
+		</if>
+	</sql>
+
+	<select id="queryTotal" resultType="long">
+		select count(*) from medical_student_to_city_transfer
+		<include refid="query_list_where"/>
+	</select>
+
+	<select id="queryListTotal" parameterType="com.yaofei.springmvcmybatis.plugins.datatables.domain.DataTablesRequest" resultType="long">
+    		select count(*) from medical_student_to_city_transfer
+    		<!-- 引用sql片段 -->
+    		<include refid="query_list_where"/>
+    </select>
+
+	<select id="queryList" resultType="com.yaofei.springmvcmybatis.entity.MedicalStudentToCityTransfer">
+		select * from medical_student_to_city_transfer
+		<!-- 引用sql片段 -->
+		<include refid="query_list_where"/>
+
+		<choose>
+			<when test="orderString != null and orderString != ''">
+				order by ${orderString}
+			</when>
+			<otherwise>
+				order by id DESC
+			</otherwise>
+		</choose>
+		<if test="start != null and length != null">
+			limit #{start}, #{length}
+		</if>
+	</select>
+
+	<insert id="insert" parameterType="com.yaofei.springmvcmybatis.entity.MedicalStudentToCityTransfer" useGeneratedKeys="true" keyProperty="id">
+		insert into medical_student_to_city_transfer
+		(						`id`,
+								`XXZJBH`, 
+								`XM`, 
+								`XMHYPY`, 
+								`XB`, 
+								`XBDM`, 
+								`MZDM`, 
+								`MZ`, 
+								`CSRQ`, 
+								`LXRQ`, 
+								`GMSFHM`, 
+								`XZ`, 
+								`SYLB_JYQK`, 
+								`CSD_DZMC`, 
+								`JTZZ_DZMC`, 
+								`HJLXDM`, 
+								`HJLX`, 
+								`HJDZ_DZMC`, 
+								`XUEXDM`, 
+								`XXMC`, 
+								`XUEHAO`, 
+								`XXDM`, 
+								`XX`, 
+								`BH`, 
+								`SHGZ_JYQK`, 
+								`ZC`, 
+								`ZZMMDM`, 
+								`ZZMM`, 
+								`RXRQ`, 
+								`JXRQ`, 
+								`RXFS_JYQK`, 
+								`TSXS_JYQK`, 
+								`JDFS_JYQK`, 
+								`XD`, 
+								`LXDH`, 
+								`QQ_FWBZH`, 
+								`DZXX`, 
+								`LXYY_JYQK`, 
+								`LXFX_JYQK`, 
+								`BZ`, 
+								`FQ_XM`, 
+								`FQ_XMHYPY`, 
+								`FQ_CYZJDM`, 
+								`FQ_CYZJMC`, 
+								`FQ_ZJHM`, 
+								`FQ_CSRQ`, 
+								`FQ_HYZKDM`, 
+								`FQ_HYZK`, 
+								`FQ_ZY`, 
+								`FQ_ZWMC`, 
+								`FQ_ZZMMDM`, 
+								`FQ_ZZMM`, 
+								`FQ_FWCS`, 
+								`FQ_LXDH`, 
+								`FQ_GX_JYQK`, 
+								`FQ_QQ_FWBZH`, 
+								`FQ_DZXX`, 
+								`MQ_XM`, 
+								`MQ_XMHYPY`, 
+								`MQ_CYZJDM`, 
+								`MQ_CYZJMC`, 
+								`MQ_ZJHM`, 
+								`MQ_CSRQ`, 
+								`MQ_HYZKDM`, 
+								`MQ_HYZK`, 
+								`MQ_ZY`, 
+								`MQ_ZWMC`, 
+								`MQ_ZZMMDM`, 
+								`MQ_ZZMM`, 
+								`MQ_FWCS`, 
+								`MQ_LXDH`, 
+								`MQ_GX_JYQK`, 
+								`MQ_QQ_FWBZH`, 
+								`MQ_DZXX`, 
+								`BZ2`, 
+								`DRSJ`, 
+								`DRFK`, 
+								`DRZTMS`, 
+								`DJSJ`, 
+								`DJDW_GAJGJGDM`, 
+								`DJDW_GAJGMC`, 
+								`DJR_XM`, 
+								`DJR_GMSFHM`, 
+								`DJR_LXDH`, 
+								`XXLY_XZQHDM`, 
+								`SC_XXRKSJ`, 
+								`XXRKSJ`
+					)
+		values
+		(
+					#{id},
+					#{xxzjbh},
+					#{xm}, 
+					#{xmhypy}, 
+					#{xb}, 
+					#{xbdm}, 
+					#{mzdm}, 
+					#{mz}, 
+					#{csrq}, 
+					#{lxrq}, 
+					#{gmsfhm}, 
+					#{xz}, 
+					#{sylbJyqk}, 
+					#{csdDzmc}, 
+					#{jtzzDzmc}, 
+					#{hjlxdm}, 
+					#{hjlx}, 
+					#{hjdzDzmc}, 
+					#{xuexdm}, 
+					#{xxmc}, 
+					#{xuehao}, 
+					#{xxdm}, 
+					#{xx}, 
+					#{bh}, 
+					#{shgzJyqk}, 
+					#{zc}, 
+					#{zzmmdm}, 
+					#{zzmm}, 
+					#{rxrq}, 
+					#{jxrq}, 
+					#{rxfsJyqk}, 
+					#{tsxsJyqk}, 
+					#{jdfsJyqk}, 
+					#{xd}, 
+					#{lxdh}, 
+					#{qqFwbzh}, 
+					#{dzxx}, 
+					#{lxyyJyqk}, 
+					#{lxfxJyqk}, 
+					#{bz}, 
+					#{fqXm}, 
+					#{fqXmhypy}, 
+					#{fqCyzjdm}, 
+					#{fqCyzjmc}, 
+					#{fqZjhm}, 
+					#{fqCsrq}, 
+					#{fqHyzkdm}, 
+					#{fqHyzk}, 
+					#{fqZy}, 
+					#{fqZwmc}, 
+					#{fqZzmmdm}, 
+					#{fqZzmm}, 
+					#{fqFwcs}, 
+					#{fqLxdh}, 
+					#{fqGxJyqk}, 
+					#{fqQqFwbzh}, 
+					#{fqDzxx}, 
+					#{mqXm}, 
+					#{mqXmhypy}, 
+					#{mqCyzjdm}, 
+					#{mqCyzjmc}, 
+					#{mqZjhm}, 
+					#{mqCsrq}, 
+					#{mqHyzkdm}, 
+					#{mqHyzk}, 
+					#{mqZy}, 
+					#{mqZwmc}, 
+					#{mqZzmmdm}, 
+					#{mqZzmm}, 
+					#{mqFwcs}, 
+					#{mqLxdh}, 
+					#{mqGxJyqk}, 
+					#{mqQqFwbzh}, 
+					#{mqDzxx}, 
+					#{bz2}, 
+					#{drsj}, 
+					#{drfk}, 
+					#{drztms}, 
+					#{djsj}, 
+					#{djdwGajgjgdm}, 
+					#{djdwGajgmc}, 
+					#{djrXm}, 
+					#{djrGmsfhm}, 
+					#{djrLxdh}, 
+					#{xxlyXzqhdm}, 
+					#{scXxrksj}, 
+					#{xxrksj}
+			)
+	</insert>
+	 
+	<update id="update" parameterType="com.yaofei.springmvcmybatis.entity.MedicalStudentToCityTransfer">
+		update medical_student_to_city_transfer 
+		<set>
+									<if test="xxzjbh != null">`XXZJBH` = #{xxzjbh}, </if>
+								<if test="xm != null">`XM` = #{xm}, </if>
+								<if test="xmhypy != null">`XMHYPY` = #{xmhypy}, </if>
+								<if test="xb != null">`XB` = #{xb}, </if>
+								<if test="xbdm != null">`XBDM` = #{xbdm}, </if>
+								<if test="mzdm != null">`MZDM` = #{mzdm}, </if>
+								<if test="mz != null">`MZ` = #{mz}, </if>
+								<if test="csrq != null">`CSRQ` = #{csrq}, </if>
+								<if test="lxrq != null">`LXRQ` = #{lxrq}, </if>
+								<if test="gmsfhm != null">`GMSFHM` = #{gmsfhm}, </if>
+								<if test="xz != null">`XZ` = #{xz}, </if>
+								<if test="sylbJyqk != null">`SYLB_JYQK` = #{sylbJyqk}, </if>
+								<if test="csdDzmc != null">`CSD_DZMC` = #{csdDzmc}, </if>
+								<if test="jtzzDzmc != null">`JTZZ_DZMC` = #{jtzzDzmc}, </if>
+								<if test="hjlxdm != null">`HJLXDM` = #{hjlxdm}, </if>
+								<if test="hjlx != null">`HJLX` = #{hjlx}, </if>
+								<if test="hjdzDzmc != null">`HJDZ_DZMC` = #{hjdzDzmc}, </if>
+								<if test="xuexdm != null">`XUEXDM` = #{xuexdm}, </if>
+								<if test="xxmc != null">`XXMC` = #{xxmc}, </if>
+								<if test="xuehao != null">`XUEHAO` = #{xuehao}, </if>
+								<if test="xxdm != null">`XXDM` = #{xxdm}, </if>
+								<if test="xx != null">`XX` = #{xx}, </if>
+								<if test="bh != null">`BH` = #{bh}, </if>
+								<if test="shgzJyqk != null">`SHGZ_JYQK` = #{shgzJyqk}, </if>
+								<if test="zc != null">`ZC` = #{zc}, </if>
+								<if test="zzmmdm != null">`ZZMMDM` = #{zzmmdm}, </if>
+								<if test="zzmm != null">`ZZMM` = #{zzmm}, </if>
+								<if test="rxrq != null">`RXRQ` = #{rxrq}, </if>
+								<if test="jxrq != null">`JXRQ` = #{jxrq}, </if>
+								<if test="rxfsJyqk != null">`RXFS_JYQK` = #{rxfsJyqk}, </if>
+								<if test="tsxsJyqk != null">`TSXS_JYQK` = #{tsxsJyqk}, </if>
+								<if test="jdfsJyqk != null">`JDFS_JYQK` = #{jdfsJyqk}, </if>
+								<if test="xd != null">`XD` = #{xd}, </if>
+								<if test="lxdh != null">`LXDH` = #{lxdh}, </if>
+								<if test="qqFwbzh != null">`QQ_FWBZH` = #{qqFwbzh}, </if>
+								<if test="dzxx != null">`DZXX` = #{dzxx}, </if>
+								<if test="lxyyJyqk != null">`LXYY_JYQK` = #{lxyyJyqk}, </if>
+								<if test="lxfxJyqk != null">`LXFX_JYQK` = #{lxfxJyqk}, </if>
+								<if test="bz != null">`BZ` = #{bz}, </if>
+								<if test="fqXm != null">`FQ_XM` = #{fqXm}, </if>
+								<if test="fqXmhypy != null">`FQ_XMHYPY` = #{fqXmhypy}, </if>
+								<if test="fqCyzjdm != null">`FQ_CYZJDM` = #{fqCyzjdm}, </if>
+								<if test="fqCyzjmc != null">`FQ_CYZJMC` = #{fqCyzjmc}, </if>
+								<if test="fqZjhm != null">`FQ_ZJHM` = #{fqZjhm}, </if>
+								<if test="fqCsrq != null">`FQ_CSRQ` = #{fqCsrq}, </if>
+								<if test="fqHyzkdm != null">`FQ_HYZKDM` = #{fqHyzkdm}, </if>
+								<if test="fqHyzk != null">`FQ_HYZK` = #{fqHyzk}, </if>
+								<if test="fqZy != null">`FQ_ZY` = #{fqZy}, </if>
+								<if test="fqZwmc != null">`FQ_ZWMC` = #{fqZwmc}, </if>
+								<if test="fqZzmmdm != null">`FQ_ZZMMDM` = #{fqZzmmdm}, </if>
+								<if test="fqZzmm != null">`FQ_ZZMM` = #{fqZzmm}, </if>
+								<if test="fqFwcs != null">`FQ_FWCS` = #{fqFwcs}, </if>
+								<if test="fqLxdh != null">`FQ_LXDH` = #{fqLxdh}, </if>
+								<if test="fqGxJyqk != null">`FQ_GX_JYQK` = #{fqGxJyqk}, </if>
+								<if test="fqQqFwbzh != null">`FQ_QQ_FWBZH` = #{fqQqFwbzh}, </if>
+								<if test="fqDzxx != null">`FQ_DZXX` = #{fqDzxx}, </if>
+								<if test="mqXm != null">`MQ_XM` = #{mqXm}, </if>
+								<if test="mqXmhypy != null">`MQ_XMHYPY` = #{mqXmhypy}, </if>
+								<if test="mqCyzjdm != null">`MQ_CYZJDM` = #{mqCyzjdm}, </if>
+								<if test="mqCyzjmc != null">`MQ_CYZJMC` = #{mqCyzjmc}, </if>
+								<if test="mqZjhm != null">`MQ_ZJHM` = #{mqZjhm}, </if>
+								<if test="mqCsrq != null">`MQ_CSRQ` = #{mqCsrq}, </if>
+								<if test="mqHyzkdm != null">`MQ_HYZKDM` = #{mqHyzkdm}, </if>
+								<if test="mqHyzk != null">`MQ_HYZK` = #{mqHyzk}, </if>
+								<if test="mqZy != null">`MQ_ZY` = #{mqZy}, </if>
+								<if test="mqZwmc != null">`MQ_ZWMC` = #{mqZwmc}, </if>
+								<if test="mqZzmmdm != null">`MQ_ZZMMDM` = #{mqZzmmdm}, </if>
+								<if test="mqZzmm != null">`MQ_ZZMM` = #{mqZzmm}, </if>
+								<if test="mqFwcs != null">`MQ_FWCS` = #{mqFwcs}, </if>
+								<if test="mqLxdh != null">`MQ_LXDH` = #{mqLxdh}, </if>
+								<if test="mqGxJyqk != null">`MQ_GX_JYQK` = #{mqGxJyqk}, </if>
+								<if test="mqQqFwbzh != null">`MQ_QQ_FWBZH` = #{mqQqFwbzh}, </if>
+								<if test="mqDzxx != null">`MQ_DZXX` = #{mqDzxx}, </if>
+								<if test="bz2 != null">`BZ2` = #{bz2}, </if>
+								<if test="drsj != null">`DRSJ` = #{drsj}, </if>
+								<if test="drfk != null">`DRFK` = #{drfk}, </if>
+								<if test="drztms != null">`DRZTMS` = #{drztms}, </if>
+								<if test="djsj != null">`DJSJ` = #{djsj}, </if>
+								<if test="djdwGajgjgdm != null">`DJDW_GAJGJGDM` = #{djdwGajgjgdm}, </if>
+								<if test="djdwGajgmc != null">`DJDW_GAJGMC` = #{djdwGajgmc}, </if>
+								<if test="djrXm != null">`DJR_XM` = #{djrXm}, </if>
+								<if test="djrGmsfhm != null">`DJR_GMSFHM` = #{djrGmsfhm}, </if>
+								<if test="djrLxdh != null">`DJR_LXDH` = #{djrLxdh}, </if>
+								<if test="xxlyXzqhdm != null">`XXLY_XZQHDM` = #{xxlyXzqhdm}, </if>
+								<if test="scXxrksj != null">`SC_XXRKSJ` = #{scXxrksj}, </if>
+								<if test="xxrksj != null">`XXRKSJ` = #{xxrksj}</if>
+					</set>
+		where id = #{id} and is_deleted = 0
+	</update>
+	
+	<delete id="delete">
+		delete from medical_student_to_city_transfer where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from medical_student_to_city_transfer where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<select id="queryObject" resultType="com.yaofei.springmvcmybatis.entity.MedicalStudentToCityTransfer">
+		select * from medical_student_to_city_transfer where id = #{value}
+	</select>
+
+</mapper>

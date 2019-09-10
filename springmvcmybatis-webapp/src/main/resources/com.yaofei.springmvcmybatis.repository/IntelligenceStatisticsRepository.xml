@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yaofei.springmvcmybatis.repository.IntelligenceStatisticsRepository">
+
+	<!-- sql片段 -->
+	<sql id="query_list_where">
+		<!-- where可以自动去除第一个and -->
+		<where>
+			i.is_deleted=0
+			<if test="extraSearch !=null">
+				<if test="extraSearch.areaId !=null and extraSearch.areaId !=''">
+					and i.area_id = #{extraSearch.areaId}
+				</if>
+				<if test="extraSearch.reportingTimeStart !=null and extraSearch.reportingTimeStart !=''">
+					and i.reporting_time >= #{extraSearch.reportingTimeStart}
+				</if>
+				<if test="extraSearch.reportingTimeEnd !=null and extraSearch.reportingTimeEnd !=''">
+					and i.reporting_time &lt; date_add( #{extraSearch.reportingTimeEnd}, interval 1 day)
+				</if>
+				<if test="extraSearch.intelligenceOfficerId !=null and extraSearch.intelligenceOfficerId !=''">
+					and i.intelligence_officer_id = #{extraSearch.intelligenceOfficerId}
+				</if>
+				<if test="extraSearch.isOfficer !=null and extraSearch.isOfficer !=''">
+					and io.is_officer =   ${extraSearch.isOfficer}
+				</if>
+			</if>
+		</where>
+	</sql>
+
+
+	<select id="queryListTotal" parameterType="com.yaofei.springmvcmybatis.plugins.datatables.domain.DataTablesRequest"
+			resultType="long">
+		select count(*) from (
+		SELECT
+		t2.*, io.id_numbers,
+		io. NAME,
+		io.is_officer
+		FROM
+		(
+		SELECT
+		intelligence_officer_id,
+		SUM(count1) AS sum1,
+		SUM(count2) AS sum2,
+		SUM(count3) AS sum3,
+		count(*) AS counts
+		FROM
+		(
+		SELECT
+		intelligence_officer_id,
+		CASE LEVEL
+		WHEN 0 THEN
+		1
+		ELSE
+		0
+		END AS count1,
+		CASE LEVEL
+		WHEN 1 THEN
+		1
+		ELSE
+		0
+		END AS count2,
+		CASE LEVEL
+		WHEN 2 THEN
+		1
+		ELSE
+		0
+		END AS count3
+		FROM
+		intelligence i
+		<include refid="query_list_where"/>
+		) t
+		GROUP BY
+		intelligence_officer_id
+		) t2
+		LEFT JOIN intelligence_officer io ON io.id = t2.intelligence_officer_id) t
+	</select>
+
+	<select id="queryList" resultType="com.yaofei.springmvcmybatis.entity.IntelligenceStatistics">
+		SELECT
+		t2.*, io.id_numbers,
+		io. NAME,
+		io.is_officer
+		FROM
+		(
+		SELECT
+		intelligence_officer_id,
+		SUM(count1) AS sum1,
+		SUM(count2) AS sum2,
+		SUM(count3) AS sum3,
+		count(*) AS counts
+		FROM
+		(
+		SELECT
+		intelligence_officer_id,
+		CASE LEVEL
+		WHEN 0 THEN
+		1
+		ELSE
+		0
+		END AS count1,
+		CASE LEVEL
+		WHEN 1 THEN
+		1
+		ELSE
+		0
+		END AS count2,
+		CASE LEVEL
+		WHEN 2 THEN
+		1
+		ELSE
+		0
+		END AS count3
+		FROM
+		intelligence i
+		<include refid="query_list_where"/>
+		) t
+		GROUP BY
+		intelligence_officer_id
+		) t2
+		LEFT JOIN intelligence_officer io ON io.id = t2.intelligence_officer_id
+
+		<choose>
+			<when test="orderString != null and orderString != ''">
+				order by ${orderString}
+			</when>
+			<otherwise>
+				order by id DESC
+			</otherwise>
+		</choose>
+		<if test="start != null and length != null">
+			limit #{start}, #{length}
+		</if>
+	</select>
+
+</mapper>

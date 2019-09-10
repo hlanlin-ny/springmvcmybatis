@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yaofei.springmvcmybatis.repository.SysWechatRepository">
+
+    <!-- sql片段 -->
+    <sql id="query_list_where">
+        <!-- where可以自动去除第一个and -->
+        <where>
+            and is_deleted = 0
+            <if test="extraSearch !=null">
+                <if test="extraSearch.name !=null and extraSearch.name !=''">
+                    and name like CONCAT('%',#{extraSearch.name},'%')
+                </if>
+                <if test="extraSearch.mobile !=null and extraSearch.mobile !=''">
+                    and mobile = #{extraSearch.mobile}
+                </if>
+            </if>
+        </where>
+    </sql>
+
+    <select id="queryTotal" resultType="long">
+		select count(*) from sys_wechat where is_deleted = 0
+	</select>
+
+    <select id="queryListTotal" parameterType="com.yaofei.springmvcmybatis.plugins.datatables.domain.DataTablesRequest"
+            resultType="long">
+        select count(*) from sys_wechat
+        <!-- 引用sql片段 -->
+        <include refid="query_list_where"/>
+    </select>
+
+    <select id="queryList" resultType="com.yaofei.springmvcmybatis.entity.SysWechat">
+        select * from sys_wechat WHERE is_deleted = 0
+
+    </select>
+
+    <insert id="save" parameterType="com.yaofei.springmvcmybatis.entity.SysWechat"            useGeneratedKeys="true" keyProperty="id">
+		insert into sys_wechat
+		(
+                    		`name`, 
+                    		`desc`, 
+                    		`is_deleted`, 
+                    		`created_time`, 
+                    		`created_by`, 
+                    		`created_ip`, 
+                    		`modification_time`, 
+                    		`modification_by`, 
+                    		`modification_ip`
+            		)
+		values
+		(
+                    			#{name}, 
+                    			#{desc}, 
+                    			#{isDeleted}, 
+                    			#{createdTime}, 
+                    			#{createdBy}, 
+                    			#{createdIp}, 
+                    			#{modificationTime}, 
+                    			#{modificationBy}, 
+                    			#{modificationIp}
+            		)
+	</insert>
+
+    <update id="update" parameterType="com.yaofei.springmvcmybatis.entity.SysWechat">
+        update sys_wechat
+        <set>
+                                                                            <if test="name != null">`name` = #{name}, </if>
+                                                                <if test="desc != null">`desc` = #{desc}, </if>
+                                                                <if test="isDeleted != null">`is_deleted` = #{isDeleted}, </if>
+                                                                <if test="createdTime != null">`created_time` = #{createdTime}, </if>
+                                                                <if test="createdBy != null">`created_by` = #{createdBy}, </if>
+                                                                <if test="createdIp != null">`created_ip` = #{createdIp}, </if>
+                                                                <if test="modificationTime != null">`modification_time` = #{modificationTime}, </if>
+                                                                <if test="modificationBy != null">`modification_by` = #{modificationBy}, </if>
+                                                                <if test="modificationIp != null">`modification_ip` = #{modificationIp}</if>
+                                    </set>
+        where ID = #{id} and is_deleted = 0
+    </update>
+
+    <delete id="delete">
+		delete from sys_wechat where ID = #{value}
+	</delete>
+
+    <delete id="deleteBatch">
+        delete from sys_wechat where ID in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="queryObject" resultType="com.yaofei.springmvcmybatis.entity.SysWechat">
+		select * from sys_wechat where ID = #{value}
+	</select>
+
+</mapper>

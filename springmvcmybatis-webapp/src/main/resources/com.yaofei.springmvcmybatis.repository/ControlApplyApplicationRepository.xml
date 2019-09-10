@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yaofei.springmvcmybatis.repository.ControlApplyApplicationRepository">
+
+    <!-- sql片段 -->
+    <sql id="query_list_where">
+        <!-- where可以自动去除第一个and -->
+        <where>
+            and is_deleted = 0
+            <if test="extraSearch !=null">
+                <if test="extraSearch.controlByName !=null and extraSearch.controlByName !=''">
+                    and control_by_name like CONCAT('%',#{extraSearch.controlByName},'%')
+                </if>
+                <if test="extraSearch.controlMeasureRequire !=null and extraSearch.controlMeasureRequire !=''">
+                    and control_measure_require = #{extraSearch.controlMeasureRequire}
+                </if>
+                <if test="extraSearch.applyName !=null and extraSearch.applyName !=''">
+                    and apply_name like CONCAT('%',#{extraSearch.applyName},'%')
+                </if>
+                <if test="extraSearch.controlBeginTime !=null and extraSearch.controlBeginTime !=''">
+                    and control_begin_time >= #{extraSearch.controlBeginTime}
+                </if>
+                <if test="extraSearch.controlEndTime !=null and extraSearch.controlEndTime !=''">
+                    and control_end_time &lt; date_add(#{extraSearch.controlEndTime}, interval 1 day)
+                </if>
+            </if>
+        </where>
+    </sql>
+
+    <select id="queryTotal" resultType="long">
+		select count(*) from control_apply_application where is_deleted = 0
+	</select>
+
+    <select id="queryListTotal" parameterType="com.yaofei.springmvcmybatis.plugins.datatables.domain.DataTablesRequest"
+            resultType="long">
+        select count(*) from control_apply_application
+        <!-- 引用sql片段 -->
+        <include refid="query_list_where"/>
+    </select>
+
+    <select id="queryList" resultType="com.yaofei.springmvcmybatis.entity.ControlApplyApplication">
+        select * from control_apply_application
+        <!-- 引用sql片段 -->
+        <include refid="query_list_where"/>
+
+        <choose>
+            <when test="orderString != null and orderString != ''">
+                order by ${orderString}
+            </when>
+            <otherwise>
+                order by id DESC
+            </otherwise>
+        </choose>
+        <if test="start != null and length != null">
+            limit #{start}, #{length}
+        </if>
+    </select>
+
+    <insert id="save" parameterType="com.yaofei.springmvcmybatis.entity.ControlApplyApplication" useGeneratedKeys="true"
+            keyProperty="id">
+		insert into control_apply_application
+		(
+                    		`control_by_name`, 
+                    		`nick_name`, 
+                    		`sex`, 
+                    		`born_time`, 
+                    		`nation`, 
+                    		`card_type`, 
+                    		`card_number`, 
+                    		`address`, 
+                    		`work_unit`, 
+                    		`control_reason`, 
+                    		`control_measure_require`, 
+                    		`control_begin_time`,
+                    		`control_end_time`, 
+                    		`control_days`, 
+                    		`control_unit`, 
+                    		`feed_back_contact`, 
+                    		`apply_unit`, 
+                    		`apply_unit_contact_tel`, 
+                    		`apply_name`, 
+                    		`apply_unit_principal`, 
+                    		`apply_safe_organ`,
+                    		`status`,
+                    		`remark`,
+                    		`created_by`, 
+                    		`created_ip`
+            		)
+		values
+		(
+                    			#{controlByName}, 
+                    			#{nickName}, 
+                    			#{sex}, 
+                    			#{bornTime}, 
+                    			#{nation}, 
+                    			#{cardType}, 
+                    			#{cardNumber}, 
+                    			#{address}, 
+                    			#{workUnit}, 
+                    			#{controlReason}, 
+                    			#{controlMeasureRequire}, 
+                    			#{controlBeginTime},
+                    			#{controlEndTime}, 
+                    			#{controlDays}, 
+                    			#{controlUnit}, 
+                    			#{feedBackContact}, 
+                    			#{applyUnit}, 
+                    			#{applyUnitContactTel}, 
+                    			#{applyName}, 
+                    			#{applyUnitPrincipal}, 
+                    			#{applySafeOrgan},
+                    			#{status},
+                    			#{remark},
+                    			#{createdBy}, 
+                    			#{createdIp}
+            		)
+	</insert>
+
+    <update id="update" parameterType="com.yaofei.springmvcmybatis.entity.ControlApplyApplication">
+        update control_apply_application
+        <set>
+            <if test="controlByName != null">`control_by_name` = #{controlByName},</if>
+            <if test="nickName != null">`nick_name` = #{nickName},</if>
+            <if test="sex != null">`sex` = #{sex},</if>
+            <if test="bornTime != null">`born_time` = #{bornTime},</if>
+            <if test="nation != null">`nation` = #{nation},</if>
+            <if test="cardType != null">`card_type` = #{cardType},</if>
+            <if test="cardNumber != null">`card_number` = #{cardNumber},</if>
+            <if test="address != null">`address` = #{address},</if>
+            <if test="workUnit != null">`work_unit` = #{workUnit},</if>
+            <if test="controlReason != null">`control_reason` = #{controlReason},</if>
+            <if test="controlMeasureRequire != null">`control_measure_require` = #{controlMeasureRequire},</if>
+            <if test="controlBeginTime != null">`control_begin_time` = #{controlBeginTime},</if>
+            <if test="controlEndTime != null">`control_end_time` = #{controlEndTime},</if>
+            <if test="controlDays != null">`control_days` = #{controlDays},</if>
+            <if test="controlUnit != null">`control_unit` = #{controlUnit},</if>
+            <if test="feedBackContact != null">`feed_back_contact` = #{feedBackContact},</if>
+            <if test="applyUnit != null">`apply_unit` = #{applyUnit},</if>
+            <if test="applyUnitContactTel != null">`apply_unit_contact_tel` = #{applyUnitContactTel},</if>
+            <if test="applyName != null">`apply_name` = #{applyName},</if>
+            <if test="applyUnitPrincipal != null">`apply_unit_principal` = #{applyUnitPrincipal},</if>
+            <if test="applySafeOrgan != null">`apply_safe_organ` = #{applySafeOrgan},</if>
+            <if test="status != null">`status` = #{status},</if>
+            <if test="remark != null">`remark` = #{remark},</if>
+            <if test="modificationBy != null">`modification_by` = #{modificationBy},</if>
+            <if test="modificationIp != null">`modification_ip` = #{modificationIp}</if>
+        </set>
+        where id = #{id} and is_deleted = 0
+    </update>
+
+    <delete id="delete">
+		delete from control_apply_application where id = #{value}
+	</delete>
+
+    <delete id="deleteBatch">
+        delete from control_apply_application where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="queryObject" resultType="com.yaofei.springmvcmybatis.entity.ControlApplyApplication">
+		select * from control_apply_application where id = #{value}
+	</select>
+
+
+    <select id="queryNormalControl" resultType="com.yaofei.springmvcmybatis.entity.ControlApplyApplication">
+        select * from control_apply_application where status = '布控中'
+    </select>
+
+</mapper>

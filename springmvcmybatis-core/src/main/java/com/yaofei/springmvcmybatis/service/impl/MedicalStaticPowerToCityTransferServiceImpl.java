@@ -1,0 +1,22 @@
+package com.yaofei.springmvcmybatis.service.impl;
+
+import com.yaofei.springmvcmybatis.entity.MedicalStaticPowerToCityTransfer;
+import com.yaofei.springmvcmybatis.entity.MedicalStudentToCityTransfer;
+import com.yaofei.springmvcmybatis.repository.MedicalStaticPowerToCityTransferRepository;
+import com.yaofei.springmvcmybatis.repository.MedicalStudentToCityTransferRepository;
+import com.yaofei.springmvcmybatis.service.MedicalStaticPowerToCityTransferService;
+import com.yaofei.springmvcmybatis.service.MedicalStudentToCityTransferService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service("medicalStaticPowerToCityTransferService")
+public class MedicalStaticPowerToCityTransferServiceImpl extends AbstractBaseService<MedicalStaticPowerToCityTransfer> implements MedicalStaticPowerToCityTransferService {
+	@Autowired
+	private MedicalStaticPowerToCityTransferRepository medicalStaticPowerToCityTransferRepository;
+
+	@Override
+	public void insert(MedicalStaticPowerToCityTransfer medicalStaticPowerToCityTransfer) {
+		medicalStaticPowerToCityTransferRepository.insert(medicalStaticPowerToCityTransfer);
+	}
+
+}

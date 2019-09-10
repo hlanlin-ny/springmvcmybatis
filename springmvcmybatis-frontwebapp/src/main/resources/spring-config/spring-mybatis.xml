@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                     http://www.springframework.org/schema/beans/spring-beans.xsd
+                     http://www.springframework.org/schema/context
+  					 http://www.springframework.org/schema/context/spring-context.xsd
+  					 http://www.springframework.org/schema/aop
+  					 http://www.springframework.org/schema/aop/spring-aop.xsd
+  					 http://www.springframework.org/schema/tx
+  					 http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!--<context:property-placeholder location="classpath:properties/db.properties"/>-->
+
+
+    <!-- 配置Druid连接池,通常只需要修改initialSize，minIdle，maxActive的值 -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+          init-method="init" destroy-method="close">
+        <!-- 基本属性 url、user、password -->
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.user}"/>
+        <property name="password" value="${jdbc.password}"/>
+
+        <!-- 配置初始化大小、最小、最大 -->
+        <property name="initialSize" value="1"/>
+        <property name="minIdle" value="1"/>
+        <property name="maxActive" value="20"/>
+
+        <!-- 配置获取连接等待超时的时间 -->
+        <property name="maxWait" value="60000"/>
+
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="60000"/>
+
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="300000"/>
+
+        <property name="validationQuery" value="SELECT 'x'"/>
+        <property name="testWhileIdle" value="true"/>
+        <property name="testOnBorrow" value="false"/>
+        <property name="testOnReturn" value="false"/>
+
+        <!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
+        <property name="poolPreparedStatements" value="false"/>
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="20"/>
+
+        <!-- 配置监控统计拦截的filters -->
+        <!--<property name="filters" value="stat" />-->
+        <property name="proxyFilters">
+            <list>
+                <!--放在 stat-filter 之前表示拦截检测的时间不在StatFilter统计的SQL执行时间内。放在后面，意思相反-->
+                <ref bean="wall-filter"/>
+                <ref bean="stat-filter"/>
+                <ref bean="log-filter"/>
+            </list>
+        </property>
+    </bean>
+
+    <!--Druid内置StatFilter配置，用于统计监控信息-->
+    <bean id="stat-filter" class="com.alibaba.druid.filter.stat.StatFilter">
+        <!--SQL合并配置-->
+        <property name="mergeSql" value="true"/>
+        <!--慢SQL记录-->
+        <property name="slowSqlMillis" value="10000"/>
+        <property name="logSlowSql" value="true"/>
+    </bean>
+    <!--Druid提供了WallFilter，它是基于SQL语义分析来实现防御SQL注入攻击的-->
+    <bean id="wall-filter-config" class="com.alibaba.druid.wall.WallConfig" init-method="init">
+        <!-- 指定配置装载的目录  -->
+        <property name="dir" value="META-INF/druid/wall/mysql"/>
+        <property name="selectWhereAlwayTrueCheck" value="false"/>
+        <property name="selectHavingAlwayTrueCheck" value="false"/>
+    </bean>
+    <bean id="wall-filter" class="com.alibaba.druid.wall.WallFilter">
+        <property name="dbType" value="mysql"/>
+        <property name="config" ref="wall-filter-config"/>
+        <property name="logViolation" value="true"/>
+        <!--<property name="throwException" value="false"/>-->
+    </bean>
+    <bean id="log-filter" class="com.alibaba.druid.filter.logging.CommonsLogFilter">
+        <property name="resultSetLogEnabled" value="false"/>
+        <property name="statementExecutableSqlLogEnable" value="true"/>
+        <property name="statementCreateAfterLogEnabled" value="false"/>
+        <property name="statementPrepareAfterLogEnabled" value="false"/>
+        <property name="statementPrepareCallAfterLogEnabled" value="false"/>
+        <property name="statementExecuteAfterLogEnabled" value="false"/>
+
+        <property name="statementExecuteQueryAfterLogEnabled" value="false"/>
+        <property name="statementExecuteUpdateAfterLogEnabled" value="false"/>
+        <property name="statementExecuteBatchAfterLogEnabled" value="false"/>
+        <property name="statementCloseAfterLogEnabled" value="false"/>
+        <property name="statementParameterClearLogEnable" value="false"/>
+        <property name="statementParameterSetLogEnabled" value="false"/>
+    </bean>
+
+
+    <!-- 配置会话工厂SqlSessionFactory -->
+    <!-- 让spring管理sqlsessionfactory 使用mybatis和spring整合包中的 -->
+    <!-- Spring 和 MyBatis无缝整合，不需要MyBatis的配置映射文件 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--dataSource属性指定要用到的连接池-->
+        <property name="dataSource" ref="dataSource"/>
+        <!--configLocation属性指定mybatis的全局核心配置文件。设置settings和typeAliases等来覆写默认的配置-->
+        <property name="configLocation" value="classpath:mybatis/SqlMapConfig.xml"/>
+        <!-- 自动扫描 mapping.xml文件 , 省掉Configuration.xml里的手工配置 -->
+        <!-- 当mybatis的xml文件和mapper接口不在相同包下时，需要用mapperLocations属性指定xml文件的路径。
+                *是个通配符，代表所有的文件，**代表所有目录下 -->
+        <property name="mapperLocations" value="classpath*:com.yaofei.springmvcmybatis.repository/**/*.xml"></property>
+    </bean>
+
+    <!-- 自动注册mybatis mapper bean -->
+    <!-- 由于单个配置，编写麻烦，所以使用扫描器扫描 mappers
+在spring容器中配置mapper的扫描器，产生的动态代理对象在spring的容器中自动注册，bean的id就是mapper类名（首字母小写）
+ -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!-- 指定扫描包的路径，就是mapper接口的路径，多个包中间以 半角逗号
+        由于这里设置了扫描，所以SqlMapConfig.xml中的扫描mapper配置可以去掉了
+         -->
+        <property name="basePackage" value="com.yaofei.springmvcmybatis.repository"></property>
+    </bean>
+
+
+    <!-- 事务管理 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!-- 开启注解事务 配置基于注解的事务 -->
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+
+    <!-- 定义个通知，指定事务管理器 -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="get*" propagation="REQUIRED"/>
+            <tx:method name="find*" propagation="REQUIRED"/>
+            <tx:method name="select*" propagation="REQUIRED"/>
+            <tx:method name="query*" propagation="REQUIRED"/>
+            <tx:method name="delete*" propagation="REQUIRED"/>
+            <tx:method name="update*" propagation="REQUIRED"/>
+            <tx:method name="add*" propagation="REQUIRED"/>
+            <tx:method name="insert*" propagation="REQUIRED"/>
+
+            <tx:method name="*" propagation="REQUIRED"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <!-- 事务入口  启动对@AspectJ（面向切面）注解的支持 -->
+    <aop:config>
+        <!-- 只对业务逻辑层实施事务 -->
+        <aop:pointcut id="txPointcut" expression="execution(* com.yaofei.springmvcmybatis..service..*+.*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut"/>
+    </aop:config>
+
+</beans>

@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yaofei.springmvcmybatis.repository.MedicalStaticPowerToCityTransferRepository">
+
+	<!-- sql片段 -->
+	<sql id="query_list_where">
+		<if test="extraSearch !=null">
+			<!-- where可以自动去除第一个and -->
+			<where>
+				<if test="extraSearch.xm !=null and extraSearch.xm !=''">
+					and xm like CONCAT('%',#{extraSearch.xm},'%')
+				</if>
+				<if test="extraSearch.gmsfhm !=null and extraSearch.gmsfhm !=''">
+					and gmsfhm = #{extraSearch.gmsfhm}
+				</if>
+			</where>
+		</if>
+	</sql>
+
+	<select id="queryTotal" resultType="long">
+		select count(*) from medical_static_power_to_city_transfer
+		<include refid="query_list_where"/>
+	</select>
+
+	<select id="queryListTotal" parameterType="com.yaofei.springmvcmybatis.plugins.datatables.domain.DataTablesRequest" resultType="long">
+    		select count(*) from medical_static_power_to_city_transfer
+    		<!-- 引用sql片段 -->
+    		<include refid="query_list_where"/>
+    </select>
+
+	<select id="queryList" resultType="com.yaofei.springmvcmybatis.entity.MedicalStaticPowerToCityTransfer">
+		select * from medical_static_power_to_city_transfer
+		<!-- 引用sql片段 -->
+		<include refid="query_list_where"/>
+
+		<choose>
+			<when test="orderString != null and orderString != ''">
+				order by ${orderString}
+			</when>
+			<otherwise>
+				order by id DESC
+			</otherwise>
+		</choose>
+		<if test="start != null and length != null">
+			limit #{start}, #{length}
+		</if>
+	</select>
+
+	<insert id="insert" parameterType="com.yaofei.springmvcmybatis.entity.MedicalStaticPowerToCityTransfer" useGeneratedKeys="true" keyProperty="id">
+		insert into medical_static_power_to_city_transfer
+		(	
+                ID,
+                XXZJBH,
+                KH_WPBZH,
+                XM,
+                GDDH,
+                YDDH,
+                XB,
+                GMSFHM,
+                YDLBDM,
+                YDLB,
+                HYFLDM,
+                KHZTDM,
+                KHZT,
+                KHLBDM,
+                KHLB,
+                YDDZ,
+                FDDZ,
+                XZZ_XZQHDM,
+                XZZ_XZQHMC,
+                XZZ_DZMC,
+                JFRQ,
+                QSRQ,
+                JSRQ,
+                DWMC,
+                DWZCDZ_DZMC,
+                SYDZ_DZMC,
+                LXR_XM,
+                LXR_LXDH,
+                FDDBR_XM,
+                FDDBR_GMSFHM,
+                FDDBR_YDDH,
+                DJSJ,
+                DJDW_GAJGJGDM,
+                DJDW_GAJGMC,
+                DJR_XM,
+                DJR_GMSFHM,
+                DJR_LXDH,
+                XXLY_XZQHDM,
+                XXRKSJ,
+                BZ
+					)
+		  values
+		     (
+		        #{ID},
+				#{XXZJBH},
+				#{KH_WPBZH},
+				#{XM},
+				#{GDDH},
+				#{YDDH},
+				#{XB},
+				#{GMSFHM},
+				#{YDLBDM},
+				#{YDLB},
+				#{HYFLDM},
+				#{KHZTDM},
+				#{KHZT},
+				#{KHLBDM},
+				#{KHLB},
+				#{YDDZ},
+				#{FDDZ},
+				#{XZZ_XZQHDM},
+				#{XZZ_XZQHMC},
+				#{XZZ_DZMC},
+				#{JFRQ},
+				#{QSRQ},
+				#{JSRQ},
+				#{DWMC},
+				#{DWZCDZ_DZMC},
+				#{SYDZ_DZMC},
+				#{LXR_XM},
+				#{LXR_LXDH},
+				#{FDDBR_XM},
+				#{FDDBR_GMSFHM},
+				#{FDDBR_YDDH},
+				#{DJSJ},
+				#{DJDW_GAJGJGDM},
+				#{DJDW_GAJGMC},
+				#{DJR_XM},
+				#{DJR_GMSFHM},
+				#{DJR_LXDH},
+				#{XXLY_XZQHDM},
+				#{XXRKSJ},
+				#{BZ}
+			)
+	</insert>
+	 
+	<update id="update" parameterType="com.yaofei.springmvcmybatis.entity.MedicalStaticPowerToCityTransfer">
+		update medical_static_power_to_city_transfer 
+		<set>
+			<if test="CYZJDM != null">CYZJDM=#{CYZJDM},</if>
+			<if test="ZJHM != null">ZJHM=#{ZJHM},</if>
+			<if test="XM null">XM=#{XM},</if>
+			<if test="XBDM != null">XBDM=#{XBDM},</if>
+			<if test="CSRQ != null">CSRQ=#{CSRQ},</if>
+			<if test="MZDM != null">MZDM=#{MZDM},</if>
+			<if test="XLDM != null">XLDM=#{XLDM},</if>
+			<if test="HYZKDM != null">HYZKDM=#{HYZKDM},</if>
+			<if test="GJDM != null">GJDM=#{GJDM},</if>
+			<if test="ZYZGMC != null">ZYZGMC=#{ZYZGMC},</if>
+			<if test="CYZGZZT != null">CYZGZZT=#{CYZGZZT},</if>
+			<if test="CYZGLBHZQC != null">CYZGLBHZQC=#{CYZGLBHZQC},</if>
+			<if test="CYZGZH != null">CYZGZH=#{CYZGZH},</if>
+			<if test="CYZGZ_CCLZRQ != null">CYZGZ_CCLZRQ=#{CYZGZ_CCLZRQ},</if>
+			<if test="CYZGZBZ_RQ != null">CYZGZBZ_RQ=#{CYZGZBZ_RQ},</if>
+			<if test="CYZGZHZ_RQ != null">CYZGZHZ_RQ=#{CYZGZHZ_RQ},</if>
+			<if test="CYZGZKHZQ_JZRQ != null">CYZGZKHZQ_JZRQ=#{CYZGZKHZQ_JZRQ},</if>
+			<if test="CYZGZYXQ_JZRQ != null">CYZGZYXQ_JZRQ=#{CYZGZYXQ_JZRQ},</if>
+			<if test="CYZGZBHZ_CS != null">CYZGZBHZ_CS=#{CYZGZBHZ_CS},</if>
+			<if test="FZJG_DWMC != null">FZJG_DWMC=#{FZJG_DWMC},</if>
+			<if test="HJDZ_XZQHDM != null">HJDZ_XZQHDM=#{HJDZ_XZQHDM},</if>
+			<if test="HJDZ_XZQHMC != null">HJDZ_XZQHMC=#{HJDZ_XZQHMC},</if>
+			<if test="HJDZ_DZMC != null">HJDZ_DZMC=#{HJDZ_DZMC},</if>
+			<if test="XZZ_XZQHDM != null">XZZ_XZQHDM=#{XZZ_XZQHDM},</if>
+			<if test="XZZ_XZQHMC != null">XZZ_XZQHMC=#{XZZ_XZQHMC},</if>
+			<if test="XZZ_DZMC != null">XZZ_DZMC=#{XZZ_DZMC},</if>
+			<if test="LXDH != null">LXDH=#{LXDH},</if>
+			<if test="DWMC != null">DWMC=#{DWMC},</if>
+			<if test="GZDW_LXDH != null">GZDW_LXDH=#{GZDW_LXDH},</if>
+			<if test="GZDW_XZQHDM != null">GZDW_XZQHDM=#{GZDW_XZQHDM},</if>
+			<if test="GZDWFZR_GMSFHM != null">GZDWFZR_GMSFHM=#{GZDWFZR_GMSFHM},</if>
+			<if test="GZDWFZR_XM != null">GZDWFZR_XM=#{GZDWFZR_XM},</if>
+			<if test="GZDWFZR_LXDH != null">GZDWFZR_LXDH=#{GZDWFZR_LXDH},</if>
+			<if test="DBDW_RQ != null">DBDW_RQ=#{DBDW_RQ},</if>
+			<if test="LKBDW_RQ != null">LKBDW_RQ=#{LKBDW_RQ},</if>
+			<if test="HYLBDM != null">HYLBDM=#{HYLBDM},</if>
+			<if test="BZ != null">BZ=#{BZ},</if>
+			<if test="XXLY_XZQHDM != null">XXLY_XZQHDM=#{XXLY_XZQHDM},</if>
+			<if test="CJGZ_SJ != null">CJGZ_SJ=#{CJGZ_SJ},</if>
+			<if test="YGXZDM != null">YGXZDM=#{YGXZDM},</if>
+			<if test="DJSJ != null">DJSJ=#{DJSJ},</if>
+			<if test="XXRKSJ != null">XXRKSJ=#{XXRKSJ}</if>
+		</set>
+		where id = #{ID}
+	</update>
+	
+	<delete id="delete">
+		delete from medical_static_power_to_city_transfer where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from medical_static_power_to_city_transfer where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{ID}
+		</foreach>
+	</delete>
+
+	<select id="queryObject" resultType="com.yaofei.springmvcmybatis.entity.MedicalStaticPowerToCityTransfer">
+		select * from medical_static_power_to_city_transfer where id = #{value}
+	</select>
+
+</mapper>

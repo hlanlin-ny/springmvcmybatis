@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yaofei.springmvcmybatis.repository.HospitalUnitInformationRepository">
+
+    <!-- sql片段 -->
+    <sql id="query_list_where">
+        <!-- where可以自动去除第一个and -->
+        <where>
+            and is_deleted = 0
+            <if test="extraSearch !=null">
+                <if test="extraSearch.areaId !=null and extraSearch.areaId !=''">
+                    and area_id = #{extraSearch.areaId}
+                </if>
+                <if test="extraSearch.hospitalName !=null and extraSearch.hospitalName !=''">
+                    and hospital_name like CONCAT('%',#{extraSearch.hospitalName},'%')
+                </if>
+                <if test="extraSearch.remark !=null and extraSearch.remark !=''">
+                    and remark = #{extraSearch.remark}
+                </if>
+
+            </if>
+        </where>
+    </sql>
+
+    <select id="queryTotal" resultType="long">
+		select count(*) from hospital_unit_information where is_deleted = 0
+	</select>
+
+    <select id="queryListTotal" parameterType="com.yaofei.springmvcmybatis.plugins.datatables.domain.DataTablesRequest"
+            resultType="long">
+        select count(*) from hospital_unit_information
+        <!-- 引用sql片段 -->
+        <include refid="query_list_where"/>
+    </select>
+
+    <select id="queryList" resultType="com.yaofei.springmvcmybatis.entity.HospitalUnitInformation">
+        select * from hospital_unit_information
+        <!-- 引用sql片段 -->
+        <include refid="query_list_where"/>
+
+        <choose>
+            <when test="orderString != null and orderString != ''">
+                order by ${orderString}
+            </when>
+            <otherwise>
+                order by id DESC
+            </otherwise>
+        </choose>
+        <if test="start != null and length != null">
+            limit #{start}, #{length}
+        </if>
+    </select>
+
+    <insert id="save" parameterType="com.yaofei.springmvcmybatis.entity.HospitalUnitInformation" useGeneratedKeys="true"
+            keyProperty="id">
+		insert into hospital_unit_information
+		(
+		                    `area_id`,
+                    		`hospital_name`, 
+                    		`hospital_address`,
+                    		`area`, 
+                    		`police_office`, 
+                    		`contact`, 
+                    		`tel`, 
+                    		`emergency_contact`, 
+                    		`emergency_tel`,
+                    		`remark`,
+                    		`created_by`, 
+                    		`created_ip`
+            		)
+		values
+		(
+		                        #{areaId},
+                    			#{hospitalName}, 
+                    			#{hospitalAddress}, 
+                    			#{area}, 
+                    			#{policeOffice}, 
+                    			#{contact}, 
+                    			#{tel}, 
+                    			#{emergencyContact}, 
+                    			#{emergencyTel},
+                    			#{remark},
+                    			#{createdBy}, 
+                    			#{createdIp}
+            		)
+	</insert>
+
+    <update id="update" parameterType="com.yaofei.springmvcmybatis.entity.HospitalUnitInformation">
+        update hospital_unit_information
+        <set>
+            <if test="areaId != null">`area_id` = #{areaId},</if>
+            <if test="hospitalName != null">`hospital_name` = #{hospitalName},</if>
+            <if test="hospitalAddress != null">`hospital_address` = #{hospitalAddress},</if>
+            <if test="area != null">`area` = #{area},</if>
+            <if test="policeOffice != null">`police_office` = #{policeOffice},</if>
+            <if test="contact != null">`contact` = #{contact},</if>
+            <if test="tel != null">`tel` = #{tel},</if>
+            <if test="emergencyContact != null">`emergency_contact` = #{emergencyContact},</if>
+            <if test="emergencyTel != null">`emergency_tel` = #{emergencyTel},</if>
+            <if test="remark != null">`remark` = #{remark},</if>
+            <if test="modificationBy != null">`modification_by` = #{modificationBy},</if>
+            <if test="modificationIp != null">`modification_ip` = #{modificationIp}</if>
+        </set>
+        where id = #{id} and is_deleted = 0
+    </update>
+
+    <delete id="delete">
+		delete from hospital_unit_information where id = #{value}
+	</delete>
+
+    <delete id="deleteBatch">
+        delete from hospital_unit_information where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="queryObject" resultType="com.yaofei.springmvcmybatis.entity.HospitalUnitInformation">
+		select * from hospital_unit_information where id = #{value}
+	</select>
+
+</mapper>
