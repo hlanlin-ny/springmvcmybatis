@@ -2,6 +2,8 @@ package com.yaofei.springmvcmybatis.repository;
 
 import com.yaofei.springmvcmybatis.entity.CarGpsInfoToCityTransfer;
 
+import java.util.List;
+
 /**
  * 有线电视用户登记信息
  * 
@@ -12,4 +14,6 @@ import com.yaofei.springmvcmybatis.entity.CarGpsInfoToCityTransfer;
 public interface CarGpsInfoToCityTransferRepository extends BaseRepository<CarGpsInfoToCityTransfer> {
 
     void insertCarGps(CarGpsInfoToCityTransfer carGpsInfoToCityTransfer);
+
+    List<CarGpsInfoToCityTransfer> selectCar();
 }

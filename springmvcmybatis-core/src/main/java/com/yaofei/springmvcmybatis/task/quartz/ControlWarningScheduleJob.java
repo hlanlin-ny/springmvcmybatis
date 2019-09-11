@@ -3,6 +3,7 @@ package com.yaofei.springmvcmybatis.task.quartz;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.drew.metadata.StringValue;
 import com.yaofei.springmvcmybatis.entity.*;
 import com.yaofei.springmvcmybatis.repository.MedicalNewbornRecordTransferRepository;
 import com.yaofei.springmvcmybatis.service.*;
@@ -1750,7 +1751,6 @@ public class ControlWarningScheduleJob {
                 try {
                     id = list.get(i).getId();
                     carGpsInfoToCityTransfer.setId(id);
-                    carGpsInfoToCityTransfer.setXxzjbh(id);
                     if (!Empty.equals(list.get(i).getDetail()) && list.get(i).getDetail() != null) {
                         String details = list.get(i).getDetail();
                         String[] arr = details.split(";");
@@ -1805,11 +1805,50 @@ public class ControlWarningScheduleJob {
                             }
                         }
                     }
+                    carGpsInfoToCityTransfer.setSjly("桐柏县出租车轨迹信息");
                     carGpsInfoToCityTransferService.insertCarGps(carGpsInfoToCityTransfer);
                     intelligenceImportCityService.updateIfUpload(id);
                 } catch (Exception e) {
                     intelligenceImportCityService.updateIfUpload(id);
                     e.printStackTrace();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void updateAutoCarGpsToCity(String param) throws Exception {
+        try {
+            List<CarGpsInfoToCityTransfer> lists = carGpsInfoToCityTransferService.selectCar();
+            for (CarGpsInfoToCityTransfer carGpsInfoToCityTransfer : lists) {
+                try {
+                    Map<String, Object> params = new HashMap<>();
+                    // http://218.28.124.98:89/gpsonline/GPSAPI?version=1&method=loadLocation&vid=6096317&vKey=5f4f45de957a5f196c2cec47ce3b0d4f
+                    params.put("version", "1");
+                    params.put("method", "loadLocation");
+                    params.put("vid", String.valueOf(carGpsInfoToCityTransfer.getClid()));
+                    params.put("vKey", String.valueOf(carGpsInfoToCityTransfer.getVkey()));
+                    String url = "http://218.28.124.98:89/gpsonline/GPSAPI?version="+params.get("version")+"&method="+params.get("method")+
+                            "&vid="+params.get("vid")+"&vKey="+params.get("vKey");
+                    JSON json = HttpRequestUtils.httpGet(params, url);
+                    JSONArray listJson = ((JSONObject) json).getJSONArray("locs");
+                    if (listJson.size() < 1) {
+                        continue;
+                    }
+                    JSONObject object = (JSONObject) listJson.get(0);
+                    carGpsInfoToCityTransfer.setCzdh(object.getString("mobile"));
+                    carGpsInfoToCityTransfer.setJd(object.getString("lng"));
+                    carGpsInfoToCityTransfer.setWd(object.getString("lat"));
+                    carGpsInfoToCityTransfer.setBz(object.getString("info"));
+                    carGpsInfoToCityTransfer.setSd(object.getString("speed"));
+                    carGpsInfoToCityTransfer.setDwsj(new Date());
+                    carGpsInfoToCityTransfer.setDjdwGajgmc("桐柏县公安局");
+                    carGpsInfoToCityTransfer.setDjrXm("付岩峰");
+                    carGpsInfoToCityTransfer.setSsqy("河南省南阳市桐柏县");
+                    carGpsInfoToCityTransfer.setSjly("桐柏县出租车轨迹信息");
+                    carGpsInfoToCityTransferService.insertCarGps(carGpsInfoToCityTransfer);
+                } catch (Exception e) {
+                    continue;
                 }
             }
         } catch (Exception e) {

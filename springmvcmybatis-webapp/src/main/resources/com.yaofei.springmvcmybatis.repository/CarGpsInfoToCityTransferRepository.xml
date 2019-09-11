@@ -86,4 +86,8 @@
 		select count(*) from medical_static_cargps_to_city_transferc
 		<include refid="query_list_and"/>
 	</select>
+
+	<select id="selectCar" resultType="com.yaofei.springmvcmybatis.entity.CarGpsInfoToCityTransfer">
+		select clid,cph,vkey from medical_static_carinfo_to_city_transferc
+	</select>
 </mapper>

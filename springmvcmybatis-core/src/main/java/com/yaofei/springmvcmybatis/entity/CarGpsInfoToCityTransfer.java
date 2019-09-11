@@ -39,6 +39,7 @@ public class CarGpsInfoToCityTransfer extends BaseEntity {
   private Date scrqzjsj;
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
   private Date scrzyksj;
+  private String vkey;
 
   public long getId() {
     return id;
@@ -246,5 +247,14 @@ public class CarGpsInfoToCityTransfer extends BaseEntity {
 
   public void setScrzyksj(Date scrzyksj) {
     this.scrzyksj = scrzyksj;
+  }
+
+  public String getVkey() {
+    return vkey;
+  }
+
+  public CarGpsInfoToCityTransfer setVkey(String vkey) {
+    this.vkey = vkey;
+    return this;
   }
 }

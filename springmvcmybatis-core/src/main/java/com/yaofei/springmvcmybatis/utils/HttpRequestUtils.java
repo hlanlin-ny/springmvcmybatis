@@ -20,7 +20,7 @@ public class HttpRequestUtils {
         HttpClient client = new HttpClient();
         GetMethod getMethod = new GetMethod(URL);
         int i = client.executeMethod(getMethod);
-        JSON json = JSON.parseObject(new String(getMethod.getResponseBody()));
+        JSON json = JSON.parseObject(new String(getMethod.getResponseBody(),"utf-8"));
         return json;
     }
     // post请求
